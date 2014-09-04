@@ -1,0 +1,10 @@
+thesis.pdf
+thesis.synctex.gz
+tmp
+*.aux
+*.nlo
+*.nls
+*.brf
+*.project
+*.texlipse
+*.DS_store
