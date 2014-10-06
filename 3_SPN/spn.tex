@@ -1,0 +1,647 @@
+\chapter{The $\MCPN$ approximation}\label{sec:spn}
+
+In this chapter, we start constructing an approximation to the monoenergetic neutron transport equation $T\psi - q = 0$
+of the form
+\begin{equation}\label{eq:MC-bte}
+    \bomega\cdot\nabla\psi(\br,\bomega) + \sigma_t(\br)\psi(\br,\bomega) - \intA[']{\left[\sigma_s(\br,\bomega\cdot\bomega') + 
+    \frac{\nu(\br)\sigma_f(\br)}{4\pi}\right]\psi(\br,\bomega')} - q(\br,\bomega) = 0.
+\end{equation}
+We will focus on the angular approximation here and assume that $\psi(\cdot,\bomega)\in\Lp[2](\Sphere)$
+% in the discussion below (even though the final derivation in Sec. \ref{sec:mcpn} actually requires only $\Lp[1](\Sphere)$ integrability)
+. 
+Let us start by recalling the well established spherical harmonics method.
+
+\section{$\PN$ approximation}\label{sec:SPH}
+Being a square integrable function on $\Lp[2](\Sphere)$, $\psi(\cdot,\bomega)$ may be represented by a generalized
+Fourier series expansion in terms of a complete orthonormal basis of this space. The $\PN$ method uses the basis of
+tesseral spherical harmonic functions $\{\Y{n}{m}\}$ of degree $n\geq 0$ and order $-n \leq m \leq n$ (shortly
+\textit{tesseral harmonics}). A finite method is obtained by the classical Galerkin approximation of the BTE in a
+subspace $\Lp[2]_N(\Sphere)\subset\Lp[2](\Sphere)$ spanned by $\{\Y{n}{m}\}$,  $n \leq N$ \footnote{For subtle reasons
+that could be found in the literature (\cite[Sec. 10.3.2]{Davison}, \cite[Sec. 9.6]{Stacey1}), only odd-$N$ $\PN$
+approximations are usually used.} -- i.e. it consists of the expansion
+\begin{equation}\label{eq:exp}
+  \psi(\br,\bomega) \approx \suma[n]{0}{N}\suma[m]{-n}{n}\angmom{n}{m}(\br)\Y{n}{m}(\bomega)
+\end{equation}
+and orthogonal projection of the residual $T\psi - q$ onto $\Lp[2]_N(\Sphere)$ (similarly, the exact boundary conditions 
+are projected onto a subspace of $\Lp[2](\pX[-])$ spanned by the complete set of odd-degree tesseral harmonics; 
+the resulting conditions are known as the \textit{Marshak conditions}\footnote{We only make a remark that there is 
+another form of approximate boundary conditions known as the Mark conditions. The relative merit of one over the other 
+is not completely resolved so both are widely used. We choose the former as they are consistent with the Galerkin 
+derivation of the $\PN$ equations.}).
+
+The choice of the tesseral harmonics basis facilitates the realization of the above procedure. Besides the
+orthonormality property, they obey a three-term recurrence rule that is used advantageously in expanding the advection
+part
+% (however, a closure relation such as that partial derivatives of $\angmom{N+1}{m}(\br)$ vanish for all relevant $m$
+% becomes necessary)
+and they also naturally appear in the \textit{addition theorem} for Legendre polynomials $P_n$:
+\begin{equation}\label{eq:addition}
+  P_n(\bomega\cdot\bomega') = \frac{4\pi}{2n+1}\suma[m]{-n}{n}\Y{n}{m}(\bomega)\Y{n}{m}(\bomega').
+\end{equation}
+This equality is used for simplifying the scattering part of the transfer operator, after its expansion in terms of 
+Legendre polynomials (which form a complete orthonormal set in $\Lp[2]([-1,1])$):
+\begin{equation}\label{eq:exp2}
+  \sigma_s(\br,\bomega\cdot\bomega') \approx \suma[k]{0}{K}
+      \frac{2k+1}{4\pi}\sigma_{sk}(\br)P_k(\bomega'\cdot\bomega)
+\end{equation}
+(where $K \leq N$ is usually called \textit{degree of scattering anisotropy}).
+%where
+%$\Sigma_{sk}(\br) = 2\pi \muint[_0]{\P{k}(\mu_0)\Sigma_s(\br, \mu_0)}$
+%are the coefficients of the expansion of the scattering cross-section 
+% ROTATIONAL INVARIANCE OF SUBSP.
+Also, we directly obtain the important physical quantities as $\phi = \angmom{0}{0}$, $\mathbf{J} = \bigl[\angmom{1}{0},\angmom{1}{1},\angmom{1}{-1}\bigr]^T$.
+
+\section{Other spherical harmonic approximations}
+This standard procedure is described in various books on reactor physics and used in several computer codes
+(\cite{MARC,Capilla,vanCriekingen1}). It results however in a complicated set of strongly coupled partial differential
+equations without any clear structure that could be used for its simplification. This motivates the search for an
+alternative set of expansion functions for \eqref{eq:exp} that would share with $\Y{n}{m}$ the important properties like
+those mentioned above but have a more regular structure.
+
+\subsection{Surface and solid spherical harmonics}
+One possible such set arises by studying the linear combinations of tesseral harmonics of fixed degree. We will simplify
+the notation by setting $\mu = \cost$, replace $\bomega$ with $(\mu, \azimuthal)$ where necessary and also use the
+following relations between the velocity and direction vectors in Cartesian coordinates:
+$$
+  \bv = [v_x, v_y, v_z]^T = v\bomega,\quad \bomega = [\Omega_x, \Omega_y, \Omega_z]^T = \frac{\bv}{v}.
+$$
+
+\begin{definition}\label{defn:SSH}
+  A general linear combination of the $2n + 1$ tesseral harmonics of degree $n$ is called a \textit{surface spherical 
+  harmonic of degree $n$} and can be written as
+  \begin{equation}\label{eq:exp3}
+    Y_n(\mu,\azimuthal) = A_0 P_n(\mu) + \suma[m]{1}{n}\left[ A_m \cos(m\azimuthal)\P{n}{m}(\mu) + B_m \sin(m\azimuthal)\P{n}{m}(\mu)\right]
+  \end{equation}
+  where $\P{n}{m}$ are the \textit{associated Legendre polynomials} \cite[Chap. VI]{Byerly}. 
+\end{definition}
+Note that there is a one-to-one relationship between the coefficients in eq. \eqref{eq:exp} for fixed $n$ and the 
+coefficients in \eqref{eq:exp3}.
+
+Multiplying by $v^n$, we obtain the (regular) \textit{solid spherical harmonic}\footnote{Regular solid spherical
+harmonics are one class of solutions of the Laplace equation $\lap Y = 0$ in spherical coordinates
+$(v,\azimuthal,\polar)$ which vanish as $v\to 0$. The other are the irregular solid spherical harmonics, which have
+singularity of the form $v^{-n-1}$ at the origin (\cite[Chap. VI]{Byerly}).}. Paper \cite{Ackroyd1} appears to be the
+first where solid spherical harmonics were practically used to solve the neutron transport equation. Under the
+assumption of isotropic scattering ($\sigma_{sk} = 0$ for $k \geq 1$ in \eqref{eq:exp2}) he derived for a homogeneous
+region a set of coupled diffusion equations (called SH\PN) without any other requirement (unlike the classical
+derivation of the $\SPN$ equations, which required certain assumptions about dimensionality or material properties, cf.
+\cite{Larsen1}, \cite{Pomraning1}), together with heuristic boundary and interface conditions. As was shown in the
+paper, the SH\PN~ equations reduced by simple substitutions to the set of $\SPN$ equations originally formulated by
+Gelbard and it is interesting to note that this actually showed that the latter are within an isotropically scattering
+homogeneous medium equivalent to the full solid harmonics expansion -- the same result for surface spherical harmonics
+has been independently proven in \cite{Coppa1} and revisited recently (\cite{Coppa2,McClarren1}). Unfortunately, the
+general treatment in \cite{Ackroyd1} is very technically involved and in author's opinion quite difficult to follow --
+this may be the reason why the idea has not been picked up and possible research directions outlined in the paper's
+conclusion not pursued.
+
+\subsection{Cartesian tensors}\label{sec:tensors}
+In order to develop a conceptually simpler and arguably also more useful approach, we need to recall some basic facts
+about Cartesian tensors. We will use the convention that Greek subscripts represent axes of a Cartesian coordinate
+system with unit vectors $\be_x$, $\be_y$, $\be_z$. We will also use the usual Einstein's summation convention which
+implies summation over any index which appears twice in an indexed expression, for instance $$
+  \AAA{\alpha\beta\gamma}\BBB{\beta\gamma} =
+  \suma[\beta]{1}{3}\suma[\gamma]{1}{3}\AAA{\alpha\beta\gamma}\BBB{\beta\gamma} = \CCC{\alpha}.
+$$
+
+\begin{definition}
+  An $n$-dimensional array $\AA$ of $3^n$ components $\AAA{\alpha_1\ldots\alpha_n}$ is called \textit{Cartesian tensor 
+  of rank $n$} if it transforms as
+  \begin{equation}\label{eq:tenstran}
+    A^{(n)'}_{\alpha_1\ldots\alpha_n} = g_{\alpha_1\beta_1}\cdots g_{\alpha_n\beta_n}\AAA{\beta_1\ldots\beta_n}
+  \end{equation}
+  under the change of coordinate system $Oxyz \to Ox'y'z'$ by the action of an orthogonal matrix $\mathbf{G} = [g_{\alpha\beta}]$:
+  $$
+    \be_\alpha' = g_{\alpha\beta}\be_\beta.
+  $$
+\end{definition}
+As we will only use the Cartesian tensors, we will henceforth omit the word Cartesian. Word ``tensor'' will also be used
+ for a general \textit{tensor field}, components of which are functions -- like $\AA(\br)$. The transformation has then 
+ the following form:
+$$
+  A^{(n)'}_{\alpha_1\ldots\alpha_n}(\br) = \AAA{\alpha_1\ldots\alpha_n}(\mathbf{G}^{-1}\br) = g_{\alpha_1\beta_1}\cdots g_{\alpha_n\beta_n}\AAA{\beta_1\ldots\beta_n}(\br).
+$$
+We will denote by $\eye$ the identity rank-2 tensor (matrix) and by $ \mathbb{O}^{(n)}$ the zero rank-n tensor.
+
+Addition and subtraction of two tensors of same rank and multiplication of a tensor by a scalar are done component-wise. 
+Multiplication of two tensors is defined as follows:
+\begin{definition}
+  Components of tensor $\CC[n+m] = \AA\otimes\BB[m]$ are given by
+  $$
+    \CCC[n+m]{\alpha_1\ldots\alpha_n\beta_1\ldots\beta_m} = \AAA{\alpha_1\ldots\alpha_n}\BBB{\beta_1\ldots\beta_m}.
+  $$
+\end{definition}
+
+\begin{definition}
+  $m$-th power of tensor $\AA$ is a tensor of rank $nm$ defined as
+  $$
+    \CC[nm] = \AA\otimes\AA\otimes\cdots\otimes\AA\quad \mbox{($m$-times)}
+  $$
+\end{definition}
+We will mainly use powers of vectors and also consider the gradient operator as a vector
+$$
+  \nabla = \left[\pd{}{x}, \pd{}{y}, \pd{}{z}\right]^T
+$$
+(hence $\Delta = \lap = \nabla\otimes\nabla$). Also, to keep usual notation, $\nabla\AA \equiv \nabla\otimes\AA$.
+
+\begin{definition}
+  For $1\leq m \leq n$, the $m$-fold contraction of tensors $\AA$ and $\BB$ is a rank-($2n-2m$) tensor 
+  $\CC[2n-2m] = \AA\underset{m}{\cdot}\BB$ with components
+  $$
+    \CCC[2n-2m]{\alpha_{1}\ldots\alpha_{n-m}\beta_1\ldots\beta_{n-m}} = 
+    \AAA{\alpha_1\ldots\alpha_{n-m}\gamma_{n-m+1}\ldots\gamma_n}\BBB{\gamma_n\ldots\gamma_{n-m+1}\beta_{n-m}\ldots\beta_1}.
+  $$
+\end{definition}
+Specially for $m = 1$, we get the standard inner product. 
+In the case when $n = m$, we obtain the scalar $\AAA{\gamma_1\ldots\gamma_n}\BBB{\gamma_n\ldots\gamma_1}$ and 
+suppress the index under the $\cdot$ sign to simplify the writing (it should be clear from the two operands and their 
+rank that a total contraction over all their indices is intended). 
+
+\begin{definition}
+  For $m \leq \lfloor n/2 \rfloor$ (the integer part of $n/2$), the $m$-fold contraction of tensor $\AA$ (contraction 
+  in $m$ index pairs) is a rank-($n-2m$) tensor with components
+  $$
+    \BBB[n-2m]{\alpha_{2m+1}\ldots\alpha_n} = \AAA{\alpha_1\alpha_1\ldots\alpha_m\alpha_m\alpha_{2m+1}\ldots\alpha_n}.
+  $$
+\end{definition}
+When contracting in only 1 index pair, the $1$-fold contraction is simply called a contraction. The result has a special 
+name:
+\begin{definition}
+  Contraction of tensor $\AA$ in one index pair is called \textit{trace} of $\AA$ in that pair:
+  $$
+    \trace \AA = \AAA[n-2]{\alpha_1\alpha_1\alpha_3\ldots\alpha_n}.
+  $$ 
+\end{definition}
+If the trace of $\AA$ in one index pair vanishes, the tensor is said to be traceless in that pair. Obviously then, if 
+the tensor does not depend on the order of indices, it is traceless in all index pairs.
+\begin{definition}
+  Tensor $\AA$ is \textit{totally symmetric} if it is invariant under any permutation $\perm{\alpha_1\ldots\alpha_n}$ 
+  of its indices:
+  $$
+    \AAA{\alpha_1\ldots\alpha_n} = \AAA{\perm{\alpha_1\ldots\alpha_n}}.
+  $$
+\end{definition}
+
+\begin{definition}
+  Totally symmetric tensor whose trace in any index pair vanishes is called \textit{totally symmetric traceless tensor} 
+  and its trace vanishes in all index pairs. We will denote totally symmetric traceless tensors as TST tensors.
+\end{definition}
+
+We can make any tensor of rank $n$ totally symmetric by applying the symmetrization operator $\Sym{\cdot}$:
+\begin{definition}
+  $\widetilde{\mathbb{A}}^{(n)} = \Sym\AA$ is a totally symmetric tensor with components
+  $$
+    \widetilde A^{(n)}_{\alpha_1\ldots\alpha_n} = \frac{1}{n!}\ \; \sum_{\mathclap{\perm{\alpha_1\ldots\alpha_n}}}\ \;\AAA{\alpha_1\ldots\alpha_n}.
+  $$
+\end{definition}  
+As we will see shortly, there also exists an operator which makes a totally symmetric tensor totally symmetric and traceless.
+
+\subsection{Maxwell-Cartesian spherical harmonics}\label{sec:MCSH}
+It is well known that any solid spherical harmonic of degree $n$, when expressed in Cartesian coordinates: $S_n(\bv) =
+S_n(v_x, v_y, v_z) = v^n Y_n(\bv/v)$, is a harmonic polynomial, homogeneous of degree $n$ (\cite[Art. 110]{Byerly}),
+i.e.
+$$
+  \lapv S_n(\bv) = 0,\quad S_n(\lambda\bv) = \lambda^n S_n(\bv)
+$$ (in fact, there is an alternative definition of solid spherical harmonic as a function satisfying these two
+properties and of surface spherical harmonic as a restriction of such function to the unit sphere). The space of such
+polynomials has dimension $2n + 1$\footnote{Homogeneous polynomial of degree $n$ has $\frac{(n+1)(n+2)}{2}$
+coefficients; since $\lapv S_n(\bv)$ is a homogeneous polynomial of degree $n-2$ with $\frac{n(n-1)}{2}$ coefficients
+expressed in terms of those of $S_n$, the condition $\lapv S_n(\bv) = 0$ reduces the number of independent coefficients
+of $S_n$ to $\frac{(n+1)(n+2)}{2} - \frac{n(n-1)}{2} = 2n + 1$.}\label{pg:indepc} and is isomorphic to the space of TST
+tensors of rank $n$ (\cite{Sam}).
+% SEE AXLER HFT - L2(S_2) = direct sum of H_n(S_2)
+In particular, when the components of such a tensor do not depend on $v_x$, $v_y$, $v_z$, (or $\Omega_x$, $\Omega_y$,
+$\Omega_z$) they comprise coefficients of the solid (or surface) spherical harmonic and so also (in the
+$\Sphere$-restricted case) the coefficients $\angmom{n}{m}(\br,E)$ in the expansion \eqref{eq:exp} (when transformed
+back to spherical coordinates). Hence, by solving the set of tensorial equations with these tensors of ranks $n \leq N$
+as unknowns, we could accomplish essentially the same as by solving the ordinary $\PN$ equations, but we could
+additionally use the TST tensor character of the equations.
+
+To construct this set, we will build on the ideas presented by Johnston (\cite{Johnston1}) and Applequist
+(\cite{Applequist1}). Johnston arrived at a ``far more symmetric and compact'' (\cite[p. 1455]{Johnston1}) form of the
+angularly discretized general Boltzmann-Vlasov equation by expanding the flow function in terms of
+\textit{Maxwell-Cartesian spherical harmonic tensors} rather than the usual surface spherical harmonics. The term
+``Maxwell-Cartesian spherical harmonic tensor'' has been coined by Applequist in \cite{Applequist2}, who in his older
+paper \cite{Applequist1} showed a systematic way of obtaining a special TST tensor of any rank $n$ whose components are
+spherical harmonics of degree $n$ in Cartesian frame of reference as defined by Maxwell in \cite[p. 160]{Maxwell}.
+Specifically, in present notation, he showed that Maxwell's spherical harmonics based on Cartesian axes can be obtained
+(up to a normalization constant) as components of $$
+  \detr \bv^n \quad \mbox{(or $\detr \bomega^n$)}
+$$ where $\detr$ is the so-called \textit{detracer operator} which projects a general totally symmetric tensor of rank
+$n$ into the space of totally symmetric and traceless tensors of rank $n$ (see the note on p. 4311 of
+\cite{Applequist1}). The result of applying the detracer operator on a totally symmetric tensor $\AA$ is a TST tensor
+with components:
+\begin{equation}\label{eq:detr}
+  \detr \AAA{\alpha_1\ldots\alpha_n} = \suma[m]{0}{\lfloor n/2 \rfloor} \frac{(-1)^m(2n-2m-1)!! }{(2n-1)!!}\quad\sum_{\mathclap{\{\perm{\alpha_1\ldots\alpha_n}\}_{\text{d}}}}\quad\kron{\alpha_1}{\alpha_2}\cdots\kron{\alpha_{2m-1}}{\alpha_{2m}}\AAA{\beta_1\beta_1\ldots\beta_m\beta_m\alpha_{2m+1}\ldots\alpha_n},
+\end{equation}
+where $\{\perm{\alpha_1\ldots\alpha_n}\}_{\text{d}}$ denotes the set of all permutations that give distinct terms in 
+the last sum (considering their total symmetry) and $(2n-1)!! = (2n-1)(2n-3)\cdots 3\cdot 1$ with $(-1)!! = 1$. Various 
+properties and different explicit forms of the detracer operator are given in \cite[Sec. 5]{Applequist1}
+%or, in a somewhat more transparent way, in \cite[Eqns. (36), (37)]{Vreoiju}
+.
+
+Being general surface spherical harmonics according to Def. \ref{defn:SSH}, Maxwell's surface spherical harmonics are
+linear combination of tesseral harmonics and hence share many of the properties of the latter. An extensive presentation
+of these properties is given in \cite{Applequist1,Applequist2} and we will recall some of them in further sections. We
+will use the following form of Maxwell-Cartesian surface spherical harmonics of degree $n$ as components of rank-$n$ TST
+tensors (called sometimes \textit{Maxwell-Cartesian tensors}):
+\begin{equation}\label{eq:MCSH}
+  \PP(\bomega) = \detr \bomega^n
+\end{equation}
+which differ from those used by Applequist in that they have coefficient $1$ at their first term but which coincide 
+with those used by Johnston. 
+ 
+We note that projection of $\PP$ along, say, $z$-axis (or any other because of the symmetry) yields (up to a
+normalization factor) the Legendre polynomials:
+\begin{equation}\label{eq:leg}
+  \PP(\bomega)\contr\be_z^n = P^{(n)}_{\alpha_1\ldots\alpha_n}\kron{3}{\alpha_1}\cdots\kron{3}{\alpha_n} = P^{(n)}_{33\ldots3} = \frac{n!}{(2n-1)!!}P_n(\mu) \equiv C_n P_n(\mu)
+\end{equation}
+and hence components of $\PP$ could be explicitly obtained by extending the well-known formulas for Legendre 
+polynomials, for instance
+\begin{equation}\label{eq:conn1}
+  \PP(\bomega) = \bomega^n - \frac{n(n-2)}{2(2n-1)}\Sym{\eye\otimes\bomega^{n-2}} + \frac{n(n-1)(n-2)(n-3)}{8(2n-1)(2n-3)}\Sym{\eye^2\otimes\bomega^{n-4}}\mp\ldots
+\end{equation}
+(\cite[Chap. VI]{Byerly}, \cite{Johnston1})
+% or
+%\begin{equation}\label{eq:conn2}
+%  \PP[0](\bomega) = 1,\ \PP[n+1](\bomega) = \left[\bomega\otimes\PP[n](\bomega) - \tfrac{n^2}{4n^2-1}\eye\otimes\PP[n-1](\bomega)\right]_{\mbox{\scriptsize sym}},\ n = 1,2,\ldots.
+%\end{equation}
+First few Maxwell-Cartesian surface harmonics generated by this formula are shown in the table below together with the 
+corresponding tesseral harmonics and Legendre polynomials.
+\begin{center}
+	\begin{tabular}{|A|B|C|D|}
+	  \hline
+		n & $\YY(\bomega)\propto$ & $\PP(\bomega)$ & $C_n P_n(\mu)$ \nl
+		0 & 1 & 1 & 1\nl
+		1 & $\Omega_x$, $\Omega_y, \Omega_z$ & $\Omega_x$, $\Omega_y$, $\Omega_z$ & $\mu$ \nl
+		2 & $-\Omega_x^2-\Omega_y^2 + 2\Omega_z^2$, 
+		    $\Omega_y\Omega_z$, 
+		    $\Omega_z\Omega_x$,
+		    $\Omega_x\Omega_y$,
+		    $\Omega_x^2 - \Omega_y^2$ & $\Omega_x^2-\tfrac13$, 
+		                                $\Omega_y^2-\tfrac13$, 
+		                                $\Omega_z^2-\tfrac13$, 
+		                                $\Omega_x\Omega_y$, 
+		                                $\Omega_x\Omega_z$, 
+		                                $\Omega_y\Omega_z$ & $\mu^2 - \tfrac13$ \nl
+	\end{tabular}
+	\captionof{table}{Tesseral and Maxwell-Cartesian surface spherical harmonics and Legendre polynomials up to degree 
+	$n = 2$.}
+	\label{tab:harmonics}
+\end{center}
+ The symmetric nature of the Maxwell-Cartesian surface harmonics as opposed to the tesseral harmonics can be seen from 
+ the third row in the table. We also note that since there are $\frac{(n+1)(n+2)}{2}$ distinct components in a general 
+ totally symmetric tensor of rank $n$, the number of Maxwell-Cartesian harmonics is greater than the number of tesseral 
+ harmonics of the same degree, which is ($2n + 1$) for $n \geq 2$. However, due to the $\frac{n(n-1)}{2}$ conditions 
+ arising from the tracelessness property, there are just $2n + 1$ independent components in $\PP$ (see also the footnote 
+ on pg. \pageref{pg:indepc}). This also indicates the fact that unlike the tesseral harmonics with same degree but
+ different orders, components of $\PP$ are not all $\Lp[2](\Sphere)$-orthogonal. Nevertheless, Maxwell-Cartesian surface
+  tensors of different degrees are orthogonal in the following sense:
+\begin{equation}\label{eq:OG}
+  \intA{\PP[n](\bomega) \otimes \PP[m](\bomega)} = \mathbb{O}^{m+n},\quad n\neq m.
+\end{equation}
+
+The Maxwell-Cartesian tensors have been actively used for solving various electro-magnetics and quantum-mechanical
+problems (see the references in \cite{Applequist2}), but there is apparently only one attempt to bring them to the field
+of neutron transport. In a recent article \cite{Coppa3}, Coppa re-derived the Maxwell-Cartesian surface spherical
+harmonic tensors from their analogy with Legendre polynomials (see above) and the requirement that they satisfy the
+addition theorem of the form \eqref{eq:addition}. He then multiplied the BTE with these tensors and integrated over the
+sphere to obtain a system of tensorial equations, each of which being itself a symmetric set of PDE's determining the
+components of the flux moment tensor defined by
+\begin{equation*}
+  \psi^{(n)}(\br) = \intA{\psi(\br,\bomega)\PP[n](\bomega)}.\tag{\cite[Eqn. (42)]{Coppa3}}
+\end{equation*}
+Note that this definition implies that the flux moment tensors $\psi^{(n)}$ are totally symmetric and traceless. 
+However, only the symmetry property appears to be recognized in \cite{Coppa3}. Using rather complicated tensor relations 
+(which are not fully derived in the paper and only conjectured to hold for general $n$), the system is constructed again 
+by analogy with the procedure leading to the $\PN$ system. This could be misleading, however. In particular, there is 
+no indication of why the moments obtained by solving the set could be interpreted as coefficients in an expansion of 
+angular flux. Note that in the usual $\PN$ method where the angular flux is expanded into a series of tesseral 
+harmonics, the key ingredient that allows us to deduce 
+%that allow us to deduce from the residual projection condition
+%$$
+%  \suma[n']{0}{\infty}\suma[m']{-n'}{n'}\Y{n'}{m'}(\bomega)\intA{\left[T\psi(\br,\bomega) - q(\br,\bomega)\right] \Y{n}{m}(\bomega)} = 0
+%$$
+%that 
+%$$
+%  \intA{\left[T\psi(\br,\bomega) - q(\br,\bomega)\right] \Y{n}{m}(\bomega)} = 0\quad \forall n,m
+%$$
+%(which leads to the moment equations analogous to \cite[Eqn. (48)]{Coppa3}) 
+the system of equations analogous to \cite[Eqn. (48)]{Coppa3}) for the coefficients in the expansion is orthogonality 
+(and hence linear independence) of all $\Y{n}{m}$. We do not have this property in the set of Maxwell-Cartesian 
+harmonics (which seems to be neglected in \cite{Coppa3}). This issue however, can be elegantly resolved by taking into 
+account the tracelessness property of the Maxwell-Cartesian tensors. We will demonstrate it by combining the results of 
+Johnston (\cite{Johnston1}) and Applequist (\cite{Applequist1}). Surprisingly, this more fundamental and systematic 
+approach leads to a set of equations equivalent with \cite[Eqn. (42)]{Coppa3} (explanation of why this is so deserves 
+further investigation). We will also see a clear connection to the 1D $\PN$ equations (based on the expansion of angular 
+flux in Legendre polynomials) which could be expected from the formal equivalence of the Maxwell-Cartesian tensors and 
+Legendre polynomials mentioned above (\eqref{eq:conn1}, 
+%\eqref{eq:conn2}, 
+Tab. \ref{tab:harmonics})\footnote{In \cite{Coppa3}, only the equivalence with $\PN[1]$ and $\SPN[2]$ equations have 
+been shown by rather laborious manipulations with the equations for $l = 0,1$ and $l = 0,1,2$, respectively.}.
+
+\section{Derivation of the $\MCPN$ approximation}\label{sec:mcpn}
+\subsection{First attempts}
+Using the results of \cite[Art. 114]{Byerly}, the expansion of angular neutron flux in terms of surface spherical 
+harmonics could be written as
+\begin{equation}\label{eq:MC-exp1}
+  \psi(\br,\bomega) = \suma[n]{0}{\infty}\frac{2n+1}{4\pi}\intA{\psi(\br,\bomega')P_n(\bomega\cdot\bomega')}.
+\end{equation}
+As shown in \cite[Sec. 7, Corollary II]{Applequist1}, Maxwell-Cartesian tensors satisfy the following form of 
+addition theorem:
+\begin{equation}\label{eq:MC-addition}
+  \PP(\bomega)\contr\PP(\bomega') = C_n P_n(\bomega\cdot\bomega')
+\end{equation}
+($C_n$ defined in \eqref{eq:leg}). Combining the two results, we obtain
+\begin{equation}\label{eq:MC-exp2}
+  \psi(\br,\bomega) = \suma[n]{0}{\infty}\frac{2n+1}{4\pi C_n}\left[\intA{\psi(\br,\bomega')\PP(\bomega')}\right]\contr\PP(\bomega).
+\end{equation}
+If we now define the \textit{$n$-th angular flux moment tensor} by
+\begin{equation}\label{eq:flux-moment}
+  \fmom(\br) := \frac{2n+1}{4\pi C_n}\intA{\psi(\br,\bomega)\PP(\bomega)}
+\end{equation}
+equation \eqref{eq:MC-exp2} becomes
+\begin{equation}\label{eq:MC-exp3}
+  \psi(\br,\bomega) = \suma[n]{0}{\infty}\fmom(\br)\contr\PP(\bomega).
+\end{equation}
+Note that we have, like before, $\phi = \fmom[0]$, $\mathbf{J} = \bigl[\fmom[1]_x,\fmom[1]_y,\fmom[1]_z\bigr]^T$.
+
+Although equation \eqref{eq:MC-exp3} with \eqref{eq:flux-moment} looks like a (generalized) Fourier series, we should 
+keep in mind that
+$$
+  \intA{\PP[\ell](\bomega)\otimes\suma[n]{0}{\infty}\fmom(\br)\contr\PP(\bomega)} \neq \fmom[\ell]
+$$
+in general and regard \eqref{eq:flux-moment} as definition.
+
+We analogously expand also the volumetric source term, leading to 
+\begin{equation}\label{eq:MC-exp_src}
+  q(\br,\bomega) = \suma[n]{0}{\infty}\qmom(\br)\contr\PP(\bomega)
+\end{equation}
+with
+\begin{equation*}
+  \qmom(\br) := \frac{2n+1}{4\pi C_n}\intA{q(\br,\bomega)\PP(\bomega)}.
+\end{equation*}
+
+To find the relations that must be satisfied by the angular expansion moments $\fmom(\br)$ in order for
+\eqref{eq:MC-exp3} (or equivalently \eqref{eq:MC-exp1}) to be the solution of the BTE \eqref{eq:MC-bte}, we insert the
+expansion \eqref{eq:MC-exp3} into \eqref{eq:MC-bte} (with source term represented according to \eqref{eq:MC-exp_src}).
+Let us first look at the transfer part.
+Applying eq. \eqref{eq:MC-addition} in the expansion \eqref{eq:exp2}, we immediately simplify the scattering
+term\footnote{As in \eqref{eq:MC-exp1}, the expansion is taken exactly with $K\to\infty$ so that we can simply write
+equalities between the $\Lp[2](\bomega)$ functions and their generalized Fourier series and use a single index $n =
+0,1,\ldots$ in both expansions. In a practical calculation the expansion in \eqref{eq:MC-exp1} is truncated at finite
+degree $N$ and the scattering cross-section moments $\sigma_{sk}$ are typically available only up to a certain
+anisotropy degree $K \leq N$; in that case, however, we may always set $\sigma_{sn} = \sigma_{sk}$ for $n \leq K$ and
+$\sigma_{sn} = 0$ otherwise.}:
+\begin{equation*}%\label{eq:scat}
+  \begin{aligned}
+  \intA[']{\sigma_s(\br,\bomega\cdot\bomega')\psi(\br,\bomega')} &= 
+    \suma[n]{0}{\infty}
+    \frac{2n+1}{4\pi}\sigma_{sn}(\br)\intA[']{P_n(\bomega'\cdot\bomega)\psi(\br,\bomega')}\\
+    & = \suma[n]{0}{\infty}
+    \frac{2n+1}{4\pi C_n}\sigma_{sn}(\br)\left[\intA[']{\PP(\bomega')\psi(\br,\bomega')}\right]\contr\PP(\bomega)\\
+    & = \suma[n]{0}{\infty}
+    \sigma_{sn}(\br)\fmom(\br)\contr\PP(\bomega).
+    \end{aligned}
+\end{equation*}
+Because of the orthogonality relation \eqref{eq:OG}, the fission part will have the following form:
+\begin{equation}%\label{eq:scat}
+  \intA[']{\frac{\nu(\br)\sigma_f(\br)}{4\pi}\psi(\br,\bomega')} = 
+    \suma[n]{0}{\infty}
+    \frac{\nu(\br)\sigma_f(\br)}{4\pi}\fmom(\br)\contr\intA[']{\PP(\bomega')} = \nu(\br)\sigma_f(\br)\phi(\br).
+\end{equation}
+Therefore, by inserting \eqref{eq:MC-exp3} into \eqref{eq:MC-bte} and using these results we obtain
+\begin{equation}\label{eq:MC-bte2}
+  \suma[n]{0}{\infty}\left[\bomega\cdot\nabla\fmom + \sigma_t\fmom 
+  - \sigma_{sn}\fmom[n] - \kron{n}{0}\nu\sigma_f\phi - \qmom\right]\contr\PP(\bomega) = 0
+\end{equation}
+where each term in the brackets is dependent only on $\br$ (which is omitted for brevity).
+
+Formulation of the moment equations for $\fmom(\br)$ is now hampered by linear dependence among certain functions in
+each $\PP(\bomega)$ (so that we cannot deduce from \eqref{eq:MC-bte2} that for each $n$, all components of the
+expression in brackets must vanish), as well as by the advection term which still contains $\bomega$. Both issues may be
+however overcome by the so-called \textit{detracer exchange theorem} (\cite[Sec. 5.2]{Applequist2}).
+\begin{theorem}\label{thm:detex}
+  If $\AA$ and $\BB$ are totally symmetric tensors of rank $n$, then
+  $$
+    \AA\contr\detr \BB = \BB\contr\detr \AA.
+  $$
+\end{theorem}
+\begin{proof}
+  The theorem easily follows from the definitions of the detracer operator \eqref{eq:detr} and tensor contraction.
+\end{proof}
+Since $\fmom(\br)$ is by definition totally symmetric and traceless and $\bomega^{n}$ totally symmetric, using Theorem 
+\ref{thm:detex} with $\AA \equiv \fmom(\br)$ and $\BB \equiv \bomega^{n}$ and the definition \eqref{eq:MCSH} of 
+Maxwell-Cartesian tensors shows that\footnote{Recall that the detracer is a projection operator into the space of 
+TST tensors and thus leaves the already TST tensor unchanged.} 
+$$
+  \fmom(\br)\contr\PP(\bomega) = \fmom(\br)\contr\bomega^n
+$$
+and the expansion \eqref{eq:MC-exp3} is thus equivalent to a power series in $\bomega$:
+$$
+  \psi(\br,\bomega) = \suma[n]{0}{\infty}\fmom(\br)\contr\bomega^n
+$$
+(similarly for \eqref{eq:MC-exp_src}). The advection term therefore simplifies as follows:
+$$
+  (\bomega\cdot\nabla)\fmom\contr\bomega^n = \left.
+  \pw{\Omega_\beta\gradcomp\beta\fmom_{\alpha_0,\ldots,\alpha_{n-1}}\Omega_{\alpha_{n-1}}\cdots\Omega_{\alpha_0}}{if $n \geq 1$}
+     {\Omega_\beta\gradcomp\beta\phi}{if $n = 0$}\right\}
+   = \nabla\fmom\contr[n+1]\bomega^{n+1}
+$$
+for $n = 0,1,\ldots$ and by reindexing:
+$$
+  (\bomega\cdot\nabla)\fmom[n-1]\contr\bomega^{n-1} = \nabla\fmom[n-1]\contr[n]\bomega^{n}
+$$
+for $n = 1,2,\ldots$. We can therefore rewrite eq. \eqref{eq:MC-bte2} as
+\begin{equation}\label{eq:MC-bte3}
+  \suma[n]{0}{\infty}\left[\nabla\fmom[n-1] + \sigma_t\fmom
+  - \sigma_{sn}\fmom - \kron{n}{0}\nu\sigma_f\phi - \qmom\right]\contr\bomega^n = 0
+\end{equation}
+with the term with negative rank discarded. Although eq. \eqref{eq:MC-bte3} closely resembles a vanishing linear 
+combination of monomials
+\footnote{Since we will not need to distinguish between the position vector $\br$ and the velocity vector $\bv$ here, 
+we use the standard Cartesian coordinates $[x,y,z]$ for the latter as well.}
+$$
+  \bv^n = x^{n_1}y^{n_2}z^{n_3},\quad n_1 + n_2 + n_3 = n
+$$
+whose linear independence would imply that the expression in brackets must be a zero tensor for each $n$, by examining 
+the not fully sensible equations that we would obtain in this way we might suspect that this is not the case. 
+The reason is given in the following section.
+
+\subsection{Sufficient conditions for deriving the moment equations}
+When monomials $\bv^n$ of different degrees are restricted to the unit sphere, there appear nontrivial but vanishing
+linear combinations of them (consider e.g. $\Omega_x^2 + \Omega_y^2 + \Omega_z^2 - 1$). However, when only the
+components of $\bomega^n$ for a \textsl{single} $n$ are considered, they \textsl{are} linearly independent according to
+the following lemma.
+\begin{lemma}
+  If $\AA$ is a totally symmetric tensor of rank $n$, independent of $\bomega$, and
+  \begin{equation}\label{eq:lemma1}
+    \AA\contr\bomega^n = 0,
+  \end{equation}
+  then $\AA = \mathbb{O}^{(n)}$.
+\end{lemma}
+\begin{proof}
+  If $\AA$ is a totally symmetric tensor, then 
+  $$
+    \AA\contr\bomega^n = \frac{1}{v^n}\AA\contr\bv^n
+  $$
+  represents a linear combination of monomials of degree $n$,  with coefficients being the components of $\AA$. By 
+  linear independence of these monomials we conclude that if the equality \eqref{eq:lemma1} holds, then all components 
+  of $\AA$ must vanish.
+\end{proof}
+
+One possibility how to extend the above result to an arbitrary linear combination of direction tensors with different
+ranks is to require the coefficient tensors to be not only totally symmetric, but also traceless.
+
+\begin{theorem}\label{thm:MC-suffcond}
+  If $\AA$ is a TST tensor independent of $\bomega$ for all $n = 0,1,\ldots$ and
+  $$
+    \suma[n]{0}{\infty}\AA\contr\bomega^n = 0,
+  $$
+  then $\AA = \mathbb{O}^{(n)}$ for all $n$.
+\end{theorem}
+\begin{proof}
+  As discussed in Sec. \ref{sec:MCSH}, any TST tensor $\AA$ uniquely identifies a surface spherical harmonic of degree 
+  $n$ by 
+  $$
+    Y_n(\bomega) = \AA\contr\bomega^n.
+  $$
+  Since surface spherical harmonics of different degrees are linearly independent,
+  $$
+    \suma[n]{0}{\infty} Y_n(\bomega) = 0\quad \Rightarrow \quad Y_n(\bomega) = 0 \ \ \forall{n}.
+  $$
+  The conclusion follows from the above lemma.
+\end{proof}
+
+\subsection{Final set of moment equations}
+Using Thm. \ref{thm:MC-suffcond}, we see that we can obtain from \eqref{eq:MC-bte3} a set of moment equations if we
+ensure that the expression in square brackets is a TST tensor for each $n$. Since $\fmom$ and $\qmom$ are TST by
+definition, we only have to symmetrize and detrace the advection terms. We need to be careful, however, not to change
+the original equation. This can be done by a clever rearranging of the terms in the sum.
+
+First note that thanks to the symmetry of $\bomega^n$ we obviously have $$
+  \nabla\fmom[n-1]\contr\bomega^n = \Sym{\nabla\fmom[n-1]}\contr\bomega^n.
+$$ The symmetrized advection terms can be put into an equivalent TST form by $$
+  \Sym{\nabla\fmom[n-1]} = \detr\Sym{\nabla\fmom[n-1]} - \left(\detr\Sym{\nabla\fmom[n-1]} -
+  \Sym{\nabla\fmom[n-1]}\right).
+$$ The result of the detracer operation on $\Sym{\nabla\fmom[n-1]}$ can be seen by using $$
+  \AAA{\alpha_1\ldots\alpha_n} = \Sym{\gradcomp{\alpha_1}\fmom[n-1]_{\alpha_2\ldots\alpha_n}},\quad n \geq 2
+$$ in eq. \eqref{eq:detr}. Taking into account the tracelessness of $\fmom[n-1]$, the only nonzero terms in the outer
+sum will be those with $m = 0$ and $m = 1$. For $m = 0$, we obtain just the original tensor $\AA =
+\Sym{\nabla\fmom[n-1]}$, while for $m = 1$, we obtain the inner sum over terms
+\begin{equation*}
+  \Sym{\kron{\alpha_1}{\alpha_2}\gradcomp{\beta}\fmom[n-1]_{\beta\alpha_3\ldots\alpha_n}},\quad
+  \Sym{\kron{\alpha_1}{\alpha_3}\gradcomp{\beta}\fmom[n-1]_{\alpha_2\beta\alpha_4\ldots\alpha_n}},\quad\mbox{etc.},
+\end{equation*}
+that is $n-1$ times $\Sym{\eye\otimes\nabla\cdot\fmom[n-1]}$. We therefore get
+\begin{equation}
+\begin{aligned}\label{eq:MC-split0}
+  \nabla\fmom[n-1]\contr\bomega^n &= \Sym{\nabla\fmom[n-1]}\contr\bomega^n\\
+    & = \Sym{\nabla\fmom[n-1] - \frac{n-1}{2n-1}\eye\otimes\nabla\cdot\fmom[n-1] + \frac{n-1}{2n-1}\eye\otimes\nabla\cdot\fmom[n-1]}\contr\bomega^n\\
+    & = \Sym{\nabla\fmom[n-1] - \frac{n-1}{2n-1}\eye\otimes\nabla\cdot\fmom[n-1]}\contr\bomega^n + \frac{n-1}{2n-1}\left(\nabla\cdot\fmom[n-1]\right)\contr\bomega^{n-2}
+\end{aligned}
+\end{equation}
+where the last equality comes from the realization that $\eye\cdot\bomega^2 = \bomega\cdot\bomega = 1$ and 
+$\nabla\cdot\fmom[n-1]$ is totally symmetric since $\fmom[n-1]$ is. 
+Note that we have actually obtained that
+\begin{equation}\label{eq:MC-split}
+  \nabla\fmom[n-1]\contr\bomega^n = \detr\Sym{\nabla\fmom[n-1]}\contr\bomega^n + 
+  \frac{n-1}{2n-1}\left(\nabla\cdot\fmom[n-1]\right)\contr\bomega^{n-2}.
+\end{equation}
+Eq. \eqref{eq:MC-split} shows that even though $\nabla\fmom[n-1]$ by itself is neither symmetric nor traceless, its 
+contraction with $\bomega^n$ can be split into a sum of two contractions of TST tensors (total symmetry and 
+tracelessness of the latter follows from the fact that $\fmom[n-1]$ is TST). By introducing this splitting into eq. 
+\eqref{eq:MC-bte3} and regrouping the sum by $\bomega^n$, we finally obtain
+\begin{equation}\label{eq:MC-bte4}
+\begin{multlined}
+  \suma[n]{0}{\infty}\left\{\Sym{\nabla\fmom[n-1] - \frac{n-1}{2n-1}\eye\otimes\nabla\cdot\fmom[n-1]} + \frac{n+1}{2n+3}\nabla\cdot\fmom[n+1]+\right.\\
+  \left.\vphantom{\Sym{\nabla\fmom[n-1] - \frac{n-1}{2n-1}\eye\otimes\nabla\cdot\fmom[n-1]} + \frac{n+1}{2n+3}\nabla\cdot\fmom[n+1]}
+     + \sigma_t\fmom - \sigma_{sn}\fmom - \kron{n}{0}\nu\sigma_f\phi - \qmom
+  \right\}\contr\bomega^n = 0
+\end{multlined}
+\end{equation}
+(again with the non-sensical tensors with negative ranks discarded).
+
+Equation \eqref{eq:MC-bte4} is completely equivalent to eq. \eqref{eq:MC-bte3} or \eqref{eq:MC-bte2}, but regrouped to a
+form of a vanishing linear combination of $\bomega^n$ with TST coefficient tensors for each $n$. Theorem
+\ref{thm:MC-suffcond} therefore applies and we get the desired set of first-order partial differential equations for the
+angular flux moments:
+\begin{equation}\label{eq:MC-set}
+  \frac{n+1}{2n+3}\nabla\cdot\fmom[n+1] + \Sym{\nabla\fmom[n-1] - \frac{n-1}{2n-1}\eye\otimes\nabla\cdot\fmom[n-1]} + 
+  \sigma_t\fmom - \sigma_{sn}\fmom - \kron{n}{0}\nu\sigma_f\phi = \qmom
+\end{equation}
+for each $n = 0,1,\ldots$. 
+
+\subsection{The $\MCPN$ approximation}
+Note that in passing to a finite approximation by the simplest closure $\nabla\cdot\fmom[N+1] \equiv \mathbb{O}^{N}$ for
+some $N \geq 0$, we do not spoil the TST character of the $N$-th coefficient tensor (in view of \eqref{eq:MC-split0},
+this closure actually means that we are neglecting the nonzero traces of $\nabla\fmom[N-1]$).
+The set \eqref{eq:MC-set} for $n \leq N$ may be regarded as an alternative to the ordinary $\PN$ equations and because
+its solution represents the expansion of angular flux into Maxwell-Cartesian surface spherical harmonics of degrees up
+to $N$, it will be called \textit{$\MCPN$ approximation}. We now explicitly state the first four equations in the
+$\MCPN[3]$ set. We put $$\Sa{n} = \sigma_t - \sigma_{sn} - \kron{n}{0}\nu\sigma_f$$ and also include the $\otimes$
+symbol whenever multiplication of tensors of rank $\geq 1$ occurs and finally obtain
+
+\begin{equation}\label{eq:MCP3}
+\begin{aligned}
+    \tfrac{1}{3}\nabla\cdot\fmom[1] 
+      +   {\Sigma}_{0}\phi
+      &=  {q}^{(0)} \\[.2em]
+    \tfrac{2}{5} \nabla\cdot\fmom[2] + \Sym{\nabla\otimes\phi} 
+      +   {\Sigma}_{1}\fmom[1] 
+      &=  {q}^{(1)}  \\[.2em]
+    \tfrac{3}{7} \nabla\cdot\fmom[3] + \Sym{\nabla\otimes\fmom[1]} - \tfrac{1}{3} \Sym{\eye\otimes\nabla\cdot\fmom[1]}
+      +   {\Sigma}_{2}\fmom[2]
+      &=  {q}^{(2)}  \\[.2em]
+                                       \Sym{\nabla\otimes\fmom[2]} - \tfrac{2}{5} \Sym{\eye\otimes\nabla\cdot\fmom[2]}
+      +   {\Sigma}_{3}\fmom[3]
+      &=  {q}^{(3)}
+    \end{aligned}
+\end{equation}
+
+We see that the $\MCPN[1]$ set is equivalent to the $\PN[1]$ set. For higher $N$, we have more equations in the $\MCPN$
+set than in the corresponding $\PN$ set, but because the coefficient tensors are bound to be TST, we can choose for each
+$n$ any $2n+1$ equations and solve them for the corresponding $2n+1$ moments (which are the coefficients in
+\eqref{eq:MC-exp3} at the functions forming an irreducible linearly independent subset of $\PP(\bomega)$) and express
+the remaining ones as their linear combinations.
+
+More important however appears the potential of using the symmetric and traceless structure of the $\MCPN$ equations to
+provide new perspectives on some other widely used approximations or to create new ones. For instance, by projecting
+each tensor along a chosen axis (say $z$), we obtain one dimensional equations which are exactly the same as the 1D
+$\PN$ equations (since both symmetrized terms in every $n \geq 2$ $\MCPN$ equation become equal to
+$\der{\fmom[n-1]_z}{z}$) if we take into account the definition of moments in the classical $\PN$ equations and multiply
+each $\fmom[n]_z$ accordingly by a factor ${2n+1}$. This indicates the possibility to investigate the original ad-hoc
+derivation of the $\SPN$ equation by formal extension of the 1D $\PN$ equations into 3D in the current tensorial
+framework. Similarly, by multiplying each $\fmom[n]$ by $\frac{n!}{(2n-1)!!}$, we arrive at the system derived by Coppa
+(\cite{Coppa3}).
+
+There is also an interesting link to an old article of Selengut (\cite{Selengut}) in which the full multidimensional
+$\PN[3]$ solution is obtained by solving a set of two coupled diffusion equations\footnote{much like in the $\SPN[3]$
+approximation, but apparently without restrictions on dimensionality or cross-sections other than the usual isotropic
+scattering and volumetric source assumptions} with special interface conditions in presence of multiple heterogeneous
+regions. Selengut's derivation of the set is however quite puzzling (see also commentary in \cite[Sec. 5.2]{McClarren2})
+and his equations have never been either analyzed or at least numerically tested. Assuming sufficient differentiability
+of the angular flux moments $\fmom$ in eq. \eqref{eq:MCP3}, isotropic volumetric sources ($q^{(n)} = 0$ for $n\geq 1$)
+and no void regions (i.e., all $\Sigma_{rn} > 0$), one can easily combine all equations into a single equation of the
+form
+\begin{equation}\label{eq:mom2}
+  \fmom[2] = F(\phi, \fmom[2]) + \frac{1}{3\Sigma_2}\eye\Bigl(q^{(0)} - \Sigma_0\phi\Bigr)
+\end{equation}
+with $F$ being a differential operator. The right hand side of \eqref{eq:mom2}, however, is merely a symmetric tensqor
+(matrix) with non-zero trace, and \eqref{eq:mom2} is thus not compatible with our definition of $\fmom[2]$. By 
+adding the \textit{compatibility condition} $$
+  \trace\left[F(\phi, \fmom[2]) + \frac{1}{3\Sigma_2}\eye\Bigl(q^{(0)} - \Sigma_0\phi\Bigr)\right] = 0,
+$$
+however, one can eliminate the components of $\fmom[2]$ and get the following equation for scalar flux
+\footnote{This has been done so far only for the $\MCPN[3]$ set using the computer algebra system Mathematica, but a 
+general procedure can be almost certainly formulated, leading to scalar flux equation with $\nabla^6$ term for
+ $\MCPN[5]$ and so forth.}
+\begin{equation}\label{eq:scfl}
+  \frac{3}{35\Sigma_1\Sigma_2\Sigma_3}\nabla^4\phi + \left(\frac{4}{15\Sigma_1\Sigma_2} + 
+  \frac{9}{35\Sigma_2\Sigma_3}\right)\nabla^2(q_0 - \Sigma_{0}\phi) - \frac{1}{3\Sigma_1}\nabla^2\phi
+	  = q_0 - \Sigma_{0}\phi,
+\end{equation}
+which in the case of isotropic scattering reduces exactly to Selengut's Eqn. (5). Further investigation of this 
+connection may be useful as it could shed some light on Selengut's derivation of interface conditions or lead to a
+ new one (including the boundary conditions).
+
+

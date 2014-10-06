@@ -1,0 +1,15 @@
+\let\unitsep=\cdot     % Inserted at spaces in second arg, separates units (A s)
+\let\numunitsep=\;  % Separator between number and unit (12.3 V)
+\makeatletter
+\def\quan#1{\ifmmode \let\@shiftmath=\relax \else \let\@shiftmath=$\fi
+\@shiftmath \uppercase{\def\@quanarg{#1}}%
+\expandafter\@quannum\@quanarg E\@noexp\@end \futurelet\@nextchar\@quanunit}
+\def\@quannum#1E#2\@end{\@quanmant#1\@end \ifx\@noexp#2 \else \@quanexp#2\fi}
+\def\@quanmant#1{\ifx#1\@end \let\@next=\relax \else
+\if,#1\mathord,\else #1\fi \let\@next=\@quanmant \fi \@next}
+\def\@quanexp#1E\@noexp{\times 10^{#1}}
+\def\@quanunit{\if[\@nextchar
+\def\@next[##1]{\numunitsep[\mathrm{##1}]\endgroup\@shiftmath}%
+\begingroup\@quanspace \else \let\@next=\@shiftmath \fi \@next}
+{\catcode`\ =\active\gdef\@quanspace{\catcode`\ =\active\let =\unitsep}}
+\makeatother

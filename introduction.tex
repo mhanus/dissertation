@@ -1,0 +1,256 @@
+\chapter{Introduction}\label{chap:intro}
+% \thispagestyle{empty}
+It is a common agreement nowadays that nuclear energy is the only available source able to fulfill current and future
+energetic demands of mankind without  polluting the Earth any further. Preceding its useful utilization, such as
+generation of electricity, materials irradiation or for medical purposes, its extraction within a nuclear reactor must
+occur.
+ Nuclear reactors are sophisticated devices composed of diverse materials like fuel, coolant, regulation and structural
+ materials. All these constituents are arranged in a highly heterogeneous manner due to various safety, technological
+ and economical considerations. Depending on the time spent within the reactor, both their physical and mechanical
+ properties change and some of them (like fuel elements of control rods) are also subject to repeated rearrangement.
+
+Design of such reactors and analysis of their various operational modes is therefore a complicated task that encompasses
+several areas of science and engineering. At its start, however, determination of neutronic conditions within the
+reactor core plays a crucial role and has received a substantial attention in the field of reactor physics over the past
+decades. Main objective of such neutronic analyses is to describe and predict the reactor state under various
+circumstances and to find its optimal configuration, in which it is capable of long-term, self-sustained operation with
+only a minimal human intervention.
+
+The optimal operation is achieved by automating the regulation devices to balance neutron production from fission chain
+reaction and their loss due to capture and out of core leakage. Such automation foremost requires knowledge of a
+long-term behaviour of any tested core configuration, which may be obtained by performing a steady-state analysis of the
+reactor core. Methods used for these analyses should accurately calculate the neutron multiplication factor
+(characterizing the departure of the core from the desired equilibrium state) and spatial distribution of neutron flux
+(from which subsequently the important reaction rates, power and heat distribution can be obtained for further
+assessment of reactor operation). Since there is usually a multitude of possible core configurations, all calculations
+should proceed swiftly to be practically applicable.
+
+\section{Past work and motivation for improvements}
+Formulation and implementation of a method suitable for the just mentioned calculation tasks has been the main subject
+of the author's Bachelor thesis \cite{bib:HanusBP}.
+It thoroughly describes the development of a two-dimensional solver capable of efficient calculation of the fission
+multiplication factor and corresponding neutron flux distribution for an arbitrary core composition. The method has been
+implemented in the MATLAB\nomenclature[X]{MATLAB}{\textbf{MAT}rix \textbf{LAB}oratory}{}{} development
+environment and successfully tested on a few benchmark problems.
+The current text originated as the Master thesis, building upon and referring to \cite{bib:HanusBP} from time to time.
+Although it is not neccessary to read the Bachelor thesis in order to understand this book, it may help further clarify
+the exposition, particularly at the places of explicit citations. Therefore, the Bachelor thesis is available
+electronically at \url{https://github.com/mhanus/publications/raw/bthesis/bakule/bakalarka/thesis.pdf}.
+
+At the end of \cite{bib:HanusBP}, several directions for future investigation and enhancements have been outlined. Also,
+many new requirements  have come from the company {\v S}koda-JS\nomenclature[X]{{\v S}JS}{\textbf{\v S}koda
+\textbf{J}adern{\' e} \textbf{s}troj{\' i}renstv{\' i}, a.s. ({S}koda Nuclear Machinery, Inc.)}{}{}, the industrial
+partner in the project\footnote{Project No. 1M0545 of the Czech Ministry of Education} under whose support both theses
+were created, or simply from the ongoing scientific progress.
+To identify the major areas for modernization, reflections on the main parts of \cite{bib:HanusBP} will now be given
+from the current point of view.
+
+% \vspace*{1em}
+\subsection{Improving the mathematico-physical model} 
+Expressing the balance of the processes occurring in the core mathematically leads in full generality to an
+integro-differential equation with seven independent variables -- the Boltzmann equation of neutron transport. This has
+been thoroughly described in Section 3.1 of the thesis. The following section takes the reader through various
+simplifications of the Boltzmann equation, resulting in a system of partial differential equations with only three
+independent variables (spatial coordinates in three dimensions) for the steady-state calculations. The two major
+approximations performed on the course are the assumption of diffusion-like behaviour of neutrons within the core and
+their categorization into several groups of constant energy.
+
+\subsubsection*{Limitation of diffusion approximation} The diffusion theory has long served as a standard tool for
+whole-core neutronic calculations. It allows an efficient numerical formulation and yet produces plausible results for
+many realistic reactor configurations. However, the assumptions made in its derivation severely restrict the
+circumstances under which the approximation is reasonable. Neutrons can be safely expected to move  from places of their
+highest concentration (corresponding to highest neutron flux) to those less occupied (according to the well-established
+Fick's law of diffusion) only in highly scattering and weakly absorbing media. The scattering is the only process
+contributing to neutron flux during the derivation (i.e. no sources and sinks have been assumed) and should be isotropic
+or only ``slightly'' anisotropic (what is meant by that will become clear in \sref{sec:dif}).  High absorption would
+lead to rapid spatial variation of neutron flux similarly to the proximity to interfaces separating different materials
+and invalidate another assumption made in the original derivation of the theory (\cite[Chap. 3]{StaceyNRP}).
+% \clearpage
+
+Consequently, at the peripheral regions of the core where structural material of the pressure vessel replaces the
+inner-core composition, near the control rods and localized sources in currently operating production and research
+reactors, in cores loaded with high-burnup fuel (an obvious and logical trend in todays fuel management) or in cores
+containing the MOX\nomenclature[X]{MOX}{\textbf{M}ixed \textbf{O}xide \textbf{F}uel}{}{} fuel adjacent to standard
+UO$_2$ fuel (an effective way to dispose of plutonium originating from weapons or spent fuel reprocessing), the theory
+warns us against using the diffusion approximation and the practical results of some recent difficult problems
+corroborate the warning.
+%  Fortunately in practice, the diffusion theory calculation can be often made accurate enough even in these cases by
+% applying transport theory corrections cleverly precalculated using the Boltzmann equation, which do not change the
+% overall structure of the equations (typically, they are incorporated into the input data to a diffusion method). Some
+% recent studies show, however, that especially for the last mentioned problems with high-burnup and MOX fuels, even
+% with such corrections unsatisfactory results are produced by diffusion methods.
+
+There are also cases where the diffusion becomes inadequate at all due to its isotropic nature, i.e. the inability to
+capture the phenomena associated with neutrons' direction of motion, like modeling the
+ADS\nomenclature[X]{ADS}{\textbf{A}ccelerator \textbf{D}riven \textbf{S}ystems}{}{} systems or shielding calculations.
+In order to develop a solution method capable of treating these cases, a full transport theory must be used as a basis
+instead of the diffusion approximation.
+
+\subsubsection{Limitation of the two-group approximation}
+Discretization of the continuous energetic dependence of neutrons into several intervals (\textit{groups}) relies on a
+careful precalculation of group-wise constant parameters for the resulting few-group system of governing equations. This
+is usually done by a multigroup calculation over single or several neighboring fuel assemblies (using a high-fidelity
+physical model), providing detailed energetic distribution of neutron flux (i.e. its \textit{spectrum}), which is used
+in turn to collapse the multigroup data into the desired number of groups (the so called \textit{group condensation}, or
+\textit{collapsing}). The resulting set of few-group constants is expected to capture most of the spectral
+characteristics of the given material. Due to a very complicated energetic dependence of core constituents and their
+non-trivial spectral interaction (e.g. in the mixed MOX/UO$_2$ cores or various future reactor designs), however, this
+becomes hardly achievable when collapsing into only a small final number of energy groups. Modern methods should
+therefore be applicable in finer energy group structures or even use a better approximation of energy spectrum and
+effects associated therewith (e.g. the resonance self-shielding, as demonstrated in \cite{bib:DownarARSM}).
+
+% \vspace*{1em}
+\subsection{Improving the numerical method}
+Perhaps the simplest numerical method for solving boundary value problems like that of neutron diffusion is based on the
+finite difference approximation of the involved differential operators and has become a workhorse of computer neutronic
+calculations since their beginning around 1960s. More computationally and physically pleasing methods have then been
+developed based on the variational or conservation principles, but the stringent demands on the fineness of the
+computational grid remained major obstacles to their efficient application. To overcome this drawback, the so called
+nodal methods were devised in mid seventies and have matured until today. They are now used to speed-up majority of both
+diffusion and transport codes.
+
+\subsubsection{Nodal method}\label{sec:Intro1121}
+Modern nodal methods are built upon a conservative discretization of the governing equations by the classical finite
+volume method (FVM). Somewhat against the theory of the method, however, the finite volumes are intentionally kept quite
+large so as to facilitate efficient solution of the equations for the whole core. Usually, the computational volumes (or
+\textit{nodes}) are chosen as coarse as the whole fuel assembly. Discretization errors thus introduced are accounted for
+by a clever correction scheme, which (similarly to a classical multigrid method) employs an additional level of
+calculation at several stages of the coarse mesh calculation. The more accurate approximation (commonly termed ``higher
+order approximation'') of desired quantities obtained from this second level is compared with that of the finite volume
+method on the coarse mesh to determine the correction. The solution of this iterative process converges to that of the
+more accurate method but with substantially less computational demands. This correction procedure is commonly known as a
+\textit{coarse-mesh, finite-difference} method (since the primary part of its iteration matrix represents the
+finite-difference equations obtained from the finite volume discretization over coarse volumes), or
+\textit{CMFD}.%\parend
+
+There are several ways of constructing the higher order solution and many actually do not require finer mesh. These
+methods either use knowledge of the analytic solution of the governing equations within each node (i.e. fuel assembly)
+or approximate the nodal flux shape by its projection into a space spanned by a finite set of suitable basis functions
+defined over the node. The former are hence termed \textit{analytic nodal methods} (\textit{ANM}) and some successful
+examples are described e.g. in \cite{bib:GrundmannDYN3D} or \cite{bib:ChoAFEN}.
+Methods of the other class are called \textit{nodal expansion methods} (\textit{NEM}). They differ among each other
+primarily in the choice of basis functions used for approximating the unknown flux function, leading to methods like
+\textit{PNM} (\textit{polynomial nodal method}) or \textit{SANM} (\textit{semi-analytic nodal method}). In our opinion,
+nodal expansion methods are somewhat easier to formulate and implement, particularly when finer energetic discretization
+is required, than the analytic methods. They are also more easily used in conjunction with the transport model. Since
+results of many numerical experiments with methods from both categories indicate comparative solution accuracy, the
+nodal expansion method has become the method of choice for our previous work and is described in more detail in
+\cite{bib:HanusBP}.
+
+\subsubsection{Homogenization and reconstruction}
+In the derivation of the nodal method equations, one assumes that material properties of each node are spatially
+constant, i.e. the node is physically homogeneous. Since one node typically encompasses the whole fuel assembly,
+however, this condition almost certainly does not hold even for a fresh assembly at the start of a new reactor campaign
+(which contains complicated arrangement of fuel rods, or \textit{pins}, with varying fuel material composition, their
+cladding and the moderator). Physically heterogeneous nodes are therefore first converted into homogeneous ones by a
+(purely mathematical) homogenization procedure, which ensures that the solution considering the simpler homogenized
+configuration will be equivalent to one that would be obtained without it, at least in the sense of preserving important
+quantities like reaction rates and multiplication factor. This is often done in a similar fashion as energy group
+condensation, i.e. by performing a single-assembly calculation with fictitious boundary conditions (usually
+corresponding to an infinite lattice of nodes with the same properties as the one being homogenized).
+
+Although there are applications, such as fuel optimization, where global reactor quantities (multiplication factor,
+assembly average power distribution) are the only required results, there are also others (like assembly power peaking
+estimation or thermal-hydraulic calculations) that require knowledge of detailed, pin-by-pin neutron flux distribution.
+Because nodal methods yield only the integral averages of neutron flux over the nodes, determination of the node-wise
+flux distribution from these averaged values is certainly not self-evident. A common way to resolve this issue of nodal
+methods is to utilize for the pinwise flux reconstruction the information about its characteristic shape, previously
+obtained during homogenization.
+% Note that using only a one-level transverse integration procedure when formulating the nodal equations makes the
+% reconstruction process easier, since a complete radial flux distribution is directly obtained from the homogenized
+% nodal solution.
+
+\subsubsection{Calculation procedure}
+
+The solution of a steady state core problem translates either into a fixed source calculation, in which the neutron flux
+produced by the specified external neutron source is determined, or into an eigenvalue problem, in which the dominant
+eigenpair is sought as it is the only one corresponding to real physical quantities, namely the reactor multiplication
+factor and neutron flux (\cite[Sec. 3.3.1.1]{bib:HanusBP}). In the reference, we dealt exclusively with the latter as it
+is the most frequent type of calculation performed in reactor analyses. As has been demonstrated there, traditional
+numerical methods like the power or Rayleigh-Ritz method can be used to determine the dominant eigenpair.
+
+However, in many real-world reactor problems, these simple iterative methods converge very slowly. Many techniques have
+been devised in need for an effective acceleration, like the Wielandt's shift method, Chebyshev or asymptotic source
+extrapolation. Although these methods can significantly reduce the number of iterations in some cases, there are
+problems in which even their convergence rate may become too slow. Furthermore, they depend rather sensitively on one or
+more parameters that must be guessed a priori. Recently, however, Krylov subspace methods have begun to be used in
+numerical core studies as they are believed to bring a solution at least to the last problem. In summary, acceleration
+schemes for the eigenvalue calculations are certainly a valuable addition to a core calculation code, although their
+usage should not be automatic and is likely to require an expert input.
+
+There are many areas of nuclear reactor studies where the calculation performance is highly important. In the fuel
+loading optimization process, for example, the steady state equation has to be evaluated many times in order to find the
+optimal condition. Another area, where the need for a fast core neutronic solver is even aggravated because a
+quasi-static approach cannot be used, is the analysis of the transient states of the reactor, such as the startup,
+shutdown or abrupt control rod movement during an accident. Although not being the subject of this thesis, a good method
+for steady-state reactor calculations should be prepared for a dynamical extension. Selection of mathematical and
+numerical models should therefore be guided with computational efficiency in mind.
+
+
+% \subsection{Improving the implementation}  Production nuclear reactor analysis codes are written in a low-level
+% programming language, such as C or Fortran, taking advantage of their reliability, execution speed and portability.
+% Due to their complexity, prototyping, rapidly changing and testing the code in these languages is impractical. There
+% are two tools that are in my opinion perfectly suited for such work in the sphere of scientific computing -- the
+% MATLAB and Mathematica development environments. The former is primarily designed for numerical computation while the
+% latter is better suited for symbolic manipulations with involved mathematical expressions, although this
+% categorization is of course not strict. \parend MATLAB has already been used to develop the previous nodal code and
+% proved to be quite efficient both in terms of the programming and execution time. Perhaps the single most important
+% feature of the new versions released in the course of development of the present nodal code is their refined object
+% oriented capability. The new code could have been therefore designed and written in a modern, object oriented fashion,
+% without losing the advanced data structures and functions available in MATLAB. \parend Relatively to the previous
+% nodal method, conformal mapping and transport methodology increased the complexity of mathematical formulations that
+% have to be represented in the computer code. Since a majority of them is only needed to be evaluated and manipulated
+% once and just the results may be used in the final code, Mathematica proved to be an invaluable companion to MATLAB in
+% developing the code.
+
+\section{Present work}
+
+During the improvement of the CMFD and nodal methods developed at the author's institute, a new requirement has arisen
+to create a fine-mesh, finite-difference (FMFD) solver. Although this may seem as a step backwards, the fine mesh
+heterogeneous solver is actually a key ingredient in the homogenization procedure, as will be shortly described in
+\sref{sec:Homogenization}. Moreover, after its calibration on available acknowledged results from literature, it has
+proven to be an invaluable aide in validating the developed nodal method against the input data from the partner company
+{\v S}-JS.
+
+Most notably, however, the FMFD discretization approach provides a simple way to deal with spatial dependence of the
+Boltzmann equation and allows thus to concentrate on the remaining independent variables in the equation. The main topic
+of this work is the exploration of the transport theoretical models and methods capable of improving the accuracy of the
+diffusion based solvers, that is, without the need for rewriting the whole existing code from scratch. It tries to
+provide a complete (although not at all exhaustive) overview of the whole process of transforming the neutron transport
+equation into a readily programmable numerical method.
+
+\subsection{Structure of the text}
+Chapter 2 is devoted to the mathematical theory of neutron transport, which is in the literature often either silently
+omitted (in the physicists' works) or tremendously involved (the mathematicians' works). Section \ref{sec:ntt} presents
+the fundamental equation of the theory together with a physical explanation of its terms and some basic
+simplifications.\\
+\indent Section \ref{sec:ms} then describes a functional-analytic setting of the whole theory, which proves very useful
+for describing the methods generally applicable to any transport approximation (including diffusion) in the subsequent
+parts.\\
+\indent The two problems of primary interest for applications are presented next, in \sref{sec:two_problems} -- namely
+the eigenvalue (core criticality) calculation and the calculation with specified non-changing neutron sources. Overview
+of the mathematical conditions necessary to prove the existence of their solution and a connection to the corresponding
+physical conditions are also given.\\
+\indent The chapter is concluded with sections \ref{sec:angular} and \ref{sec:tr-slab}, which concentrate on the
+complicated directional dependence of the processes governed by the neutron transport equation and develops their
+convenient mathematical representation.
+
+Chapter 3 focuses on the actual discretization of the energetic and directional dependence of Boltzmann's equation.
+Energetic dependence is attended to first in \sref{sec:multigroup}, which describes the multigroup approximation and the
+natural solution technique of the resulting quasi-discrete equations (the \textit{source iteration}).\\
+\indent The angular variable is addressed next in \sref{sec:angular_approximation}. Two widely used methods -- that of
+\textit{discrete ordinates} and that of \textit{spherical harmonics} -- are described in the section, again with a link
+to the classical methods of numerical mathematics. The latter is then chosen for a closer study, ultimately leading to
+the so called \textit{simplified spherical harmonics} approximation.\\
+\indent In the final \sref{sec:mgsp3}, the results of the energetic discretization are linked together with those of the
+directional one to formulate the multigroup simplified spherical harmonics approximation.
+
+Chapter 4 addresses the remaining continuous variable in the transport equation by describing the spatial discretization
+using a finite volume scheme. As the  main targetted application domain is the neutronic analysis of thermal light water
+reactors (LWR\nomenclature[X]{LWR}{\textbf{L}ight \textbf{W}ater \textbf{R}eactor}) with hexagonal fuel assemblies, the
+spatial discretization is performed accordingly -- by the coarse-mesh, finite-difference method accompanied by a nodal
+method to reduce discretization errors, and by the fine-mesh, finite-difference method. The first approach is described
+only very briefly, leaving more space to the latter. The FMFD method is then shown to give consistent results with the
+acknowledged fine-mesh codes in the three-dimensional diffusion and transport-theory calculations.
+
+% \clearpage

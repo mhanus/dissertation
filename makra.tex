@@ -1,0 +1,138 @@
+\newcommand{\comment}[1]{}
+\newcommand{\myparagraph}[1]{\paragraph{#1}\mbox{}\\}
+\newcommand{\pw}[4]{
+	\begin{cases}\displaystyle
+		#1 & \mbox{#2},\\ 
+		#3 & \mbox{#4}
+	\end{cases}
+}
+
+\newcommand{\cref}[1]{Chap.~\ref{#1}}
+\newcommand{\Cref}[1]{Chapter~\ref{#1}}
+\newcommand{\sref}[1]{Sec.~\ref{#1}}
+\newcommand{\Sref}[1]{Section~\ref{#1}}
+\newcommand{\aref}[1]{App.~\ref{#1}}
+\newcommand{\Aref}[1]{Appendix~\ref{#1}}
+\newcommand{\fref}[1]{Fig.~\ref{#1}}
+\newcommand{\Fref}[1]{Figure~\ref{#1}}
+\newcommand{\tref}[1]{Tab.~\ref{#1}}
+\newcommand{\Tref}[1]{Table~\ref{#1}}
+\newcommand{\pgref}[1]{p.~\pageref{#1}}
+\newcommand{\Pgref}[1]{page~\pageref{#1}}
+
+
+
+\def\eqrefs#1#2{(\protect\ref{#1}--\protect\ref{#2})}
+
+\newcommand{\alert}[1]{\textcolor{red}{#1}}
+\newcommand{\PN}[1][N]{\ensuremath{\text{P}_{#1}}}
+\newcommand{\MCPN}[1][N]{\ensuremath{\text{MCP}_{#1}}}
+\newcommand{\SN}[1][N]{\ensuremath{\text{S}_{#1}}}
+\newcommand{\SPN}[1][N]{\ensuremath{\text{SP}_{#1}}}
+\newcommand{\Oh}{\ensuremath{\mathcal{O}}}
+
+\newcommand{\R}[1][]{\mathbb{R}^{#1}}
+\newcommand{\mat}[1]{\mathbf{#1}}
+\newcommand{\src}{q}
+
+\newcommand{\sla}{\ensuremath{\shortleftarrow}}
+\newcommand{\sra}{\ensuremath{\shortrightarrow}}
+
+\newcommand{\br}{\ensuremath{\mathbf{r}}}
+\newcommand{\bv}{\ensuremath{\mathbf{v}}}
+\newcommand{\bn}{\ensuremath{\mathbf{n}}}
+\newcommand{\be}{\ensuremath{\mathbf{e}}}
+\newcommand{\bJ}{\ensuremath{\mathbf{J}}}
+
+\newcommand{\bomega}{\mathbf{\Omega}}
+\newcommand{\Sphere}{\ensuremath{S_2}}
+\newcommand{\Emin}{\ensuremath{E_{\text{min}}}}
+\newcommand{\Emax}{\ensuremath{E_{\text{max}}}}
+
+\newcommand{\der}[3][]{\ensuremath{\frac{\text{d}^{#1}{#2}}{\text{d} {#3}^{#1}}}}
+\newcommand{\pd}[3][]{\ensuremath{\frac{\partial^{#1}#2}{\partial #3^{#1}}}}
+\newcommand{\grad}{\nabla}
+\newcommand{\gradcomp}[1]{\nabla_{\!#1}}
+\newcommand{\lapv}{\nabla^2}
+\newcommand{\lap}{\nabla^2}
+
+\renewcommand{\d}[1]{\ensuremath{\text{d}#1\,}}
+\newcommand{\intE}[4][]{\int_{#2}^{#3}#4\,\d{E#1}}
+\newcommand{\intEg}[3]{\int_{E^{#1}}^{E^{#2}}#3\,\d{E}}
+\newcommand{\intA}[2][]{\int_{\Sphere}#2\,\d{\bomega#1}}
+\newcommand{\intX}[2][X]{\int_{#1}#2\,\d{x}}
+
+\newcommand{\sumg}{\sum_{{g'\neq g}}}
+\newcommand{\summ}[2]{\sum_{#1}^{#2}}
+\newcommand{\suma}[3][l]{\summ{#1=#2}{#3}}
+
+\newcommand{\abs}[1]{\ensuremath{\left\vert#1\right\vert}}
+\newcommand{\norm}[2][]{\ensuremath{\lVert#2\rVert_{#1}}}
+
+\newcommand{\pX}[1][]{\partial X^{#1}}
+\newcommand{\pV}[1][]{\partial V}
+\newcommand{\VV}{V}
+
+\newcommand{\polar}{\vartheta}
+\newcommand{\azimuthal}{\varphi}
+\newcommand{\sint}{\sin \polar}
+\newcommand{\sinp}{\sin \azimuthal}
+\newcommand{\cost}{\cos \polar}
+\newcommand{\cosp}{\cos \azimuthal}
+\newcommand{\db}{\ensuremath{\d\xi}}
+
+\newcommand{\Lp}[1][p]{L^{#1}}
+\newcommand{\Hp}[1][p]{H^{#1}}
+\newcommand{\Id}{\ensuremath{I}}
+\newcommand{\Dom}[1]{\mathcal{D}(#1)}
+
+\newcommand{\Y}[2]{Y_{#1}^{#2}}
+\renewcommand{\P}[2]{P_{#1}^{#2}}
+\newcommand{\YY}[1][n]{\mathbf{Y}_{#1}}
+\newcommand{\Yc}[2]{\bar{Y}_{#1}^{#2}}
+\newcommand{\YYc}[1][n]{\bar{\mathbf{Y}}_{#1}}
+
+\newcommand{\PP}[1][n]{\mathbb{P}^{(#1)}}
+\newcommand{\PPP}[2][n]{P^{(#1)}_{#2}}
+\renewcommand{\AA}[1][n]{\mathbb{A}^{(#1)}}
+\newcommand{\AAA}[2][n]{A^{(#1)}_{#2}}
+\newcommand{\BB}[1][n]{\mathbb{B}^{(#1)}}
+\newcommand{\BBB}[2][n]{B^{(#1)}_{#2}}
+\newcommand{\CC}[1][n]{\mathbb{C}^{(#1)}}
+\newcommand{\CCC}[2][n]{C^{(#1)}_{#2}}
+
+
+\newcommand{\kron}[2]{\delta_{#1#2}}
+\newcommand{\Sym}[1]{\left[#1\right]_{\mbox{\scriptsize sym}}}
+\newcommand{\eye}{\mathbb{I}}
+\newcommand{\detr}[1][n]{\mathscr{D}_{#1}}
+\newcommand{\contr}[1][n]{\cdot}%\underset{#1}{\cdot}}
+\newcommand{\perm}[1]{\pi(#1)}
+
+\newcommand{\angmom}[2]{\ensuremath{\phi_{#1}^{#2}}}
+\newcommand{\fmom}[1][n]{\Phi_{#1}}
+\newcommand{\qmom}[1][n]{Q_{#1}}
+\newcommand{\Sa}[2][]{\Sigma^{#1}_{#2}}
+\newcommand{\mst}{\underline{\sigma_t}}
+%\newcommand{\Sym}[2]{\mathscr{S}^{(#1)}\left[#2\right]}
+
+\newcommand{\angflux}{\ensuremath{\psi}}
+
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\esssup}{ess\,sup\,}
+\DeclareMathOperator{\argmin}{argmin\,}
+\DeclareMathOperator{\diag}{diag\,}
+\DeclareMathOperator{\col}{col\,}
+\DeclareMathOperator{\trace}{tr\,}
+
+\usepackage{colortbl}
+\newlength\celldim \newlength\fontheight \newlength\extraheight
+\setlength\celldim{2em}
+\settoheight\fontheight{A}
+\setlength\extraheight{\celldim - \fontheight}
+
+\newcolumntype{A}{ >{\centering } p{1em}  <{\rule[-.5\extraheight]{0pt}{\extraheight+\fontheight}}}
+\newcolumntype{B}{ >{\centering } p{11em}  <{\rule[-.5\extraheight]{0pt}{\extraheight+\fontheight}}}
+\newcolumntype{C}{ >{\centering } p{11em} <{\rule[-.5\extraheight]{0pt}{\extraheight+\fontheight}}}
+\newcolumntype{D}{ >{\centering } p{4em}  <{\rule[-.5\extraheight]{0pt}{\extraheight+\fontheight}}}
+\newcommand{\nl}{\tabularnewline\hline}
