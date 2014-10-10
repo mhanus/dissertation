@@ -80,7 +80,7 @@
 \usepackage[sort, numbers]{natbib}
 
 \usepackage{stmaryrd}
-\usepackage{mathrsfs}
+%\usepackage{mathrsfs}
 
 \usepackage{ifthen}
 \usepackage{enumitem}
@@ -170,28 +170,28 @@
 \def\pagedeclaration#1{ \dotfill~#1}
 
 
-\renewcommand{\nompreamble}{ \subsection*{Guideline}%\thispagestyle{empty} The list of letters used throughout the text
-is divided into two categories: those written in Roman (or calligraphic) script and those written in Greek script.
+%\renewcommand{\nompreamble}{ \subsection*{Guideline}%\thispagestyle{empty} The list of letters used throughout the text
+%is divided into two categories: those written in Roman (or calligraphic) script and those written in Greek script.
 % The entries are sorted alphabetically in each category.
-Letters not used beyond first few lines after their definition are normally not listed. If the letter denotes some
-quantity for which there is a numbered definition in the text, the equation number is referenced after the description
-of the quantity.
-Dependence of functions is written in terms of variables used in the place of their first appearance.
+%Letters not used beyond first few lines after their definition are normally not listed. If the letter denotes some
+%quantity for which there is a numbered definition in the text, the equation number is referenced after the description
+%of the quantity.
+%Dependence of functions is written in terms of variables used in the place of their first appearance.
 
-Some letters occur in the text in both normal and bold form, the latter usually denoting a matrix or vector
-representation of the former. Since the same bold symbols are understood differently in different sections, including
-them here would only be confusing. Instead, blocks entitled \mbox{\textsc{Notational remark}} are placed at places where
-the notational convention changes and define the precise meaning of the symbols for the ensuing part of the text.
-
-In addition to explanations of indexed letters in the just mentioned lists, commonly used indices are also enumerated
-separately in another two tables (for subscripts and superscripts, respectively).
+% Some letters occur in the text in both normal and bold form, the latter usually denoting a matrix or vector
+% representation of the former. Since the same bold symbols are understood differently in different sections, including
+% them here would only be confusing. Instead, blocks entitled \mbox{\textsc{Notational remark}} are placed at places where
+% the notational convention changes and define the precise meaning of the symbols for the ensuing part of the text.
+% 
+% In addition to explanations of indexed letters in the just mentioned lists, commonly used indices are also enumerated
+% separately in another two tables (for subscripts and superscripts, respectively).
 %  Transport theory functions are in the text first presented in a general time-dependent form and this dependence is
 % later removed by the assumption of steady state (\sref{sec:steady}). Basic meaning of both forms of the function is
 % preserved, however, so the list includes only the general time-dependent functions for the sake of brevity. If for any
 % other reason two different symbols share the same meaning (e.g. due to omission of some indices that became redundant
 % under additional assumptions), they are separated by semicolon but make one entry in the list.\par
-Listing of acronyms concludes this List of Symbols. Abbreviations of named methods are listed separately.
-\clearpage }
+% Listing of acronyms concludes this List of Symbols. Abbreviations of named methods are listed separately.
+% \clearpage }
 
 \makenomenclature
 

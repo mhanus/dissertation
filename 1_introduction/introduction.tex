@@ -38,8 +38,7 @@ then be presented in more detail in Chap. \ref{chap:NTE}, together with the revi
 
 The following subsections present the main results of author's work during his Ph.D. studies.
 
-\myparagraph{The $\MCPN$ approximation and its relation to the $\SPN$ approximation} 
-
+\paragraph{The $\MCPN$ approximation and its relation to the $\SPN$ approximation} 
 One of the traditional discretization methods that converts the 6-dimensional integro-differential NTE into a system of
 familiar 3-dimensional partial differential equations (PDEs\nomenclature[Z]{PDE}{Partial differential equation}) is the
 \textit{method of spherical harmonics}, denoted $\PN$\nomenclature[Z]{\PN}{Method of spherical harmonics of order $N$} 
@@ -65,8 +64,7 @@ supercomputing center, waiting for it to come to the front of an execution queue
 attractive for physicists to quickly test their empirical approximations used throughout their production code, which is
 usually based on the strongest transport approximation -- the diffusion approximation.
 
-\myparagraph{Finite element framework for 2D neutron diffusion/transport problems}
-
+\myparagraph{Finite element framework for 2D neutron diffusion or transport problems}
 The neutron diffusion approximation, whereby the NTE is reduced to a second-order elliptic PDE (or, when energy
 dependence is taken into account implicitly, a weakly coupled non-symmetric system of second-order PDEs with
 positive-definite symmetric part -- the so-called \textit{multigroup neutron diffusion approximation}), also forms the
@@ -122,7 +120,6 @@ the NTE (unlike the $\SPN$ approximation in multidimensional, multiregion domain
 \alert{ref}.
 
 \myparagraph{3D coupled neutron-physical finite element code based on the multigroup diffusion approximation}
-
 Unfortunately, the 3D version of Hermes has not yet been released and thus the main utility of the neutronics framework
 introduced in previous paragraph is in testing new ideas on hp-adaptivity for neutron transport problems. For the
 purposes of the research project underlying this thesis (see the footnote \ref{ftn:TACR} on pg. \pageref{ftn:TACR}), a
@@ -147,7 +144,6 @@ couldn't find any paper dealing with the well-posedness of the $\SPN$ equations.
 \alert{ref}.
 
 \myparagraph{New method for solving large eigenvalue problems}
-
 Determination of reactor steady state requires finding the dominant eigenpair of a generalized eigenvalue problem. This
 has been traditionally performed by the simple power method, accelerated by eigenvalue shifting or Chebyshev
 combination of previous iterates. Recently, Krylov subspace methods have been applied (\cite{warsa}, \cite{Subramanian},
@@ -155,7 +151,7 @@ or basically any reference from the ``Nuclear Engineering'' section at
 \url{http://www.grycap.upv.es/slepc/material/appli.htm}). While the SLEPc library also serves as the main eigenvalue
 solver of our neutron-physical code, there is another eigensolver module that is based on a new method
 proposed by author's colleagues P. Van{\v e}k and R. Ku{\v z}el (who implemented the method on graphical accelerator
-cards available in our project server). Even though the implementation is not yet competitive with the well-optimized
+cards). Even though the implementation is not yet competitive with the well-optimized
 solvers from the SLEPc library (in terms of execution speed), the method itself has some interesting properties
 connected with solving large-scale eigenvalue problems. The paper describing this development has not yet been 
 published, so it is included here as Chap. \alert{ref}. This last chapter also includes numerical experiments on simpler

@@ -1,4 +1,4 @@
-\chapter{Review of neutron transport methods}\label{chap:nte-review}
+\chapter{Solution methods for the NTE}\label{chap:nte-review}
 
 \nomenclature[s]{$f \approx g$}{$f$ is approximated by $g$}
 \nomenclature[s]{$f \equiv g$}{$f$ is by definition equivalent to $g$}
@@ -13,7 +13,8 @@ form with given neutron source function $Q$:
       \bomega\cdot\grad + \sigma(\br,E)
     \Biggr]
     \psi(\br,\bomega,E) =\\
-    = \intE[']{\Emin}{\Emax}{\intA[']{\kappa(\br,\bomega\sla\bomega',E\sla E')\psi(\br,\bomega',E',t)}}  + \src(\br,\bomega,E).
+    = \intE[']{\Emin}{\Emax}{\intA[']{\kappa(\br,\bomega\sla\bomega',E\sla E')\psi(\br,\bomega',E',t)}}  + 
+    \src(\br,\bomega,E).
   \end{multlined}  
 \end{equation}
 It's solution, the \textit{angular neutron flux density} $\psi$ -- is a function of the following independent variables
@@ -31,7 +32,7 @@ that define the neutron phase space:
 \end{itemize}
 Note that since the direction vectors are confined to the sphere: $\bomega\in\Sphere$, we can express the three
 Cartesian components of $\bomega$ by only two spherical coordinates $\polar$ and
-$\azimuthal$\nomenclature[g]{$\polar$}{polar angle}\nomenclature[g]{$\azimuthal$}{azimuthal angle}:
+$\azimuthal$\nomenclature[g]{$\polar$}{polar angle}\nomenclature[g]{$\azimuthal$}{azimuthal angle}: 
 \begin{equation*}
 	\bomega = \left[\begin{array}{c}
 		\Omega_x \\
@@ -62,10 +63,11 @@ reloading optimization and this eigenvalue problem thus plays a vital role in th
 large-scale eigenvalue problems. As practically all numerical methods for solving eigenvalue problems involve the
 solution of fixed-source problems of type \eqref{eq1}, we will use eq. \eqref{eq1} as our starting point.
 
-Because of the relatively high number of independent variables appearing in the solution of eq. \eqref{eq1}
-($x,y,z\vartheta,\varphi,E$), its practical use for calculations in larger spatial domains has always been a difficult
-task. Various simplifications have therefore been explored and we review the most successful ones and their most
-important properties in the following sections.
+As mentioned in the introductory chapter, we will focus on deterministic methods for solving eq. \eqref{eq1}, requiring
+proper discretization of \eqref{eq1} and solution of the resulting system of algebraic equations.
+In the following sections, we review some of the most widely used (in author's opinion) semi-discretizations with respect to
+energy, angle and spatial variables and finish this chapter with a general discussion on solving large sparse systems of
+algebraic equations, resulting from the combination of semi-discretizations that are most suitable for our purposes.
 
 \section{Approximation of energetic dependence}
 
@@ -96,7 +98,7 @@ flux. Many of them are still used and actively developed today as their characte
 application area than other methods, which are preferred in different areas\footnote{of course, this does not exclude
 their use in the other areas}.
 
-\subsection{Lattice calculations}
+\subsection{Lattice calculations} \label{sec:lattice}
 As a first example, we consider the class of
 methods originally derived from the equivalent integral form of the NTE (\alert{ref}). Typical representatives of this
 class are the method of collision probabilities or the method of characteristics (see e.g.
@@ -118,195 +120,371 @@ traditionally called in nuclear engineering field, are employed by many existing
 operation, it is furthermore neccessary to perform these procedures under varying physical conditions of the core and
 generate many sets of averaged coefficients corresponding to these conditions. The code system described in
 \alert{chapter} expects these coefficient sets on input, i.e., it is not designed for lattice calculations.
-\begin{center}
-***
-\end{center}
-More suitable for whole-core calculations (and hence for the purposes of the project underlying the authors
-Ph.D. research) are methods derived from the integro-differential
+\vspace*{1em}
+More suitable for whole-core calculations are methods derived from the integro-differential
 version of the NTE, eq.
 \eqref{eq1}, which lead to sparse algebraic systems. The most successful and nowadays best established are the method
 of discrete ordinates ($\SN$) and the method of spherical harmonics ($\PN$).
 Both these methods arise from applying a classical well-known approach for constructing finite numerical
 approximations of PDEs  in the
 angular domain. Although in the final code, we ultimately use the lowest order approximation that can be obtained
-equivalently from both approaches -- the well-known neutron diffusion equation -- we will briefly introduce the general
+equivalently from both approaches (the neutron diffusion equation) we will briefly introduce the general
 $\SN$ and $\PN$ methods and expose their most important properties in the next two subsections. These properties are
-well known, but their origin in mathematical structure of the equations is often overlooked in papers (rare
-exceptions will be cited below). Also note that both the $\SN$ and $\PN$ methods have an importance for the thesis -- 
-the author implemented the former in order to assess accuracy of the lower-order methods (\alert{section}) and developed
-an alternative to the $\PN$ method that will be described in \alert{section}.
+well known, but their origin in mathematical structure of the equations is often overlooked in literature (rare
+exceptions will be cited below). 
 
 \subsection{The $\SN$ method}\label{sec:1-SN}
 The $\SN$ method uses the collocation approach in which a set of directions (\textit{ordinates})
-$\{\bomega_n\}_{n=1}^{M(N)}$ is chosen and the solution is approximated as:
+$\{\bomega_n\}_{n=1}^{M_S}$ is chosen and the solution is approximated as:
 \begin{equation}\label{eq:sn_approx} 
-	\psi(\br, \bomega) \approx \pw{\psi(\br,\bomega_n)}{ when $\bomega = \bomega_n$}{0}{otherwise},\quad
-	\text{ for each } n = 1,2,\ldots,M(N) 
+	\psi(\br, \bomega) \approx \pw{\psi(\br,\bomega_n)}{when $\bomega = \bomega_n$}{0}{otherwise}\quad
+	\text{ for each } n = 1,2,\ldots,M_S 
 \end{equation}
-Equation \eqref{eq1} is then evaluated at these $M(N))$ isolated directions. Note
-that for the traditional direction sets, we have $M = N(N+2)$ if the given problem does not possess any symmetries; the
+Equation \eqref{eq1} is then evaluated at these $M_S = M_S(N)$ isolated directions.
+Note that for the traditional direction sets, we have $M_S = N(N+2)$ if the given problem does not possess any symmetries; the
 method of discrete ordinates using such a number of directions is traditionally refered to as the method of discrete
-ordinates of order $N$, shortly $\SN$. We will keep this notation, but  write just $M$ for the number of directions
-instead of $M(N)$.
+ordinates of order $N$, shortly $\SN$. We will keep this notation, but  write just $M_S$ for the number of directions
+instead of $M_S(N)$ (the subscript $S$ signifies the correspondence to the $\SN$ method; later, $M_P$ will be
+introduced for the $\PN$ method).
 
 To evaluate the integral term on the right hand side of the equation, the set of directions is accompanied by a
-corresponding set of weights $\{w_n\}_{n=1}^M$, together defining a quadrature of the sphere $\Sphere.$ The requirement
-of accurate evaluation of the integral term of eq.
+corresponding set of weights $\{w_n\}_{n=1}^{M_S}$, together defining a quadrature of the sphere $\Sphere.$ The
+requirement of accurate evaluation of the integral term of eq.
 \eqref{eq1} as well as an accurate integration of the angular flux function over the sphere (which defines the
 physically important quantity \textit{scalar flux}, \alert{ref}) constitutes the main guideline for the choice of
 directions and weights. We will return to this matter later in \alert{ref}; for now it suffices to say that for
-three-dimensional problems without any symmetries, \mbox{$M = \left|\{\bomega_n, w_n\}\right| = \Oh(N^2)$} (with the
-value of $M$ for typically used quadrature sets stated above).
+three-dimensional problems without any symmetries, \mbox{$M_S = \left|\{\bomega_n, w_n\}\right| = \Oh(N^2)$} (with the
+value of $M_S$ for typically used quadrature sets stated above).
 
 To write  the final result of the $\SN$ approximation, let us first denote for a set $s = \{c_k\}_{k=1}^n$ the column
 vector with entries $c_1,c_2,\ldots,c_n$ as $\col(s)$ and similarly the diagonal matrix whose diagonal is
-given by elements of $s$ as $\diag(s)$. Then, for
- $$\psi_n(\br) \equiv \psi(\br,\bomega_n), \quad q_n(\br) \equiv
-q(\br,\bomega_n),$$ we will denote the vector of angular fluxes $\Psi(\br) = \col(\{\psi_n(\br)\})$ and the vector of
-angular sources $\mat{Q}^{SN}(\br) = \col(\{q_n(\br)\})$.
-The $\SN$ approximation consists of the following set of $M$ PDEs in spatial domain \footnote{Differentiation and
+given by elements of $s$ as $\diag(s)$. Then, denoting
+\begin{equation}\label{eq:sn_vecs}
+\psi_n(\br) \equiv \psi(\br,\bomega_n), \quad q_n(\br) \equiv
+q(\br,\bomega_n),\quad n = 1,\ldots, M_S	
+\end{equation}
+we will define the vector of angular fluxes and the vector angular sources as, respectively:
+\begin{equation}\label{eq:sn_vars}
+\Psi(\br) := \col\left(\{\psi_n(\br)\}_{n=1}^{M_S}\right),\quad
+\mat{Q}_{S_N}(\br) := \col\left(\{q_n(\br)\}_{n=1}^{M_S}\right).
+\end{equation}
+The $\SN$ approximation consists of the following set of $M_S$ PDEs in spatial domain\footnote{Differentiation and
 integration of vector functions (such as the term $\pd{\Psi(\br)}{x}$ in eq. \eqref{eq:sn1}) will be understood
 component-wise throughout this thesis.}:
 \begin{equation}\label{eq:sn1} 
-\mat{A}^{SN}_x\pd{\Psi(\br)}{x} + \mat{A}^{SN}_y\pd{\Psi(\br)}{y} +
-\mat{A}^{SN}_z\pd{\Psi(\br)}{z} + (\sigma(\br)\mat{I} - \mat{K}^{SN}(\br))\Psi(\br) = \mat{Q}^{SN}(\br),
+\mat{A}_{S_N}^x\pd{\Psi(\br)}{x} + \mat{A}_{S_N}^y\pd{\Psi(\br)}{y} +
+\mat{A}_{S_N}^z\pd{\Psi(\br)}{z} + \bigl[\sigma(\br)\mat{I} - \mat{K}_{S_N}(\br)\bigr]\Psi(\br) = \mat{Q}_{S_N}(\br),
 \end{equation}
-where $\mat{I}$ is the $M\times M$ identity matrix and
+where $\mat{I}$ is the $M_S\times M_S$ identity matrix and
 $$
-	\mat{A}^{SN}_x = \diag(\{\Omega_{n,x}\}),\ \mat{A}^{SN}_y = \diag(\{\Omega_{n,y}\}),\ \mat{A}^{SN}_z =
+	\mat{A}_{S_N}^x = \diag(\{\Omega_{n,x}\}),\ \mat{A}_{S_N}^y = \diag(\{\Omega_{n,y}\}),\ \mat{A}_{S_N}^z =
 	\diag(\{\Omega_{n,z}\}).
 $$
 Equation
 \eqref{eq:sn1} represents a system of advection-reaction equations with constant advection field given by the angular 
-matrices $\mat{A}^{SN}_x, \mat{A}^{SN}_y, \mat{A}^{SN}_z$. The system is weakly coupled through the absolute term
-$\mat{K}^{SN}(\br)$, which is the quadrature representation of the original integral term, but not through the
+matrices $\mat{A}_{S_N}^x, \mat{A}_{S_N}^y, \mat{A}_{S_N}^z$. The system is weakly coupled through the absolute term
+$\mat{K}_{S_N}\Psi$, which is the quadrature representation of the original integral term, but not through the
 differential terms. This fact and the relative smallness of the coupling term is utilized in a classical solution
 technique for the $\SN$ approximation -- the \textit{source iteration} -- in which the system \eqref{eq:sn1} is fully
 decoupled. Each equation is solved separately using any method suitable for an advection-reaction PDE, using $\psi_n$
-from previous iteration to evaluate $\mat{K}^{SN}\Psi$ (both Jacobi and Gauss-Seidel schemes may be used to update
+from previous iteration to evaluate $\mat{K}_{S_N}\Psi$ (both Jacobi and Gauss-Seidel schemes may be used to update
 $\Psi$ during the iteration process).
 
 \subsubsection{Ray effects}
 A major drawback of the $\SN$ angular approximation comes from the fact that it assumes the radiation to propagate only
 in a discrete set of directions. Only in the limiting case of infinite number of directions will the whole phase space
 be covered. Otherwise, there will remain under-treated regions, while other regions will receive more radiation in order
-to satisfy the global balance. This will lead to spatial oscillations of the scalar flux (obtained by adding up the
-contributions from the individual directions) known as the \textit{ray effects}. This problem may be seen to be the
+to satisfy the global balance. This will lead to spatial oscillations of the scalar flux (obtained as a weighted sum of
+ contributions from the individual directions) known as the \textit{ray effects}. This problem may be seen to be the
 consequence of weak coupling between the unknowns in the $\SN$ system, which is however one of its biggest strenghts
 from the computational point of view\footnote{This also exhibits the class of problems suffering the most from ray
-effects -- namely problems without fission and scattering that lack the coupling term $\mat{K}^SN$} .
+effects -- namely problems without fission and scattering that lack the coupling term $\mat{K}$} .
 It is therefore very difficult to reduce the ray effects while keeping the advantages of the $\SN$ approximation (for an
 overview and some heuristic observations, see \cite{Li1}). 
 
-The root cause of ray effects in the $\SN$ approximation is the loss of an inherent property of the radiative transfer
-equation \eqref{eq1} when transforming it into the system \eqref{eq:sn1}. This property is the rotational invariance: If
-we write eq. \eqref{eq1} in operator form as 
+It is usually mentioned in literature that the root cause of ray
+effects in the multidimensional $\SN$ approximation is the loss of rotational invariance. Being intuitively obvious,
+this statement has not been treated in any more detail (as far as the author knows). Nevertheless, we give here a
+mathematical explanation of this fact, as we would like to use the same reasoning later to show the rotational 
+invariance of the $\PN$ system, and as it also provides an insight of what actually happens when \eqref{eq1} is 
+transformed it into the system \eqref{eq:sn1}.
+
+We will say that an operator equation
+\begin{equation}\label{eq:op1} 
+Au = f
+\end{equation}
+is rotationally invariant, if $Au = f$ implies $ARu = Rf$ for an operator
+$\op{R}$ corresponding to any rotation of coordinate system $\mat{R}\in\R[3\times3]$:
+\begin{equation}\label{eq:def_rot}
+\begin{gathered}
+\op{R}: f(\br,\bomega) \mapsto f(\mat{R}^T\br,\mat{R}^T\bomega)\\
+\mat{R}^T\mat{R} = \mat{R}\mat{R}^T = \mat{I},\quad \det \mat{R} = 1
+\end{gathered}
+\end{equation}
+(Fig. \ref{fig:rot} illustrates the action of the rotation operator on function $\psi(\bomega)$,
+$\bomega\in\Sphere$).
+A sufficient condition for the property of rotational invariance is the commutativity of $A$ and $R$ (as can be seen by
+operating with $R$ on both sides of eq. \eqref{eq:op1}). 
+\begin{figure}[htp]
+\begin{center}
+  \includegraphics[scale=1]{rot.pdf}
+  \caption[Rotation of $\psi(\bomega)$]{Rotation of $\psi(\bomega)$}
+  \label{fig:rot}
+\end{center}
+\end{figure}
+If we write eq. \eqref{eq1} in the form of \eqref{eq:op1}:
 \begin{equation}\label{eq1op}
-	\mathcal{L}\psi = \mathcal{K}\psi + \mathcal{Q}
+	T\psi \equiv (\op{L} - \op{K})\psi = \op{q},
 \end{equation} 
-(the precise mathematical setting for the operators will be given in \alert{ref}), then it is not
-difficult to see that 
+where we suppose $\op{T}:V\to V$ for some suitable vector function space $V$ (precise mathematical setting
+will be given in \alert{ref}), then it is not difficult to see that 
+\begin{equation}\label{eq:commut_NTE}
+	\op{R}T = T\op{R}
+\end{equation}
+(if we also consider $R$ as an operator from $V$ to itself),
+provided that the coefficient functions $\sigma$ and $\kappa$ are also invariant under the action of $\op{R}$. This
+will be the case, e.g., if both $\br$ and $\mat{R}^T\br$ point into a single homogeneous region where scattering from
+$\bomega'$ to $\bomega$ (represented by $\kappa$) depends only on the cosine of the two directions, see (see, e.g.,
+\alert{Zweifel}). Therefore, under these conditions, the continuous NTE is rotationally invariant for any admissible
+right hand side.
+
+To see how rotation affects the $\SN$ equations, note first that the $\SN$ approximation concerns only the angular
+variable. For the sake of clarity, we will therefore drop the spatial variable in the following
+discussion.
+Consider now an arbitrary $\SN$ approximation specified by the given quadrature set
+$\displaystyle\{\bomega_n,w_n\}_{n=1}^{\infty}$.
+%by using the Dirac measure $\delta_{\bomega}(\bomega')$ with the property
+%\begin{equation}\label{eq:dirac}
+%	\int_{\Sphere} f(\bomega')\d{\delta_{\bomega}(\bomega')} = f(\bomega).
+%\end{equation}
+Using the definitions \eqref{eq:sn_vecs}, we
+define
+the mapping
+\begin{equation}\label{eq:map_SN}
+\begin{gathered}
+\PiSN: \Psi \mapsto \psi(\bomega),\\
+\bigl(\PiSN \Psi\bigr)(\bomega) = 
+\pw{\psi_n}{if $\bomega = \bomega_n$ for some $n = 1,2,\ldots,N_S$}{0}{otherwise.}
+\end{gathered}
+\end{equation}
+Note that this mapping converts a vector of directional fluxes to a function on $\Sphere$. Corresponding to it
+is the mapping that produces the discrete ordinates representation of a function $f\in\Sphere$: 
+\begin{equation}\label{eq:map_SN_inv}
+	\PihSN f(\bomega) := \col\left(\left\{f_n \right\}_{n=1}^{M_S}\right)
+	 = \col\left(\left\{f(\bomega_n)\right\}_{n=1}^{M_S}\right)
+\end{equation}
+(which we implicitely used in \eqref{eq:sn_vars} with $f(\cdot,\bomega) = \psi(\cdot,\bomega)$ and
+$f(\cdot,\bomega) = q(\cdot,\bomega)$, respectively). With these two mappings, we can rewrite the $\SN$ system \eqref{eq:sn1} in terms of 
+the transport operators from eq.
+\eqref{eq1op}:
+\begin{equation}\label{eq:sn_op}
+	\PihSN \op{L}\PiSN \Psi = \PihSN\tilde K\Psi + \mat{Q}_{S_N},
+\end{equation}
+where $\tilde K$ hides the $\SN$ quadrature representation of the original integral operator $K$; as it
+will not be needed for the argument below, we will include it in the source term.
+
+To study the behavior of the $\SN$ system under the action of the rotation operator $\op{R}$
+defined by \eqref{eq:def_rot}, we need to formulate it in the space where $\op{R}$ operates, i.e. include the definition
+of the $\SN$ unknowns $\Psi$ and $\mat{Q}_{S_N}$ in the $\SN$ operator itself:
+\begin{equation}\label{eq:sn_op}
+	\PihSN \op{L}\PiSN \PihSN \psi = \PihSN q,
+\end{equation}
+From the definitions \eqref{eq:map_SN} and \eqref{eq:map_SN_inv}, we may see that on the space of functions $V_{S_N}$
+ vanishing everywhere on $\Sphere$ except in the nodes of the given $\SN$ quadrature set, $\PiSN = \PihSN^{-1}$. As
+ $\Rng (\PiSN) = V_{S_N}$ (and operating by $L$ does not leave this space), by operating on both sides of
+ \eqref{eq:sn_op} with $\PiSN$, we obtain
+\begin{equation}\label{eq:sn_op2}
+	\op{L}\PiSN \PihSN \psi = \PiSN\PihSN q.
+\end{equation}
+Note that:
+\begin{equation}\label{eq:proj_sn}
+	\Projop{S_N} := \PiSN \PihSN, \quad \Projop{S_N} : V \to V_{S_N}
+\end{equation} 
+is a projection operator into the $S_N$ approximation space that formalizes the approximation \eqref{eq:sn_approx}.
+
+We are now ready to prove that commutativity of the rotation operator with the transport operator \eqref{eq:commut_NTE} 
+does not carry over to the $\SN$ approximation.
+
+\begin{theorem}\label{thm:commut_NTE}
+Let a transport problem 
 $$
-	\mathcal{R}(\mathcal{L} - \mathcal{K}) = (\mathcal{L} - \mathcal{K})\mathcal{R}
-$$ 
-for an operator $\mathcal{R}: f(\br,\bomega) \mapsto f(R^T\br,R^T\bomega)$ corresponding to any rotation of
-coordinate system $R$, provided that the coefficient functions $\sigma$ and $\kappa$ are also invariant under the action
-of $\mathcal{R}$. This will be the case, e.g., if both $\br$ and $R^T\br$ lie in an isotropic\footnote{Note that this
-does not mean that the actual process of scattering is isotropic, see \alert{ref}.}, homogeneous region -- a typical
-situation in multi-zone reactor calculations (see, e.g., \alert{Zweifel, Hauck}). If we define 
+	L\psi = q
 $$
-	\mathcal{P}^{SN}: \psi(\br,\bomega) \mapsto \Psi(\br) 
+satisfy 
+$RL = LR$ where $R$ is the
+rotation operator defined by \eqref{eq:def_rot}. Then for the $\SN$ approximate problem
 $$
-by eq. \eqref{eq:sn_approx} and again formally express eq. \eqref{eq:sn1} in the operator form:
+\op{L}\Projop{S_N} \psi = \Projop{S_N} q,
 $$
-	\bigl(\mathcal{L}^{SN} - \mathcal{K}^{SN}\bigr)\mathcal{P}^{SN}\psi = \mathcal{Q}^{SN},
+it holds that
 $$
-(with the same assumption on $\sigma$ and $\kappa$), its clear that now
+\op{R}\op{L}\Projop{S_N} \neq \op{L}\Projop{S_N}\op{R}.
 $$
-	\mathcal{R}\bigl(\mathcal{L}^{SN} - \mathcal{K}^{SN}\bigr)\mathcal{P}^{SN} \neq \bigl(\mathcal{L}^{SN} -
-	\mathcal{K}^{SN}\bigr)\mathcal{P}^{SN}\mathcal{R},
-$$	
-because $\mathcal{P}^{SN}\mathcal{R}\psi(\br,\bomega) = 0$ if $R^T\bomega \not\in \{\bomega_n\}_{n=1}^{M}$. As a
-consequence, the ray effects cannot be completely avoided in the standard $\SN$ framework. This brings us to the second
- approach used for approximating angular dependence in the integro-differential NTE that naturally overcomes
-this issue.
+\end{theorem}
+\begin{proof}
+Because of the commutativity of $L$ and $R$, it suffices to show that $\Projop{S_N} = \PiSN \PihSN$ does not commute
+with $\op{R}$
+\end{proof}
+\comment{
+Because
+components of vector $\Psi$ do not depend on $\bomega$, they are invariant under rotations\footnote{we keep in mind that
+in fact $\op{R}\Psi = \op{R}\Psi(\br)= \Psi(\mat{R}^T\br)$; operator $\PiSN$ however
+doesn't see the spatial variable, justifying our ommission of the spatial variable} :
+$$
+	 \PiSN \op{R} \Psi = \PiSN \Psi.
+$$
+(where we understand the component-wise action of $\op{R}$ when it is applied on a vector of functions).
+On the other hand, taking into account \eqref{eq:map_SN}, we observe that
+$$
+	 \op{R} \PiSN \Psi = \bigl(\PiSN \Psi\bigr)(\mat{R}^T\bomega) = 0
+$$
+whenever $\mat{R}^T\bomega \not\in \{\bomega_n\}_{n=1}^{M_S}$. Shifting now our attention to the inverse mapping, we can
+see from \eqref{eq:map_SN_inv} that it always yields a vector of angular flux evaluations at the fixed set of directions
+corresponding to the particular discrete ordinates set, hence
+$$
+	\op{R}\PihSN \psi(\bomega) = \PihSN \op{R} \psi(\bomega). 
+$$
+Using these findings in the left-hand side of eq. \eqref{eq:sn_op} together with rotational invariance of the continuous
+NTE, we arrive at the final result:
+For $\mat{R}^T\bomega \not\in \{\bomega_n\}_{n=1}^{M_S}$,
+$$
+	\op{R} \PihSN \op{L}\PiSN \Psi = \PihSN \op{L} \op{R} \PiSN \Psi = 0\,
+	\footnote{zero vector with $M_S$ components}, 
+$$
+whereas
+$$
+	\PihSN \op{L}\PiSN \op{R} \Psi = \PihSN \op{L} \PiSN \Psi \neq 0,
+$$ 	
+and hence the $\SN$ approximation of the NTE is not rotationally invariant in cases where the NTE is.
+Note that we would have $\PihSN = \PiSN^{-1}$ only if $\PihSN$ was defined on a space
+of functions that
+}
 
 \subsection{The $\PN$ method}
 
-Instead of the collocation method used by the $\SN$ approximation, the $\PN$ method uses the Galerkin method in
-angular domain. That is, the angularly dependent quantities in \eqref{eq1} are expanded into infinite series of properly
-chosen functions that span a complete basis on the unit sphere, the equation is multiplied by each member of the basis in turn and integrated over the sphere. The properties of the basis functions are then used to derive
-equations for the expansion coefficients. Only a finite number of the expansion terms is considered to allow practical
-computation. Usually, the expansion is truncated at length $N$ by setting all expansion coefficients with higher index
-to 0 (although there exist alternative closure methods that may have favorable properties in certain situations, see
-e.g. \cite{Frank0}). Then we speak of the $\PN$ approximation:
+Instead of the collocation method used by the $\SN$ approximation, the $\PN$ method uses the Galerkin weighted residuals
+approach in angular domain. That is, the angularly dependent quantities in \eqref{eq1} are expanded into infinite
+series of properly chosen functions that span a complete basis on the unit sphere, the equation is multiplied by each member of the basis in turn
+and integrated over the sphere. The properties of the basis functions are then used to derive equations for
+the expansion coefficients. Only a finite number of the expansion terms is considered to allow practical computation.
+Usually, the expansion is truncated at length $N$ by setting all expansion coefficients with higher index to 0 (although
+there exist alternative closure methods that may have favorable properties in certain situations, see e.g.
+\cite{Frank0}). Then we speak of the $\PN$ approximation:
 \begin{equation}\label{eq1.1}
-  \psi(\br,\bomega) \approx \sum_{k=1}^{\widetilde M} \phi_k(\br) f_k(\bomega).
+  \psi(\br,\bomega) \approx \sum_{k=1}^{ M_P} \phi_k(\br) f_k(\bomega).
 \end{equation}
+A natural function space to support this procedure is the Hilbert space of 
+square-integrable functions on the sphere $\Lp[2](\Sphere)$, equiped with the inner product
+\begin{equation}\label{eq:s2_ip}
+	(\psi, \varphi)_{\Lp[2](\Sphere)} = \intA{\psi(\bomega) \overline{\varphi(\bomega)}}.
+\end{equation}
+(overbar denotes complex conjugation). 
+We will therefore assume $\psi(\cdot,\bomega)\in\Lp[2](\Sphere)$ in this section. 
+
 The set of spherical basis functions that were used in the original $\PN$ method are the
-\textit{spherical harmonic functions}, which simplify the algebraic manipulations needed to arrive at the conditions 
-for coefficients $\psi_k$ (called \textit{angular moments}) and have other favorable properties (some will be mentioned
-in \alert(ref)). In one dimension, the spherical harmonic functions reduce to Legendre polynomials and $\widetilde M = N$. For general three-dimensional
-problems, there are $2n + 1$ linearly independent spherical harmonics for each degree $n$ and
+\textit{spherical harmonic functions}, which form a complete orthogonal system on $\Lp[2](\Sphere)$ and simplify
+the algebraic manipulations needed to arrive at the conditions for coefficients $\psi_k$ (called \textit{angular
+moments}). In one dimension, the spherical harmonic functions reduce to Legendre polynomials and $ M_P = N$. For general
+three-dimensional problems, there are $2n + 1$ linearly independent spherical harmonics for each degree $n$ and
 $$
-	\widetilde M = \sum_{n=0}^{N} 2n + 1 = (N+1)^2.
+	 M_P = \sum_{n=0}^{N} 2n + 1 = (N+1)^2.
 $$
-We expand the approximation \eqref{eq1.1} as
+We rewrite the approximation \eqref{eq1.1} as
 \begin{equation}\label{eq:pn_approx}
-	\psi(\br,\bomega) \approx \suma[n]{0}{N}\suma[m]{-n}{n}\angmom{n}{m}(\br)\Y{n}{m}(\bomega)
+	\psi(\br,\bomega) \approx \sum_{k=1}^{ M_P} \phi_k(\br)\Y{k}{}(\bomega) \equiv
+	\suma[n]{0}{N}\suma[m]{-n}{n}\angmom{n}{m}(\br)\Y{n}{m}(\bomega)
 \end{equation}
-where $\Y{n}{m}(\bomega)$ is the spherical harmonic function of degree $n$ and order $m$. Therefore, in \eqref{eq1.1},
-we consider the single index $k$ ($1 \leq k \leq \widetilde M$) that covers all the combinations of $n$ and $m$ ($0 \leq n
-\leq N$, $-n\leq m \leq n$) appearing in \eqref{eq:pn_approx}. We finally arrive at a system of $\widetilde M$ partial
-differential equations in spatial domain which is of comparable size as the system of $\SN$ equations and has the following form:
+where $\Y{n}{m}(\bomega)$ is the spherical harmonic function of degree $n$ and order $m$ and in the first term on right,
+we consider the single index $k$ ($1 \leq k \leq  M_P$) that covers all the combinations of $n$ and $m$  
+($0 \leq n \leq N$, $-n\leq m \leq n$) appearing in the second term. We finally arrive at a system of $ M_P$
+partial differential equations in spatial domain which is of comparable size as the system of $\SN$ equations and has the following form:
 \begin{equation}\label{eq:pn1}
-	\mat{A}^{PN}_x\pd{\Phi}{x} + \mat{A}^{PN}_y\pd{\Phi}{y} + \mat{A}^{PN}_z\pd{\Phi}{z} + (\sigma\mat{I} -
-	\mat{K}^{PN})\Phi = \mat{Q}^{PN},
+	\mat{A}^P_x\,\pd{\Phi(\br)}{x} + \mat{A}_y^P\,\pd{\Phi(\br)}{y} + \mat{A}_z^P\,\pd{\Phi(\br)}{z} +
+	\bigl[\sigma(\br)\mat{I} - \mat{K}_{P_N}(\br)\bigr]\Phi(\br) = \mat{Q}_{P_N}(\br),
 \end{equation}
-where $\Phi = \col(\{\phi_k\})$ and $\mat{Q}_{PN} = \col(\{q_k\})$ are, respectively, the vector of angular flux
-moments and analogously defined angular source moments. The system has the same form as that for
-the $\SN$ approximation, but the angular matrices:
+where 
+\begin{equation}\label{eq:pn_vectors}
+	\Phi = \col\left(\left\{\phi_k\right\}_{k=1}^{M_P}\right) \ \text{ and }\ 
+	\mat{Q}_{P_N} = \col\left(\left\{q_k\right\}_{k=1}^{M_P}\right) 
+\end{equation}
+are, respectively, the vector of angular flux
+moments and angular source moments. The Galerkin procedure results in their special form 
+\begin{equation}\label{eq:pn_angmom}
+	\phi_k = (\psi, \Y{k}{})_{\Lp[2](\Sphere)},\quad q_k = (q, \Y{k}{})_{\Lp[2](\Sphere)}
+\end{equation}
+which, in view of \eqref{eq:pn_approx} and the completeness and orthogonality properties of spherical harmonics, also 
+shows that the angular flux in the $\PN$ method is approximated by its orthogonal projection onto the finite-dimensional
+subspace $\Lp[2]_N(\Sphere)\subset\Lp[2](\Sphere)$:
+\begin{equation}\label{eq:PN_proj}
+	\Projop\psi(\br,\bomega) = \sum_{k=1}^{ M_P}(\psi, \Y{k}{}) \Y{k}{}(\bomega).
+\end{equation}
+
+The system has the same form 
+that for the $\SN$ approximation, but the angular matrices:
 $$
-	\left[A^{PN}_s\right]_{k,l} = \intA{\Omega_s \Y{k}{}(\bomega)\Yc{l}{}(\bomega)},\quad s\in\{x,y,z\},\ 
-	1 \leq k,l \leq \widetilde M
+	\left[A_s^P\right]_{k,l} = \intA{\Omega_s \Y{k}{}(\bomega)\Yc{l}{}(\bomega)},\quad s\in\{x,y,z\},\ 
+	1 \leq k,l \leq  M_P
 $$
-(overbar denotes complex conjugation) are no longer diagonal, but rather banded with each moment being coupled to at
-most six other moments (see, e.g., \cite{Sanchez7}).
+are no longer diagonal, but rather banded with each moment being coupled to at
+most six other moments (see, e.g., \cite{Sanchez8}).
+
 
 \subsubsection{Rotational invariance of the $\PN$ equations}
 The increased coupling between the unknowns in the $\PN$ system is the price for the attractive property of spherical
 harmonics that prevents ray effects appearing in $\SN$ solutions. It is well known (e.g, \cite[Chap.3]{Sansone}) that
 the mutually orthogonal spherical harmonic functions of given degree $n$ generate a rotationally invariant subspace of
-the Hilbert space of square-integrable functions on the sphere $\Lp{2}(\Sphere)$, which we denote by $\Lambda_n$:
+$\Lp[2](\Sphere)$, which we denote by $\Lambda_n$:
 \begin{equation}
 	\label{eq:subspace}
-    	\Lambda_n = \mathrm{Span}\bigl\{\Y{n}{m}; -n \leq m \leq n\bigr\},
+    	\Lambda_n = \text{Span}\bigl\{\Y{n}{m}; -n \leq m \leq n\bigr\},
 \end{equation}
-This means that $\mathcal{R}(\Lambda_n) \subset \Lambda_n$ for the rotation transformation $\mathcal{R}$ (cf. the
-paragraph on ray effects in \Sref{sec:1-SN}). Moreover, $\Lambda_n$ is the eigenspace associated with the $n$-th 
-eigenvalue of the Laplace operator on $\Sphere$, $\lambda_n = -n(n+1)$. Being eigenspaces of a self-adjoint operator
-corresponding to different eigenvalues, $\Lambda_n$ for $n=0,1,\ldots$ are mutually orthogonal and  
-$\Lp{2}(\Sphere) = \bigoplus_{n=0}^{\infty}\Lambda_n$\nomenclature[S]{$\bigoplus$}{direct sum of spaces}.
-Hence, we can write the $\PN$ projection onto the finite-dimensional subspace $\Lp{2}_N\subset\Lp{2}(\Sphere)$, eq.
-\eqref{eq:pn_approx}, as
+This means that $\op{R}(\Lambda_n) \subset \Lambda_n$ for the rotation transformation $\op{R}$ (cf. the
+paragraph on ray effects in \Sref{sec:1-SN}). Moreover, there is no proper subspace $\Lambda_n' \subset \Lambda_n$ that
+is rotationally invariant by itself. It is also known that $\Lambda_n$ is the eigenspace associated with the $n$-th
+eigenvalue of the Laplace operator on $\Sphere$, $\lambda_n = -n(n+1)$. Being eigenspaces of a self-adjoint operator corresponding to different eigenvalues, $\Lambda_n$ for $n=0,1,\ldots$ are mutually orthogonal and $\Lp[2](\Sphere) = \bigoplus_{n=0}^{\infty}\Lambda_n$\nomenclature[S]{$\bigoplus$}{direct sum of spaces}.
+Hence, we can write the $\PN$ projection \eqref{eq:PN_proj} as
 \begin{equation}\label{eq:pn_approx2}
-	\psi(\br,\bomega) \approx \mathcal{P}^{PN}\psi(\br,\bomega) = \suma[n]{0}{N}\angmom{n}{}(\br,\bomega),
+	\Projop\psi(\br,\bomega) = \suma[n]{0}{N}\Projop[\Lambda_n]\psi(\br,\bomega),
 \end{equation}
 where 
 $$
-	\angmom{n}{}(\br,\bomega) = \suma[m]{-n}{n}\angmom{n}{m}(\br)\Y{n}{m}(\bomega) \in \Lambda_n
+	\Projop[\Lambda_n]\psi(\br,\bomega) = \suma[m]{-n}{n}\angmom{n}{m}(\br)\Y{n}{m}(\bomega)
 $$
-with uniquely determined coefficients $\angmom{n}{m}$. Using linearity of the rotation operator and rotational
+is the orthogonal projection onto $\Lambda_n$.  
+
+As in the $\SN$ case, we will now define the mappings that take the vector $\Phi(\cdot)$ of angular flux moments to
+angular flux $\psi(\cdot,\bomega)\in\Lp[2]_N(\Sphere)$ and vice versa. Using \eqref{eq:pn_angmom}, 
+\eqref{eq:pn_vectors} and \eqref{eq:PN_proj}, we have
+$$
+\bigl(\PiPN\Phi\bigr)(\bomega) := \sum_{k=1}^{ M_P} \phi_k\Y{k}{}(\bomega) = \sum_{k=1}^{ M_P}(\psi,
+\Y{k}{})\Y{k}{}(\bomega) = \Projop\psi.
+$$
+On the other hand,
+$$
+\PiPN^{-1}\psi = \col\left( \left\{(\psi, \Y{k}{})_{\Lp[2](\Sphere)}\right\}_{k=1}^{M_P} \right).
+$$
+The $\PN$ system \eqref{eq:pn1} can now be rewritten in terms of the transport operators from eq. \eqref{eq1op}:
+$$
+	\PiPN^{-1} (L-K) \PiPN\Phi = \PiPN^{-1} q
+$$
+or
+$$
+	\PiPN^{-1} (L-K) \Projop\psi = \PiPN^{-1} q
+$$
+Commutativity of the rotation operator 
+Thanks to \eqref{eq:pn_approx2} and linearity of the rotation operator, we thus obtain
+
+Using linearity of the rotation operator and rotational
 invariance of each $\Lambda_n$, it follows that 
 $$
-	\mathcal{R}\mathcal{P}^{PN} = \mathcal{P}^{PN}\mathcal{R}
+	\op{R}\PiPN = \PiPN\op{R}
 $$
-and, since the $\PN$ system \eqref{eq:pn1} is actually obtained by applying $\mathcal{P}^{PN}$ to the left and right
+and, since the $\PN$ system \eqref{eq:pn1} is actually obtained by applying $\PiPN$ to the left and right
 hand side of eq. \eqref{eq1} and using linear independence of the spherical harmonic functions. 
 
 \subsubsection{Drawbacks of the $\PN$ approximation}
 Using the results of the previous paragraph and well-known results from the theory of Hilbert spaces, we can see that
-the sum \eqref{eq:pn_approx2} (or \eqref{eq:pn_approx}) converges in the $\Lp{2}(\Sphere)$ norm to the true solution of
+the sum \eqref{eq:pn_approx2} (or \eqref{eq:pn_approx}) converges in the $\Lp[2](\Sphere)$ norm to the true solution of
 eq. \eqref{eq1} as $N\to\infty$. However, the convergence may be very slow if the true solution to the NTE is not
 sufficiently regular in the angular variable. In particular, pointwise convergence is hindered in the neighborhood of
 phase space points where the solution of the NTE has jump discontinuity in $\bomega$ (which may occur for example when a
@@ -320,9 +498,9 @@ circumventing the Gibbs phenomenon. For example, when considering \eqref{eq:pn_a
 system, we may note that using a finite expansion obtained by truncating \eqref{eq:pn_approx2} at $n=N$ is not the only
 way of obtaining a closed system of equations -- different closures are possible as already discussed above. This fact
 has been utilized in \cite{McClarren3} where the expansion has been adjusted to mitigate the oscillations by controlling
-angular gradients\footnote{Note that the expansion \eqref{eq:pn_approx2} represents the best $\Lp{2}(\Sphere)$
+angular gradients\footnote{Note that the expansion \eqref{eq:pn_approx2} represents the best $\Lp[2](\Sphere)$
 approximation of $\psi$ by spherical polynomials up to a given degree, but absence of angular gradients in the
-$\Lp{2}(\Sphere)$ norm permits arbitrary oscillations.}. For other similar approaches in the context of general spectral
+$\Lp[2](\Sphere)$ norm permits arbitrary oscillations.}. For other similar approaches in the context of general spectral
 methods, see e.g. \cite{Tanner}.
 
 As shown in \cite{McClarren4}, there is also another issue connected with time-dependent $\PN$ approximation that must
@@ -344,8 +522,8 @@ PDE's. In the case of the $\SN$ approximation, the approach traditionally favore
 uses the source iteration technique to decouple the system into single-direction equations, each of which is then solved
 by a \textit{transport sweep} from inflow to outflow boundaries of mesh cells. The finite volume method is used to link
 the mesh cells through cell-averaged and interface unknowns. Without fission and scattering (i.e., the integral term
-$\mathcal{K}$ in \eqref{eq1op}) and reflective boundaries (\alert(ref)), the system is already decoupled and only one
-sweep for each direction is sufficient to determine $\mathcal{L}^{-1}$ and hence the solution. In the other case, source
+$\op{K}$ in \eqref{eq1op}) and reflective boundaries (\alert(ref)), the system is already decoupled and only one
+sweep for each direction is sufficient to determine $\op{L}^{-1}$ and hence the solution. In the other case, source
 iteration is required and when the integral term is dominant (like in the case of whole-core reactor calculations) some
 acceleration is usually required (see the discussion in Sec. \ref{:}).
 
@@ -365,26 +543,14 @@ required for spatial discretization. We will describe the simplest DG method for
 (see e.g.
 \cite{Meinkohn} for the application of the streamline-upwind Petrov Galerkin method).
 
+
 In any case, the final system of linear algebraic equations is generally sparse but -- given the complicated geometry
 and material arrangement of realistic problems -- very large. It is usually computationally infeasible to resolve all
 local features of the solution by a uniform mesh and some sort of adaptivity is employed. In some cases (typically in
 engineering application like the simulation of heterogeneous nuclear reactor cores), the long-term experience may be
 used to create the mesh by hand using well-established geometry and mesh generation software like the commercial CUBIT
-(\cite{CUBIT}) or the open-source GMSH (\cite{GMSH}). When the a-priori knowledge of important solution feautres is not
+(\cite{CUBIT}) or the open-source GMSH (\cite{GMSH}). When the a-priori knowledge of important solution features is not
 available, some sort of automatic adaptivity needs to be employed, which we will discuss in the following section.
-Nevertheless, both approaches lead to very large systems (easily of the order of $10^8$ even for a crude energetic
-discretization), often ill-conditioned as a result of highly irregular material properties or anisotropic meshes
-(particularly when automatic mesh refinement is employed). Using even the advanced sparse direct solvers like
-UMFPACK or MUMPS (\cite{UMFPACK,MUMPS}) to solve such systems is not practical.
-Moreover, it is intuitively obvious and easily proved (see e.g. \cite{Arioli}) that 
-
-Moreover, there are cases (typically
-in engineering applications like the simulation of heterogeneous nuclear reactor cores) where it is common to create
-initial spatial mesh by some specialized CAD and mesh-generation system based on the long-time operating experience. ,
-The need to resolve a complicated dependence on 6 independent variables may easily result in systems with
-
-Robust solvers that Also, because of the possibly highly heterogeneous domains with large jumps in material coefficients
-between subdomains, conditioned
 
 \subsection{Adaptivity}
 In real applications, automatic adaptivity of the discrete phase space is usually needed to obtain sufficiently accurate
@@ -426,7 +592,8 @@ convergence rate (as $h\to 0$ where $h$ is the diameter of the largest element i
 estimates involving solution regularity typically doesn't appear until very late in the mesh refinement process or at
 all (\cite{wang2009convergence}). Hence, utilizing higher order approximations still makes sense to accelerate
 pre-asymptotic convergence rate as much as possible (for an attempt to use hp-adaptivity with DG $\SN$ methods -- to
-author's knowledge first of its kind, see \cite{FournierDGHP}).
+author's knowledge first of its kind, see \cite{FournierDGHP}). Implementation of an $\SN$ solver in the general hp-FEM
+framework Hermes by the author of this thesis could be seen as a first step for future investigations in this direction.
 
 
 
@@ -437,23 +604,24 @@ author's knowledge first of its kind, see \cite{FournierDGHP}).
 
 \subsection{Second-order formulations}
 
-There is, however, another possibility to make the solution of the transport equation more feasible. The set of
-steady state $\PN[1]$ equations, implying that the neutron flux varies only linearly in angle, can be under some
-additional physically justifiable assumptions recast (even in 3D) into a single elliptic equation\footnote{The same
-holds also for the $\SN[2]$ equations.}. This is the familiar \textit{diffusion approximation} -- thanks to its simplicity and also the
-efficiency of the numerical solution techniques available for this approximation, it has always served as a ``workhorse
-computational method of nuclear reactor physics" \cite[p. 43]{Stacey1}. The model is indeed sufficiently accurate for
-whole core calculations of contemporary reactors, assuming that the significant finer-scale neutron transport processes
-have been resolved by some higher-fidelity NTE solvers applied in previous solution stages. The self-adjoint diffusion
-equation can then be solved using e.g. the finite element method in conjunction with both powerful and theoretically
-well-established conjugate gradient method with symmetric preconditioners like the modern algebraic multigrid. Solution
-efficiency may be improved even further also by using adaptive mesh refinement based on highly developed a posteriori
-error estimates for elliptic problems. Note that the self-adjoint property of the diffusion model can only be spoiled by
-the multigroup energy discretization, where energy transfers in neutron collisions result in non-symmetric coupling of
-the multigroup system -- this can be however easily prevented by moving the non-symmetric parts to the right-hand side
-and solving the resulting system iteratively. The simplest of such iterative splittings (which is nevertheless used by
-many existing neutron transport codes, often in conjunction with some acceleration technique) is the so-called
-\textit{source iteration}, which will be briefly introduced in Sec. \ref{sec:MG}.
+The set of steady state $\PN[1]$ equations, implying that the neutron flux varies only linearly in angle, can be under
+some additional physically justifiable assumptions (\cite{Stacey, Reuss}) recast (even in 3D) into a single elliptic
+equation\footnote{The same holds also for the $\SN[2]$ equations.}. This is the familiar \textit{diffusion approximation} -- thanks to its
+simplicity and also the efficiency of the numerical solution techniques available for this approximation, it has always
+served as a ``workhorse computational method of nuclear reactor physics" \cite[p. 43]{Stacey1}. The model is indeed
+sufficiently accurate for whole core calculations of contemporary reactors, assuming that the significant finer-scale
+neutron transport processes have been resolved by higher-fidelity NTE solvers applied in previous solution stages (as
+already discussed in \sref{}).
+The self-adjoint diffusion equation can then be solved using e.g. the finite element method in conjunction with both
+powerful and theoretically well-established conjugate gradient method with symmetric preconditioners like the modern
+algebraic multigrid. Solution efficiency may be improved even further also by using adaptive mesh refinement based on
+highly developed a posteriori error estimates for elliptic problems. Note that the self-adjoint property of the
+diffusion model can only be spoiled by the multigroup energy discretization, where energy transfers in neutron
+collisions result in non-symmetric coupling of the multigroup system -- this can be however easily prevented by moving
+the non-symmetric parts to the right-hand side and solving the resulting system iteratively. The simplest of such
+iterative splittings (which is nevertheless used by many existing neutron transport codes, often in conjunction with
+some acceleration technique) is the so-called \textit{source iteration}, which will be briefly introduced in Sec.
+\ref{sec:MG}.
 
 Although methods based on the diffusion approximation have been experimentally proven to be widely applicable for
 nuclear reactor analyses, there are situations where this approximation is just too coarse and, as some recent reports
@@ -523,3 +691,20 @@ the diffusion model under these conditions and is gaining popularity again
 exact solution of the NTE as $N\to\infty$ in general, there are several cases in which it is equivalent to the
 convergent $\PN$ expansion (see some recent papers like \cite{Coppa2,McClarren2,Larsen2}) and further research of the
 $\SPN$ model and its connections to the NTE appears to be an interesting topic.
+
+\subsubsection{Solution of the associated algebraic systems}
+
+Nevertheless, both approaches lead to very large systems (easily of the order of $10^8$ even for a crude energetic
+discretization), often ill-conditioned as a result of highly irregular material properties or meshes
+(particularly when automatic mesh refinement is employed). Using even the advanced sparse direct solvers like
+UMFPACK or MUMPS (\cite{UMFPACK,MUMPS}) to solve such systems is not practical.
+Moreover, it is intuitively obvious and easily proved (see e.g. \cite{Arioli}) that the total approximation error is
+given by the sum of di
+
+Moreover, there are cases (typically
+in engineering applications like the simulation of heterogeneous nuclear reactor cores) where it is common to create
+initial spatial mesh by some specialized CAD and mesh-generation system based on the long-time operating experience. ,
+The need to resolve a complicated dependence on 6 independent variables may easily result in systems with
+
+Robust solvers that Also, because of the possibly highly heterogeneous domains with large jumps in material coefficients
+between subdomains, conditioned
