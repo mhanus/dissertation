@@ -1,0 +1,449 @@
+\documentclass[14pt,twoside]{extbook}
+
+% fonts
+\usepackage{mathrsfs}
+\usepackage{stmaryrd}
+
+% math
+%\usepackage[intlimits]{amsmath}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[amsmath,thmmarks,thref]{ntheorem}
+%\usepackage{stmaryrd}
+%\DeclareMathAlphabet{\mathpzc}{OT1}{pzc}{m}{it}
+\usepackage{mathtools}
+\mathtoolsset{prescript-sup-format=\mathrm}
+
+%\usepackage{bm}
+%\usepackage{txfonts}
+\usepackage[T1]{fontenc}
+%\usepackage{mathptmx}
+%\usepackage{lmodern}
+
+\usepackage{footmisc}
+\renewcommand\footnotelayout{\fontsize{11}{11}}
+
+% graphics
+\usepackage{graphicx}
+\usepackage{color}
+%\usepackage{subfigure}
+\usepackage{rotating}
+%\newskip\rotFPtop \rotFPtop=2cm
+%\newskip\rotFPbot \rotFPbot=-2cm
+% hypertext
+\usepackage[colorlinks=false,dvips]{hyperref}
+\usepackage{breakurl}
+
+% additional
+\usepackage{isotope}
+\usepackage{sistyle}
+\usepackage{reference}
+\usepackage{textcomp}
+\usepackage{ifthen}
+
+% main stylefile
+\usepackage{mythesis}
+\usepackage[font=footnotesize]{subfig}
+
+%\newcommand{\parend}{\\[.5em]\indent}
+%\newcommand{\parend}{\\ \indent}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% MACRO DEFINITIONS
+
+% for nomenclature
+
+\newcommand{\refchap}[1]{~\itshape\footnotesize(in Chap.~#1)}
+\newcommand{\nomwide}[1]{\protect\parbox{\textwidth}{#1}}
+
+% abbreviations
+
+\newcommand{\ttef}{transport theory expression for~}
+\newcommand{\dtef}{diffusion theory expression for~}
+
+\def\eqrefs#1#2{(\protect\ref{#1}--\protect\ref{#2})}
+\newcommand{\mat}[5][cc]{%
+	\left[\begin{array}{#1}%
+		#2 & #3\\%
+		#4 & #5%
+	\end{array}\right]
+}
+\renewcommand{\vec}[3][c]{%
+	\left[\begin{array}{#1}%
+		#2\\%
+		#3%
+	\end{array}\right]
+}
+%\newcommand{\gmat}[1]{%
+%	\left[\begin{array}{cccc}%
+%		#1^1	& 			& 			& 		\\
+%				&	#1^2	& 			& 		\\
+%				&			& \ddots	& 		\\
+%				&			&			& #1^G
+%	\end{array}\right]
+%}
+\newcommand{\gmate}[1]{%
+	\left[\begin{array}{ccc}%
+		#1^1	& 				& 			\\
+				&	\ddots	& 			\\
+				&				&	#1^G
+	\end{array}\right]
+}
+\newcommand{\gvece}[2]{%
+	\left[\begin{array}{c}%
+		#1^1\\
+		\vdots\\
+		#1^G
+	\end{array}\right]\it{#2}
+}
+%\newcommand{\gmat}[1]{\left[\vphantom{\tilde{S_0}}#1\right]}
+%\newcommand{\gvec}[2]{\left\{\vphantom{\tilde{S_0}}#1\it{#2}\right\}}
+\newcommand{\smat}[1]{\bigl[#1\bigr]}
+\newcommand{\sgmat}[1]{[[#1]]}
+\newcommand{\gmat}[1]{\boldsymbol{#1}}
+\newcommand{\gvec}[2]{\boldsymbol{#1}\it{#2}}
+\newcommand{\lvec}[1]{\left[#1\right]}
+\newcommand{\lvect}[1]{\left[#1\right]^T}
+
+
+\newcommand{\nullmat}{\mathbf{0}}
+
+\newcommand{\iter}[2]{\\\hspace*{#2\medskipamount}#1}
+
+% Arabic subequation numbering
+\makeatletter
+%Arabic subequations counter
+\newcounter{arsub}
+\setcounter{arsub}{-1}
+\renewcommand{\thearsub}{%
+\theparentequation{}-\arabic{arsub}%
+}
+% save the original counter
+\newcommand{\c@org@eq}{}
+\let\c@org@eq\c@equation
+\newcommand{\org@theeq}{}
+\let\org@theeq\theequation
+%\setarsub sets arabic subequations counting
+\newcommand{\setarsub}{%
+\begingroup %
+\let\c@equation\c@arsub %
+\let\theequation\thearsub}
+%\setorig sets the original
+\newcommand{\setorig}{%
+\setcounter{arsub}{-1} %
+\let\c@equation\c@org@eq %
+\let\theequation\org@theeq %
+\endgroup}
+\makeatother
+
+
+
+% gray box around major steps in algorithm writings
+\newlength{\savedparindent}
+\newcommand{\SaveIndent}{\setlength{\savedparindent}{\parindent}}
+\newcommand{\RestoreIndent}{\setlength{\parindent}{\savedparindent}}
+\newcommand{\InGray}[1]{%
+	\SaveIndent{} %
+	\noindent{} \fcolorbox[rgb]{0,0,0}{0.95,0.95,0.95}{
+		\begin{minipage}{0.965\linewidth} %
+			\RestoreIndent{}%
+			#1
+		\end{minipage}
+	}%
+}
+
+\newcommand{\alb}{\begin{aligned}}
+\newcommand{\ale}{\end{aligned}}
+\newcommand{\gatb}{\begin{gathered}}
+\newcommand{\gate}{\end{gathered}}
+\newcommand{\VV}{\mathcal{D}}
+\newenvironment{piecewise}{\begin{cases}\displaystyle}{\end{cases}}
+\newcommand{\pw}[4]{
+	\begin{cases}\displaystyle
+		#1 & \mbox{#2},\\ 
+		#3 & \mbox{#4}
+	\end{cases}
+}
+\DeclareMathOperator*{\esssup}{\mathrm{ess}\,\sup}
+\DeclareMathOperator*{\MFP}{\mathrm{MFP}}
+\DeclareMathOperator*{\diag}{\mathrm{diag}}
+\DeclareMathOperator*{\col}{\mathrm{col}}
+
+%
+% commands introduced in
+%
+
+% chapter 2
+\newcommand{\polar}{\vartheta}
+\newcommand{\azimuthal}{\varphi}
+\newcommand{\muav}{\overline{\mu}_0}
+
+\newcommand{\be}{\ensuremath{\mathbf{e}}}
+
+\newcommand{\sint}{\sin \polar}
+\newcommand{\sinp}{\sin \azimuthal}
+\newcommand{\cost}{\cos \polar}
+\newcommand{\cosp}{\cos \azimuthal}
+
+\newcommand{\unit}[1]{\,[\SI{}{#1}]}
+\renewcommand{\SS}{\ensuremath{\mathcal{S}}}
+\newcommand{\EE}{\mathcal{E}}
+\newcommand{\sooriented}{\uparrow\uparrow}
+\newcommand{\norm}[2][]{\Vert #2 \Vert_{#1}}
+\newcommand{\pX}[1][]{\partial X^{#1}}
+\newcommand{\ptX}[1][]{\partial \tilde{X}^{#1}}
+\newcommand{\tX}{\tilde{X}}
+\newcommand{\R}[1][]{\ensuremath{\mathbb{R}^{#1}}}
+\newcommand{\Ef}{\epsilon_{\mathrm{f}}}
+\newcommand{\bomegain}{\bomega_{\mathrm{in}}}
+\newcommand{\PP}[1]{\ensuremath{\mathrm{P}_{#1}}}
+\newcommand{\DP}[1]{\mathrm{DP}_{#1}}
+\newcommand{\SN}[1]{\ensuremath{\mathrm{S}_{#1}}}
+\renewcommand{\P}[1]{P_{#1}}
+\newcommand{\SP}[1]{\ensuremath{\mathrm{SP}_{#1}}}
+\newcommand{\Y}[2]{Y_{#1}^{#2}}
+\newcommand{\Yc}[2]{\bar{Y}_{#1}^{#2}}
+\newcommand{\kron}[2]{\delta_{#1#2}}
+\newcommand{\keff}{\ensuremath{k_{\mathrm{eff}}}}
+
+\newcommand{\aint}[1][]{\displaystyle\int_{4\pi}\d{\bomega#1}}
+\newcommand{\azint}[1][]{\displaystyle\int_0^{2\pi}\d{\azimuthal}\!}
+\newcommand{\eint}[2][]{
+  \ifthenelse{\equal{#2}{}}
+		{\int_{\EE}\d{E#1}}
+		{\int_{#2}\d{E#1}}
+}
+\newcommand{\xint}[1][]{\displaystyle\int_{X}\d{x#1}}
+\newcommand{\muint}[1][]{\int_{-1}^{1}\d{\mu#1}}
+\newcommand{\bndint}[2][]{\displaystyle\int_{#2}\db{x#1}}
+\newcommand{\vint}[1][V]{\int_{#1}\d{\br}}
+\newcommand{\zint}[1][V_z]{\displaystyle\int_{#1}\d{z}}
+\renewcommand{\d}[1]{\ensuremath{\mathrm{d}#1\,}}
+\newcommand{\db}[1]{\ensuremath{\mathrm{d_b}#1\,}}
+\newcommand{\angmom}[2][]{\ensuremath{\phi^{#1}_{#2}}}
+\newcommand{\der}[3][]{\ensuremath{\frac{\mathrm{d}^{#1}{#2}}{\mathrm{d} {#3}^{#1}}}}
+
+
+\newcommand{\rR}{R}
+\newcommand{\rRR}{\mathscr{R}}
+\newcommand{\rP}{\mathscr{P}}
+\newcommand{\rF}{\mathscr{R}_f}
+\newcommand{\tF}{\phi}
+\newcommand{\rNF}{\mathscr{N}}
+
+\newcommand{\Lp}[2][]{L_{#1}^{#2}}
+\newcommand{\Wp}[2][]{W_{#1}^{#2}}
+\newcommand{\Id}{I}
+
+\newcommand{\br}{\ensuremath{\mathbf{r}}}
+\newcommand{\angflux}{\ensuremath{\psi}}
+\newcommand{\bj}{\ensuremath{\mathbf{j}}}
+\newcommand{\bn}{\ensuremath{\mathbf{n}}}
+\newcommand{\bomega}{\ensuremath{\mathbf{\Omega}}}
+\renewcommand{\d}[1]{\ensuremath{\mathrm{d}#1\,}}
+
+\newcommand{\angmomgen}[2]{\ensuremath{\phi_{#1#2}}}
+\newcommand{\Qmomgen}[2]{\ensuremath{Q_{#1#2}}}
+\newcommand{\Qmom}[1]{\ensuremath{Q_{#1}}}
+
+\newcommand{\abs}[1]{\ensuremath{\left\vert#1\right\vert}}
+
+\newcommand{\ra}{\ensuremath{\!\shortrightarrow\!}}
+\newcommand{\laa}{\ensuremath{\!\leftarrow\!}}
+\newcommand{\raa}{\ensuremath{\!\rightarrow\!}}
+\newcommand{\pV}{\ensuremath{\partial V}}
+\newcommand{\pD}{\ensuremath{\partial W}}
+\newcommand{\pO}{\ensuremath{\partial \Omega}}
+\newcommand{\suma}[3][l]{\sum_{#1=#2}^{#3}}
+\newcommand{\subsubparagraph}[1]
+	{\par\hspace*{0.5em}$\bullet$\hspace*{0.5em}{\textit{#1}}\indent}
+\newcommand{\capparagraph}[1]
+	{\vspace*{0.5em plus 0.5em minus 0em}\par{\textit{\textbf{#1}}}\par\vspace*{0.5em}}
+\newcommand{\pd}[3][]{\ensuremath{\frac{\partial^{#1}#2}{\partial #3^{#1}}}}
+
+\newcommand{\bJ}{\ensuremath{\mathbf{J}}}
+\newcommand{\bo}{\ensuremath{\mathbf{0}}}
+\newcommand{\bM}{\ensuremath{\mathbf{M}}}
+\newcommand{\bF}{\ensuremath{\mathbf{F}}}
+\newcommand{\bphi}{\ensuremath{\mathbf{phi}}}
+
+% chapter 3
+\newcommand{\llop}{\ensuremath{\mathbf{L}}}
+\newcommand{\LLL}[1]{L_{#1}}
+
+\newcommand{\hhop}[1][]{\ensuremath{\mathbf{H}}_{#1}}
+\newcommand{\HHH}[1]{H_{#1}}
+\newcommand{\FFF}[1]{F_{#1}}
+
+\newcommand{\ffop}{\ensuremath{\mathbf{F}}}
+\newcommand{\bbop}{\ensuremath{\mathbf{B}}}
+\newcommand{\ssop}{\ensuremath{\mathbf{S}}}
+\newcommand{\ttop}{\ensuremath{\mathbf{T}}}
+\newcommand{\QQ}{\ensuremath{\mathbf{Q}}}
+
+\newcommand{\tangflux}{\tilde{\angflux}}
+\newcommand{\vangflux}{\ensuremath{\boldsymbol{\psi}}}
+\newcommand{\valbedo}{\ensuremath{\boldsymbol{\beta}}}
+\newcommand{\vflux}{\ensuremath{\boldsymbol{\phi}}}
+\newcommand{\vangmom}[1]{\ensuremath{\boldsymbol{\phi}_{#1}}}
+\newcommand{\amom}[2][]{\ifthenelse{\equal{#1}{}}{\Phi}{\Phi^{#1}}_{#2}}
+\newcommand{\vamom}{\ensuremath{\boldsymbol{\Phi}}}
+
+\renewcommand{\th}{\ensuremath{^{\mathrm{th}}}\ }
+\newcommand{\nd}{\ensuremath{^{\mathrm{nd}}}\ }
+\newcommand{\st}{\ensuremath{^{\mathrm{st}}}\ }
+
+\renewcommand{\it}[1]{\ifthenelse{\equal{#1}{}}{}{\ensuremath{^{(#1)}}}}
+\newcommand{\angfluxin}{\angflux_{\mathrm{in}}}
+
+\newcommand{\CC}{\mathbf{C}}
+\newcommand{\GG}{\mathbf{G}}
+\newcommand{\Sa}[2][]{#1{\Sigma}_{a#2}}
+\newcommand{\SSa}{\boldsymbol{\Sigma}_{a}}
+\newcommand{\SSf}{\boldsymbol{\Sigma}_{f}}
+\newcommand{\SSs}{\boldsymbol{\Sigma}_{s}}
+\newcommand{\Src}{\boldsymbol{S}}
+\newcommand{\LL}[1]{\ifthenelse{\not\equal{#1}{1}}{\mathbf}{}{L}_{#1}}
+\newcommand{\BB}[1]{\ifthenelse{\not\equal{#1}{1}}{\mathbf}{}{B}_{#1}}
+\newcommand{\HH}[1]{\ifthenelse{\not\equal{#1}{1}}{\mathbf}{}{H}_{#1}}
+\newcommand{\FF}[1]{\ifthenelse{\not\equal{#1}{1}}{\mathbf}{}{F}_{#1}}
+
+\renewcommand{\div}{\nabla\cdot}
+\newcommand{\grad}{\nabla}
+
+\renewcommand{\O}[1][eps]{\ensuremath{
+	\ifthenelse{\equal{#1}{eps}}
+		{\mathcal{O}(\varepsilon)}
+		{
+			\ifthenelse{\equal{#1}{}}
+				{\mathcal{O}}
+				{
+					\ifthenelse{\equal{#1}{1}}
+						{\mathcal{O}(1)}
+						{\mathcal{O}(\varepsilon^{#1})}
+				}
+		}
+	}
+}
+\newcommand{\jin}[2]{j_{\mathrm{in},#1}^{#2}}
+\newcommand{\vjin}[1]{\mathbf{j}_{\mathrm{in}}^{#1}}
+
+\renewcommand{\o}{\mathbf{o}}
+
+\newcommand{\brund}{\underline{\br}}
+\newcommand{\bjund}{\underline{\bj}}
+\newcommand{\bJund}{\underline{\bJ}}
+\newcommand{\bnund}{\underline{\bn}}
+\newcommand{\ound}{\underline{\o}}
+\newcommand{\NNund}{\underline{\underline{\mathbf{N}}}}
+\newcommand{\vangmomund}[1]{\underline{\boldsymbol{\phi}_{#1}}}
+\newcommand{\ggamma}{\boldsymbol{\Gamma}}
+% chapter 4
+\newcommand{\dom}{\ensuremath{\Omega}}
+\newcommand{\V}{\ensuremath{\mathcal{V}}}
+\newcommand{\U}{\ensuremath{\mathcal{U}}}
+\newcommand{\T}{\ensuremath{\mathcal{T}}}
+\newcommand{\nequiv}{\not\equiv}
+
+\newcommand{\ddx}[2][]{\ensuremath{\frac{\mathrm{d}^{#1}{#2}}{\mathrm{d} {x}^{#1}}}}
+
+\newcommand{\DD}[1][]{{\ensuremath{\mathbf{D}_{#1}}}}
+
+% chapter 4
+
+\newcommand{\flux}{\ensuremath{\phi}}
+\newcommand{\aflux}{\ensuremath{\phi}}
+\newcommand{\face}[2][i]{\ensuremath{\Gamma_{#1,#2}}}
+\newcommand{\fint}[1][\xi]{\int_{\face{#1}}\!\d{A}\,}
+%\renewcommand{\fint}[1][\xi]{\int_{\face{#1}}\!\d{A}\,}
+\newcommand{\mV}{\abs{\V_i}}
+\newcommand{\ms}{\ell}
+\newcommand{\mf}[2][i]{\abs{\face[#1]{#2}}}
+\newcommand{\jf}[2][i]{j_{#1,#2}}
+\newcommand{\hl}[2][i]{h_{#1}^+}
+\newcommand{\hr}[2][i+\xi]{h_{#1}^-}
+\newcommand{\D}[1][i]{\ensuremath{D_{i,\xi}^g}}
+\newcommand{\JF}[2][g]{\ensuremath{J_{#2}^{#1}}}
+
+
+%
+% environments
+%
+%\newcommand{\comment}{1}{}
+
+\theoremstyle{nonumberbreak} \theoremheaderfont{\scshape}
+\theorempreskipamount 1em plus 0em minus .5em \theorembodyfont{\slshape} \theoremseparator{\\[.5em]}
+\newtheorem{remark}{Notational remark}
+
+\theoremstyle{break}
+\theoremheaderfont{\normalfont\bfseries}\theorembodyfont{\slshape}
+\theoremsymbol{\ensuremath{\diamondsuit}}
+\theoremseparator{:}
+\newtheorem{Theorem}{Theorem}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% DOCUMENT START
+%
+\begin{document}
+
+% F R O N T    M A T T E R
+
+%  external front_matter project
+
+
+%         T O C
+
+\pagestyle{fancy} 
+\pagenumbering{roman}
+\renewcommand{\chaptermark}[1]{\markboth{#1}{}} 
+\renewcommand{\sectionmark}[1]{\markright{#1}} 
+\fancyhf{}
+\fancyhead[LE,RO]{\thepage} 
+\fancyhead[LO]{\textup{\rightmark}} 
+\fancyhead[RE]{\textsc{\leftmark}} 
+\renewcommand{\headrulewidth}{0.33pt}
+\tableofcontents
+
+\newpage
+
+\thispagestyle{empty} 
+\fancyhead[LE,RO]{\thepage} 
+\fancyhead[LO,RE]{\textsc{\nomname}} 
+\printnomenclature[3.15cm]
+
+%\newpage
+%
+%    L I S T I N G S
+
+%\addcontentsline{toc}{chapter}{List of Figures}
+%\listoffigures
+
+\cleardoublepage
+
+
+\pagestyle{fancy} 
+\renewcommand{\chaptermark}[1]{\markboth{#1}{}} 
+\renewcommand{\sectionmark}[1]{\markright{#1}} 
+\fancyhf{}
+\fancyhead[LE,RO]{\thepage} 
+\fancyhead[LO]{\textup{\rightmark}} 
+\fancyhead[RE]{\textsc{\leftmark}} 
+\renewcommand{\headrulewidth}{0.33pt}
+\pagenumbering{arabic}
+
+% M A I N    M A T T E R
+
+\input{introduction.tex}
+\newpage
+
+
+% B I B L I O G R A P H Y
+
+\addcontentsline{toc}{chapter}{Bibliography}
+\bibliographystyle{alphaurl}
+\bibliography{text}
+
+\appendix
+%\input{Appendix.tex}
+
+\end{document}

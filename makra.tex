@@ -38,6 +38,8 @@
 \newcommand{\PiSN}{\Pi_{S_N}}
 \newcommand{\PihSN}{\widehat\Pi_{S_N}}
 \newcommand{\PiPN}{\Pi_{P_N}}
+\newcommand{\PihPN}{\widehat\Pi_{P_N}}
+\newcommand{\idxset}[1]{\mathcal{I}_{#1}}
 \newcommand{\ips}[2]{(#1, #2)_{\Lp[2](\Sphere)}}
 \newcommand{\sla}{\ensuremath{\shortleftarrow}}
 \newcommand{\sra}{\ensuremath{\shortrightarrow}}
@@ -64,18 +66,19 @@
 \newcommand{\intE}[4][]{\int_{#2}^{#3}#4\,\d{E#1}}
 \newcommand{\intEg}[3]{\int_{E^{#1}}^{E^{#2}}#3\,\d{E}}
 \newcommand{\intA}[2][]{\int_{\Sphere}#2\,\d{\bomega#1}}
+\newcommand{\intAA}[1]{\int_{\Sphere\times\Sphere}#1\,\d{\bomega'}\d{\bomega}}
 \newcommand{\intX}[2][X]{\int_{#1}#2\,\d{x}}
 
 \newcommand{\sumg}{\sum_{{g'\neq g}}}
 \newcommand{\summ}[2]{\sum_{#1}^{#2}}
 \newcommand{\suma}[3][l]{\summ{#1=#2}{#3}}
 
-\newcommand{\abs}[1]{\ensuremath{\left\vert#1\right\vert}}
-\newcommand{\norm}[2][]{\ensuremath{\lVert#2\rVert_{#1}}}
+\newcommand{\abs}[1]{\ensuremath{\left\vert #1 \right\vert}}
+\newcommand{\norm}[2][]{\ensuremath{\lVert #2 \rVert_{#1}}}
 
 \newcommand{\pX}[1][]{\partial X^{#1}}
-\newcommand{\pV}[1][]{\partial V}
-\newcommand{\VV}{V}
+\newcommand{\pV}[1][]{\partial \VV}
+\newcommand{\VV}{\mathcal{V}}
 
 \newcommand{\polar}{\vartheta}
 \newcommand{\azimuthal}{\varphi}
@@ -84,17 +87,22 @@
 \newcommand{\cost}{\cos \polar}
 \newcommand{\cosp}{\cos \azimuthal}
 \newcommand{\db}{\ensuremath{\d\xi}}
+\newcommand{\bndint}[2][]{\displaystyle\int_{#2}\db#1}
+
+\newcommand{\dEh}[1]{\tfrac{\Delta E^{#1}}{2}}
+\newcommand{\keff}{\ensuremath{k_{\text{eff}}}}
 
 \newcommand{\Lp}[1][p]{L^{#1}}
 \newcommand{\Hp}[1][p]{H^{#1}}
 \newcommand{\Id}{\ensuremath{I}}
-\newcommand{\Dom}[1]{\mathcal{D}(#1)}
+\newcommand{\Dom}[1]{\mathrm{Dom}\,(#1)}
 
 \newcommand{\Y}[2]{Y_{#1}^{#2}}
+\newcommand{\y}[2]{y_{#1}^{#2}}
 \renewcommand{\P}[2]{P_{#1}^{#2}}
 \newcommand{\YY}[1][n]{\mathbf{Y}_{#1}}
-\newcommand{\Yc}[2]{\bar{Y}_{#1}^{#2}}
-\newcommand{\YYc}[1][n]{\bar{\mathbf{Y}}_{#1}}
+\newcommand{\Yc}[2]{\overline {Y}_{#1}^{#2}}
+\newcommand{\YYc}[1][n]{\overline{\mathbf{Y}}_{#1}}
 
 \newcommand{\PP}[1][n]{\mathbb{P}^{(#1)}}
 \newcommand{\PPP}[2][n]{P^{(#1)}_{#2}}
@@ -114,11 +122,16 @@
 \newcommand{\perm}[1]{\pi(#1)}
 
 \newcommand{\angmom}[2]{\ensuremath{\phi_{#1}^{#2}}}
-\newcommand{\fmom}[1][n]{\Phi_{#1}}
-\newcommand{\qmom}[1][n]{Q_{#1}}
+%\newcommand{\fmom}[1][n]{\Phi_{#1}}
+%\newcommand{\qmom}[1][n]{Q_{#1}}
+\newcommand{\fmom}[1][n]{\psi^{(#1)}}
+\newcommand{\qmom}[1][n]{q^{(#1)}}
 \newcommand{\Sa}[2][]{\Sigma^{#1}_{#2}}
 \newcommand{\mst}{\underline{\sigma_t}}
 %\newcommand{\Sym}[2]{\mathscr{S}^{(#1)}\left[#2\right]}
+
+\newcommand{\lvec}[1]{\left[#1\right]}
+\newcommand{\lvect}[1]{\left[#1\right]^T}
 
 \newcommand{\angflux}{\ensuremath{\psi}}
 
@@ -127,6 +140,7 @@
 \DeclareMathOperator{\argmin}{argmin\,}
 \DeclareMathOperator{\diag}{diag\,}
 \DeclareMathOperator{\col}{col\,}
+\newcommand{\colset}[2]{\col\left(\left\{#1\right\}_{#2}\right)}
 \DeclareMathOperator{\trace}{tr\,}
 \DeclareMathOperator{\Proj}{Proj}
 \newcommand{\Projop}[1][P_N]{\Proj_{#1}}

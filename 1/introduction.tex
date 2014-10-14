@@ -29,12 +29,14 @@ state neutron transport equation}, shortly NTE. In the final chapter, we will co
 (i.e., without time derivative but with time-dependent coefficients) together with the most important feedbacks from
 varying thermal/hydraulic conditions in the core and fuel depletion.
 
-We will introduce the NTE in Chap. \ref{chap:nte-review} as an integro-differential equation in 6 dimensions. This high
-dimensionality requires either the use of direct simulation of neutrons and using statistical methods to obtain the
+We will introduce the NTE in Chap. \ref{chap:nte-review} as an integro-differential equation in 6 dimensions.
+This high dimensionality requires either the use of direct simulation of neutrons and using statistical methods to obtain the
 required physical quantities (the Monte Carlo approach) or a deterministic approach involving multiple discretizations.
 As the second approach is still preferable in terms of overall efficiency, we choose it as a basis for our methods and
-review the classical discretization methods in the second part of Chap. \ref{chap:nte-review}. The transport equation will
-then be presented in more detail in Chap. \ref{chap:NTE}, together with the review of existing solvability results. 
+review the classical discretization methods in the second part of Chap. \ref{chap:nte-methods}. We will focus on some of
+their intrinsic properties that have important consequences for their practical use. Although these properties are
+well known, they are usually described in an intuitive manner, so we will try to uncover their roots in the mathematical
+structure of the corresponding equations.
 
 The following subsections present the main results of author's work during his Ph.D. studies.
 
@@ -44,12 +46,12 @@ familiar 3-dimensional partial differential equations (PDEs\nomenclature[Z]{PDE}
 \textit{method of spherical harmonics}, denoted $\PN$\nomenclature[Z]{\PN}{Method of spherical harmonics of order $N$} 
 \nomenclature[Z]{\SN}{Method of discrete ordinates of order $N$}. This method is recalled in Chap.
 \ref{chap:nte-review} and a new alternative set (equivalent to the original $\PN$ set) is developed in Chap.
-\ref{chap:MCSH}. From this set, it is possible to directly derive another traditional approximation of neutron transport
+\ref{chap:mcpn}. From this set, it is possible to directly derive another traditional approximation of neutron transport
 -- the \textit{simplified spherical harmonic method}, or $\SPN$ \nomenclature[Z]{\SPN}{Method of simplified spherical
-harmonics of order $N$} -- which is the subject of the second part of Chap. \ref{chap:MCSH}. So far, the author has only
+harmonics of order $N$} -- which is the subject of the second part of Chap. \ref{chap:mcpn}. So far, the author has only
 been able to derive in this way the $\SPN$ equations in an interior of a homogeneous region, so in order to obtain a
 practical solution method, the usual $\SPN$ interface and boundary conditions will be applied. As a result, the standard
-$\SPN$ method is obtained, so the contribution of Chap. \ref{chap:MCSH} is rather theoretical, showing a new way of
+$\SPN$ method is obtained, so the contribution of Chap. \ref{chap:mcpn} is rather theoretical, showing a new way of
 arriving at the $\SPN$ equations (and an alternative form of the classical $\PN$ equations).
 
 The $\SPN$ method (particularly the $\SPN[3]$) already simplifies the NTE to the extent that it is applicable to
@@ -59,7 +61,7 @@ companies\footnote{\label{sjsexp}from personal experience of the author coming o
 the Czech nuclear engineering company {\v S}koda JS; more generally, see the discussion in \cite[Sec.
 2.4]{Sanchez7}}. As is well known and will be recalled in \ref{chap:SPN}, when the $\SPN[3]$ method is applied to the
 typical reactor core calculations, its solution captures most of the features of the true solution of the NTE. Combined
-with its efficiency that allows this method to be used ``of the desk'' (without the need of submitting the job to some
+with its efficiency that allows this method to be used ``off the desk'' (without the need of submitting the job to some
 supercomputing center, waiting for it to come to the front of an execution queue and gathering the results) makes it
 attractive for physicists to quickly test their empirical approximations used throughout their production code, which is
 usually based on the strongest transport approximation -- the diffusion approximation.
@@ -110,21 +112,21 @@ direct and iterative algebraic solvers (which also required reworking the CMake 
 	\item extension of the h-adaptivity capabilities by the standard a-posteriori error estimation for elliptic problems (which
 involves solution jumps over element interfaces and thus uses elements of the discontinuous Galerkin framework). 
 \end{itemize}
-More details on these contributions will be given in Chap. \alert{ref}, where also the extension of the multigroup
+More details on these contributions will be given in \cref{chap:hermes}, where also the extension of the multigroup
 neutron diffusion framework to include the $\SPN$ model (for orders $N \leq 9$, but easily extendable to an arbitrary
 order) will be presented, together with specially tailored error estimate to drive the hp-adaptivity of Hermes. To
 assess the benefits of using the $\SPN$ model over the simpler diffusion model, the author also implemented (still on
 top of the neutronics framework) a discontinuous Galerkin discretization of the \textit{discrete ordinates}
 approximation of the transport equation (the $\SN$ method, introduced in \Sref{sec:1-SN}), which, theoretically as $N\to\infty$, converges to the true solution of
 the NTE (unlike the $\SPN$ approximation in multidimensional, multiregion domains). This will be addressed in Sec.
-\alert{ref}.
+\sref{sec:DO}.
 
 \myparagraph{3D coupled neutron-physical finite element code based on the multigroup diffusion approximation}
 Unfortunately, the 3D version of Hermes has not yet been released and thus the main utility of the neutronics framework
 introduced in previous paragraph is in testing new ideas on hp-adaptivity for neutron transport problems. For the
 purposes of the research project underlying this thesis (see the footnote \ref{ftn:TACR} on pg. \pageref{ftn:TACR}), a
 3D finite element framework was needed. The final choice has been the FEniCS/Dolfin framework (\cite{dolfin1, dolfin2}).
-The final code, that the author developed within this framework, is described in Chap. \alert(ref) and demonstrated on
+The final code, that the author developed within this framework, is described in \cref{chap:coupled} and demonstrated on
 several industrial and custom benchmarks. It allows parallel assembly of the multigroup neutron diffusion problem and
 solution of the obtained algebraic problem using the well-established PETSc/SLEPc solvers (\cite{petsc1, slepc1})
 wrapped by FEniCS.
@@ -135,13 +137,14 @@ like to acknowledge the work of his colleagues -- R. Ku{\v z}el (the coordinator
 of an experimental eigensolver module), J. Egermaier and H. Kopincov{\' a} (who implemented the thermal/hydraulics
 module) and Z. Vastl (who generated the meshes for the MOX-UO$_2$ and VR-1 benchmarks).
 
-\myparagraph{Well-posedness of the $\SPN$ equations}
-While there are many papers where the finite element method has been \textit{used} to find the weak solution of
-both diffusion and $\SPN$ equations (e.g., \cite{Ragusa1, Hermes-nuclear, Ragusa2}), the question of well-posedness of
-the corresponding variational formulation is neither addressed in these papers, nor do they provide references that
-answer it. In the case of multigroup diffusion, well-posedness has been proved in \cite{Bourhrara1}. However, the author
-couldn't find any paper dealing with the well-posedness of the $\SPN$ equations. It is therefore proved in Sec.
-\alert{ref}.
+%\myparagraph{Well-posedness of the $\SPN$ equations}
+%While there are many papers where the finite element method has been \textit{used} to find the weak solution of
+%both diffusion and $\SPN$ equations (e.g., \cite{Ragusa1, Hermes-nuclear, Ragusa2}), the question of well-posedness of
+%the corresponding variational formulation is neither addressed in these papers, nor do they provide references that
+%answer it. In the case of multigroup diffusion, well-posedness has been proved in \cite{Bourhrara1}. However, the
+%% author couldn't find any paper dealing with the well-posedness of the $\SPN$ equations. It is therefore proved in
+% Sec.
+%\alert{ref}.
 
 \myparagraph{New method for solving large eigenvalue problems}
 Determination of reactor steady state requires finding the dominant eigenpair of a generalized eigenvalue problem. This
@@ -154,7 +157,5 @@ proposed by author's colleagues P. Van{\v e}k and R. Ku{\v z}el (who implemented
 cards). Even though the implementation is not yet competitive with the well-optimized
 solvers from the SLEPc library (in terms of execution speed), the method itself has some interesting properties
 connected with solving large-scale eigenvalue problems. The paper describing this development has not yet been 
-published, so it is included here as Chap. \alert{ref}. This last chapter also includes numerical experiments on simpler
-problems, which confirm the theory and have not been included in the original paper.
-
-
+published, so it is included here as \cref{chap:evc} with minor corrections and comments. This last chapter also
+includes numerical experiments on simpler problems, which confirm the theory presented in the paper.

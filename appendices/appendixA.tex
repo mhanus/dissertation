@@ -7,7 +7,7 @@ is defined as
     \Y{n}{m}(\bomega) = \Y{n}{m}(\polar,\azimuthal) = 
     \sqrt{\frac{2n+1}{4\pi}\frac{(n-m)!}{(n+m)!}} \P{n}{m}(\cos\polar)e^{i m \azimuthal},
 \end{equation}
-or (since the dependence on polar angle $\polar$ is only through its cosine)
+or, if we denote $\mu \equiv \cos\polar$,
 $$
 	\Y{n}{m}(\mu,\azimuthal) = \sqrt{\frac{2n+1}{4\pi}\frac{(n-m)!}{(n+m)!}} \P{n}{m}(\mu)e^{i m \azimuthal},
 $$
@@ -16,14 +16,21 @@ where
     \nomenclature[a]{$\P{n}{m}(\mu)$}{associated Legendre polynomial of degree $n$ and order $m$\nomrefeq} 
     \P{n}{m}(\mu) = 
     \begin{cases} 
-    	(-1)^m\sqrt{(1-\mu^2)^m}\ \der[m]{\P{n}(\mu)}{\mu} & \mbox{if } \hphantom{-}\,0 \leq m \leq n,\\[.5em]
+    	(-1)^m\sqrt{(1-\mu^2)^m}\ \der[m]{\P{n}{}(\mu)}{\mu} & \mbox{if } \hphantom{-}\,0 \leq m \leq n,\\[.5em]
     \displaystyle (-1)^{-m}\frac{(n+m)!}{(n-m)!}\P{n}{-m}(\mu) & \mbox{if } -n \leq m < 0 
     \end{cases}
 \end{equation}
-are the \textit{associated Legendre functions}. Note that ordinary Legendre polynomials are recovered for $m = 0$. 
+are the \textit{associated Legendre functions}. Note that ordinary Legendre polynomials are recovered for $m = 0$:
+\begin{equation*}
+\begin{gathered}
+	\P{0}{}(\mu) = 1,\quad \P{1}{}(\mu) = \mu,\quad \P{2}{}(\mu) = \frac12(3\mu^2 - 1),
+\quad \P{3}{}(\mu) = \frac12(5\mu^3 - 3\mu),\\
+ 	(2k + 1)\mu\P{k}(\mu) = (k+1)\P{k+1}(\mu) + k\P{k-1}(\mu)
+\end{gathered}
+\end{equation*}
 
-These functions form a closed orthonormal system on $\Lp{2}(\Sphere)$ with respect to the standard inner product
-$$
+The complex spherical harmonics form a closed orthonormal system on $\Lp{2}(\Sphere)$ with respect to the
+standard inner product $$
 (\psi, \varphi)_{\Lp[2](\Sphere)} = \intA{\psi(\bomega) {\overline\varphi(\bomega)}}
 $$
 (where the overline denotes complex conjugation), that is
@@ -36,15 +43,48 @@ $$
 \Y{n}{m}(\mu,\azimuthal)\Yc{l'}{m'}(\mu,\azimuthal) = \kron{m}{m'}\kron{n}{l'}
 \end{aligned}
 $$
-where $\kron{i}{j} = 1$ if $i = j$ and $\kron{i}{j} = 0$ otherwise (Kronecker delta symbol).
+where $\kron{i}{j} = 1$ if $i = j$ and $\kron{i}{j} = 0$ otherwise (Kronecker delta symbol). They also satisfy the
+following \textit{addition theorem}, which allows to express the value of Legendre polynomial of degree $k$ at $\mu_0 =
+\bomega\cdot\bomega'$ as a dot product of vectors with values of the $2k+1$ spherical harmonics at $\bomega$ and
+$\bomega'$, respectively:
+\begin{align}
+\P{k}(\mu_0)
+&=P_k(\mu) P_k(\mu')+2 \sum _{m = 1}^k \frac{(k-m)!}{(k+m)!} \cos \bigl(m(\azimuthal - \azimuthal')\bigr) P_k^m(\mu) P_k^m(\mu')\nonumber\\
+&=\frac{4\pi}{2k+1}\suma[m]{-k}{k}\Y{k}{m}(\polar,\azimuthal)\Yc{k}{m}(\polar',\azimuthal'),
+\label{eq:additionThm}
+\end{align}
+Note that this greatly simplifies integrals of type
+$$
+\intA{P_k(\bomega\cdot\bomega')f(\bomega')}
+$$
+(as in \alert{ref}), because of the complicated form of $\bomega\cdot\bomega'$:
+$$
+\begin{aligned}
+	\mu_0 = \bomega'\cdot\bomega 
+&= \lvect{\sint'\cosp',\sint'\sinp',\cost'} \cdot 
+	\lvec{\sint\cosp,\sint\sinp,\cost}\\
+& = \mu'\mu + \sqrt{(1-\mu'^2)(1-\mu^2)}\cos(\azimuthal' - \azimuthal),
+\end{aligned}
+$$
+where $\mu = \cost$\nomenclature[g]{$\mu$}{cosine of the polar component of the direction vector $\bomega$} is the
+ cosine of the polar component of the direction vector $\bomega$ (see \fref{fig:scatter}).
+\begin{figure}[!hbt]
+    \centering
+    \includegraphics[scale=1.65]{scattering.eps}
+    \caption[Scattering]{Geometry of scattering}
+    \label{fig:scatter}
+\end{figure}
 
 A real basis of spherical harmonics can be obtained from complex linear combination of the original basis and can be
 written in the following form:
 \begin{gather*}
-    \sqrt{2}\y{n}{m}(\polar,\azimuthal) = 
-    \pw{C_n^m \P{n}{m}(\cos\polar)\cos(m \azimuthal) = \mathrm{Re}\Y{n}{m}(\polar,\azimuthal)}{$m\geq 0$}
-    {C_n^{-m} \P{n}{-m}(\cos\polar)\sin(-m \azimuthal) = \mathrm{Im}\Y{n}{-m}(\polar,\azimuthal)}{$m < 0$,}\\
-    C_n^m = \sqrt{\frac{2n+1}{4\pi}\frac{(n-m)!}{(n+m)!}}.
+    \y{n}{m}(\polar,\azimuthal) = 
+    \begin{cases}
+    	\sqrt{2} C_n^m \P{n}{m}(\cos\polar)\cos(m \azimuthal) = \mathrm{Re}\,\Y{n}{m}(\polar,\azimuthal) & m > 0,\\[.2em]
+    	C_n^0 \P{n}{0}(\cos\polar) = \Y{n}{0}(\polar,\azimuthal) & m = 0,\\[.2em]
+    	\sqrt{2} C_n^{-m} \P{n}{-m}(\cos\polar)\sin(-m \azimuthal) = \mathrm{Im}\,\Y{n}{-m}(\polar,\azimuthal) & m < 0,
+    \end{cases}\\[.5em]
+    C_n^m = \sqrt{\frac{2n+1}{4\pi}\frac{(n-m)!}{(n+m)!}}.   
 \end{gather*}
 Functions $\y{n}{m}$ are usually called \textit{tesseral spherical harmonics of degree $n$ and order $m$} (sometimes the
 case $n = m$ is distinguished as \textit{sectorial spherical harmonics}). Linear combination of tesseral spherical

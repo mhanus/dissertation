@@ -75,12 +75,12 @@
 \usepackage{eucal}
 \usepackage[english]{babel}
 \usepackage[usenames, dvipsnames]{color}
-\usepackage[perpage,multiple]{footmisc}
+\usepackage[multiple]{footmisc}
 \renewcommand\footnotelayout{\fontsize{11}{11}}
 \usepackage[sort, numbers]{natbib}
 
 \usepackage{stmaryrd}
-%\usepackage{mathrsfs}
+\usepackage{mathrsfs}
 
 \usepackage{ifthen}
 \usepackage{enumitem}
@@ -102,9 +102,9 @@
 \theoremstyle{definition}
 \newtheorem{definition}{Definition}
 
-% \theoremstyle{nonumberbreak} \theoremheaderfont{\scshape}
-% \theorempreskipamount 1em plus 0em minus .5em \theorembodyfont{\slshape} \theoremseparator{\\[.5em]}
-% \newtheorem{remark}{Notational remark}
+\theoremstyle{remark}
+\newtheorem*{remark*}{\textsc{Remark}}
+\newtheorem{remark}{\textsc{Remark}}
 % 
 % \theoremstyle{break}
 % \theoremheaderfont{\normalfont\bfseries}\theorembodyfont{\slshape}
@@ -244,7 +244,7 @@
     \DeclareGraphicsExtensions{.png, .jpg, .jpeg, .pdf, .gif} %GIF doesn't work??
     \usepackage[pdftex]{graphicx}
     \pdfcompresslevel=9
-    \graphicspath{{0_frontmatter/figures/PNG/}{0_frontmatter/figures/PDF/}{0_frontmatter/figures/}}
+    \graphicspath{{0/figures/PNG/}{0/figures/PDF/}{0/figures/}}
 \else
     \usepackage[ dvips, 
                  bookmarks,
@@ -266,7 +266,7 @@
     \DeclareGraphicsExtensions{.eps, .ps}
     \usepackage{epsfig}
     \usepackage{graphicx}
-    \graphicspath{{0_frontmatter/figures/EPS/}{0_frontmatter/figures/}}
+    \graphicspath{{0/figures/EPS/}{0/figures/}}
 \fi
 
 \usepackage[colorinlistoftodos, textsize=small, textwidth=8em]{todonotes}

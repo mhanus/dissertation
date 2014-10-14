@@ -112,7 +112,7 @@
 
 % Your institution may have specific regulations if you need an abstract and where it is to be placed in the document. The default here is just after title.
 
-\include{0_frontmatter/abstract}
+\include{0/abstract}
 
 % The original template provides and abstractseparate environment, if your institution requires them to be separate. I think it's easier to print the abstract from the complete thesis by restricting printing to the relevant page.
 % \begin{abstractseparate}
@@ -123,8 +123,7 @@
 %: ----------------------- tie in front matter ------------------------
 
 \frontmatter
-\include{0_frontmatter/dedication}
-\include{0_frontmatter/acknowledgement}
+\include{0/acknowledgement}
 
 
 %: ----------------------- contents ------------------------
@@ -148,7 +147,7 @@
 
 % Tie in external source file for definitions: /0_frontmatter/glossary.tex
 % Glossary entries can also be defined in the main text. See glossary.tex
-\include{0_frontmatter/glossary} 
+\include{0/glossary} 
 
 %\begin{multicols}{2} % \begin{multicols}{#columns}[header text][space]
 %\begin{footnotesize} % scriptsize(7) < footnotesize(8) < small (9) < normal (10)
@@ -173,12 +172,16 @@
 
 %: ----------------------- subdocuments ------------------------
 
-  \include{1_introduction/introduction}
-  \include{1_introduction/nte_intro}	
-%  \include{1_introduction/aims}		
-%  \include{2_BTE/bte}
-%  \include{3_SPN/spn}
+  \include{1/introduction}
+  %\include{1_introduction/aims}		
+  \include{2/nte_intro}
+  \include{3/nte_methods}
+  \include{4/mcpn}
+  \include{5/hermes}
+  \include{6/coupled}
+  \include{7/evc}
 
+\chapter{Conclusions}
 
 %: ----------------------- bibliography ------------------------
 
@@ -195,6 +198,8 @@
 %\end{tiny}
 %\end{multicols}
 
+\appendix
+\include{appendices/appendixA}
 %: Declaration of originality
 %\include{7_backmatter/declaration}
 
