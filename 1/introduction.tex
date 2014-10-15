@@ -85,15 +85,15 @@ geometrically simple homogeneous region). Its advantage is the speed and overall
 in geometrical flexibility. Because of the way the nodal equations are derived, it also requires the
 \textit{homogenization} procedure to represent each coarse cell by a single set of material coefficients and the 
 corresponding \textit{dehomogenization} procedure to reconstruct the fine structure of the solution needed for further 
-computations\footnote{We note that in our verification examples in Chap. \alert{section}, we also use homogenized input 
-data and we expect such data to be used also during the optimization runs for the sake of efficiency; however, it is not
-the \textit{requirement} of the code.} (where the latter, in particular, is difficult to formulate in general cases).
+computations\footnote{We note that in our verification examples in Chap. \cref{chap:coupled}, we also use homogenized
+input data (provided as part of the benchmarks) and we expect such data to be used also during the optimization runs for the
+sake of efficiency; however, it is not the \textit{requirement} of the code.} (where the latter, in particular, is difficult to formulate in general cases).
 Moreover, the convergence and stability of the method is, to the knowledge of the author, not very well understood 
 (\cite{ZiminComm}).
 
 Although the author also participates in the development of a nodal module for the code MOBY-DICK (see footnote
-\ref{ftn:nodal}; \cite{Hanus2}, \cite[Chap. 4]{Hanus3}), only the finite-element approximation of both the diffusion and
-the $\SPN$ model will be considered in this thesis. In fact, one of the main objectives of the thesis is to show the
+\ref{ftn:nodal}; \cite{Hanus2}, \cite[Chap. 4]{Hanus3}), only finite-element approximation of the diffusion and
+ $\SPN$ models will be considered in this thesis. In fact, one of the objectives of the thesis is to show the
 feasibility of using finite element approximation in a quasi-steady state whole-core calculation code. In order to
 provide a viable alternative to coarse nodal and structured finite-difference discretizations, which often incorporate
 hard-coded formulas also for the solutions of the associated discrete algebraic systems, a need for automatic mesh

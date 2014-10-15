@@ -141,17 +141,18 @@ section), as these averaging procedures are traditionally called in nuclear engi
 operation, it is furthermore neccessary to perform these procedures under varying physical conditions of the core and
 generate many sets of averaged coefficients corresponding to these conditions. The code system described in
 \cref{chap:coupled} expects these coefficient sets on input, i.e., it is not designed for lattice calculations.
+
 \vspace*{1em}
 More suitable for whole-core calculations are methods derived from the integro-differential
 version of the NTE, eq.
-\eqref{eq1}, which lead to sparse algebraic systems. The most successful and nowadays best established are the method
+\eqref{eq1}, which lead to sparse algebraic systems. The most successful and well-established are the method
 of discrete ordinates ($\SN$) and the method of spherical harmonics ($\PN$).
-Both these methods arise from applying a classical well-known approach for constructing finite numerical
-approximations of PDEs  in the
-angular domain. Although in the final code, we ultimately use the lowest order approximation that can be obtained
-equivalently from both approaches (the neutron diffusion equation) we will briefly introduce the main ideas behind the
+Both arise from applying in the
+angular domain a classical well known approach for constructing finite numerical
+approximations of PDEs. Although in the final code, we ultimately use the lowest order approximation that can be obtained
+equivalently from both approaches (the neutron diffusion model) we will briefly introduce the main ideas behind the
 $\SN$ and $\PN$ methods and expose their most important properties in the next two subsections. These properties are
-well known, but their origin in mathematical structure of the equations is often overlooked in literature (rare
+generally known, but their origin in mathematical structure of the equations is often overlooked in literature (rare
 exceptions will be cited below). 
 
 \subsection{The $\SN$ method}\label{sec:1-SN}
@@ -160,25 +161,24 @@ $\omega = \{\bomega_n\}_{n=1}^{M}$ is chosen and the solution is approximated as
 \begin{equation}\label{eq:sn_approx} 
 	\psi(\br, \bomega) \approx 
 		\pw{\psi(\br,\bomega_n)}{if $\bomega = \bomega_n$ for $\bomega_n \in \omega$}
-		   {0}{if $\bomega \not \in \omega$} 
+		   {0}{if $\bomega \not \in \omega$.} 
 \end{equation}
 Equation \eqref{eq1} is then evaluated at these $M = M(N)$ isolated directions.
 Note that for the traditional direction sets, we have $M = N(N+2)$ if the given problem does not possess any symmetries; the
 method of discrete ordinates using such a number of directions is traditionally refered to as the method of discrete
-ordinates of order $N$, shortly $\SN$. We will keep this notation, but  write just $M$ for the number of directions
-instead of $M(N)$.
+ordinates of order $N$, shortly $\SN$. 
 
 To evaluate the integral term on the right hand side of the equation, the set of directions is accompanied by a
 corresponding set of weights $\{w_n\}_{n=1}^{M}$, together defining a quadrature of the sphere $\Sphere.$ The
 requirement of accurate evaluation of the integral term of eq.
-\eqref{eq1} as well as an accurate integration of the angular flux function over the sphere (which defines the
-physically important quantity \textit{scalar flux}, \alert{ref}) constitutes the main guideline for the choice of
-directions and weights. We will return to this matter later in \alert{ref}; for now it suffices to say that for
+\eqref{eq1} as well as accurate integration of the angular flux function over the sphere (which defines the
+physically important scalar flux \eqref{eq:scalar_flux}) constitutes the main guideline for the choice of
+directions and weights. We will return to this matter later in \sref{sec:DO}; for now it suffices to say that for
 three-dimensional problems without any symmetries, \mbox{$M = \left|\{\bomega_n, w_n\}\right| = \Oh(N^2)$} (with the
 value of $M$ for typically used quadrature sets stated above).
 
 To write  the final result of the $\SN$ approximation, let us first denote for a set $s = \{c_k\}_{k=1}^n$ the column
-vector with entries $c_1,c_2,\ldots,c_n$ as $\col(s)$ and similarly the diagonal matrix whose diagonal is
+vector with entries $c_1,c_2,\ldots,c_n$ as $\col s$ and similarly the diagonal matrix whose diagonal is
 given by elements of $s$ as $\diag(s)$. Then, denoting
 \begin{equation}\label{eq:sn_vecs}
 \psi_n(\br) \equiv \psi(\br,\bomega_n), \quad q_n(\br) \equiv
@@ -186,8 +186,8 @@ q(\br,\bomega_n),\quad n = 1,\ldots, M
 \end{equation}
 we will define the vector of angular fluxes and the vector angular sources as
 \begin{equation}\label{eq:sn_vars}
-\Psi(\br) := \col\left(\{\psi_n(\br)\}_{\idxset{M}}\right),\quad
-\mat{Q}_{S_N}(\br) := \col\left(\{q_n(\br)\}_{\idxset{M}}\right),
+\Psi(\br) := \col\{\psi_n(\br)\}_{\idxset{M}},\quad
+\mat{Q}_{S_N}(\br) := \col\{q_n(\br)\}_{\idxset{M}},
 \end{equation}
 where we used the index set of $\SN$ variables: $\idxset{M} = \{1,2,\ldots,M\}$.
 The $\SN$ approximation consists of the following set of $M$ PDEs in spatial domain\footnote{Differentiation and
@@ -199,8 +199,8 @@ component-wise throughout this thesis.}:
 \end{equation}
 where $\mat{I}$ is the $M\times M$ identity matrix and
 $$
-	\mat{A}_{S_N}^x = \diag(\{\Omega_{n,x}\}),\ \mat{A}_{S_N}^y = \diag(\{\Omega_{n,y}\}),\ \mat{A}_{S_N}^z =
-	\diag(\{\Omega_{n,z}\}).
+	\mat{A}_{S_N}^x = \diag\{\Omega_{n,x}\}_{\idxset{M}},\ \mat{A}_{S_N}^y = \diag\{\Omega_{n,y}\}_{\idxset{M}},\
+	\mat{A}_{S_N}^z = \diag\{\Omega_{n,z}\}_{\idxset{M}}.
 $$
 Equation
 \eqref{eq:sn1} represents a system of advection-reaction equations with constant advection field given by the angular 
@@ -301,8 +301,8 @@ where $V_{S_N}$ is a space of functions vanishing (as functions of $\bomega$) ev
 \in \omega$. Note that this mapping converts a vector of directional fluxes to a function on $\Sphere$. Corresponding to
 it is the mapping that produces the discrete ordinates representation of a function $f\in\Sphere$: 
 \begin{equation}\label{eq:map_SN_inv}
-	\PihSN f(\bomega) := \col\left(\left\{f_n \right\}_{\idxset{M}}\right)
-	 = \col\left(\left\{f(\bomega_n)\right\}_{\idxset{M}}\right)
+	\PihSN f(\bomega) := \col\left\{f_n \right\}_{\idxset{M}}
+	 = \col\left\{f(\bomega_n)\right\}_{\idxset{M}}
 \end{equation}
 (which we implicitely used in \eqref{eq:sn_vars} with $f(\cdot,\bomega) = \psi(\cdot,\bomega)$ and
 $f(\cdot,\bomega) = q(\cdot,\bomega)$, respectively)\footnote{This operator is also used to obtain the $\SN$ boundary
@@ -496,8 +496,8 @@ partial differential equations in spatial domain which is of comparable size as 
 \end{equation}
 where 
 \begin{equation}\label{eq:pn_vectors}
-	\Phi = \col\left(\left\{\phi_k\right\}_{\idxset{K}}\right) \ \text{ and }\ 
-	\mat{Q}_{P_N} = \col\left(\left\{q_k\right\}_{\idxset{K}}\right) 
+	\Phi = \col\left\{\phi_k\right\}_{\idxset{K}} \ \text{ and }\ 
+	\mat{Q}_{P_N} = \col\left\{q_k\right\}_{\idxset{K}}
 \end{equation}
 are, respectively, the vector of angular flux
 moments and angular source moments, and the index set of $\PN$ variables is defined analogously to the $\SN$ case:
@@ -566,7 +566,7 @@ As in the $\SN$ case, we will now define the mappings that take the vector $\Phi
 angular flux $\psi(\cdot,\bomega)\in\Lp[2]_K(\Sphere)$ and vice versa. The general operators are
 $$
 \bigl(\PiPN\mat{F}\bigr)(\bomega) := \sum_{k=1}^{ K} f_k\Y{k}{}(\bomega), \quad
-\PihPN f(\bomega) = \col\left( \left\{(\psi, \Y{k}{})_{\Lp[2](\Sphere)}\right\}_{\idxset{K}} \right).
+\PihPN f(\bomega) = \col \left\{(\psi, \Y{k}{})_{\Lp[2](\Sphere)}\right\}_{\idxset{K}}.
 $$
 Using \eqref{eq:pn_angmom}, \eqref{eq:pn_vectors} and \eqref{eq:PN_proj}, we can see that 
 $$
