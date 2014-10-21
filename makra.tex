@@ -41,6 +41,7 @@
 \newcommand{\PihPN}{\widehat\Pi_{P_N}}
 \newcommand{\idxset}[1]{\mathcal{I}_{#1}}
 \newcommand{\ips}[2]{(#1, #2)_{\Lp[2](\Sphere)}}
+\newcommand{\ip}[2]{(#2)_{#1}}
 \newcommand{\sla}{\ensuremath{\shortleftarrow}}
 \newcommand{\sra}{\ensuremath{\shortrightarrow}}
 
@@ -68,6 +69,7 @@
 \newcommand{\intA}[2][]{\int_{\Sphere}#2\,\d{\bomega#1}}
 \newcommand{\intAA}[1]{\int_{\Sphere\times\Sphere}#1\,\d{\bomega'}\d{\bomega}}
 \newcommand{\intX}[2][X]{\int_{#1}#2\,\d{x}}
+\newcommand{\muint}[2][]{\int_{-1}^{1} #2 \d{\mu#1}}
 
 \newcommand{\sumg}{\sum_{{g'\neq g}}}
 \newcommand{\summ}[2]{\sum_{#1}^{#2}}
@@ -78,7 +80,7 @@
 
 \newcommand{\pX}[1][]{\partial X^{#1}}
 \newcommand{\pV}[1][]{\partial \VV}
-\newcommand{\VV}{\mathcal{V}}
+\newcommand{\VV}{\mathcal{D}}
 
 \newcommand{\polar}{\vartheta}
 \newcommand{\azimuthal}{\varphi}
@@ -101,7 +103,7 @@
 \newcommand{\y}[2]{y_{#1}^{#2}}
 \renewcommand{\P}[2]{P_{#1}^{#2}}
 \newcommand{\YY}[1][n]{\mathbf{Y}_{#1}}
-\newcommand{\Yc}[2]{\overline {Y}_{#1}^{#2}}
+\newcommand{\Yc}[2]{{Y}_{#1}^{#2}}
 \newcommand{\YYc}[1][n]{\overline{\mathbf{Y}}_{#1}}
 
 \newcommand{\PP}[1][n]{\mathbb{P}^{(#1)}}
@@ -140,11 +142,13 @@
 \DeclareMathOperator{\argmin}{argmin\,}
 \DeclareMathOperator{\diag}{diag\,}
 \DeclareMathOperator{\col}{col\,}
-\newcommand{\colset}[2]{\col\left(\left\{#1\right\}_{#2}\right)}
+\DeclareMathOperator{\spectrum}{sp\,}
+\newcommand{\colset}[2]{\col\left\{#1\right\}_{#2}}
 \DeclareMathOperator{\trace}{tr\,}
 \DeclareMathOperator{\Proj}{Proj}
 \newcommand{\Projop}[1][P_N]{\Proj_{#1}}
 \DeclareMathOperator{\Rng}{Range}
+\DeclareMathOperator{\Ker}{Ker}
 
 \usepackage{colortbl}
 \newlength\celldim \newlength\fontheight \newlength\extraheight

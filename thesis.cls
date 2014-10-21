@@ -39,6 +39,7 @@
 
 %\usepackage{setspace}
 \usepackage{nomencl}
+\usepackage{makeidx}
 \usepackage{isotope}
 \usepackage{sistyle}
 
@@ -97,7 +98,10 @@
 %:-------------------------- Theorems ---------------------------------------
 
 \newtheorem{theorem}{Theorem}
+\newtheorem*{theorem*}{Theorem}
 \newtheorem{lemma}{Lemma}
+\newtheorem*{corollary*}{Corollary}
+\newtheorem{corollary}{Corollary}
 
 \theoremstyle{definition}
 \newtheorem{definition}{Definition}
@@ -105,6 +109,8 @@
 \theoremstyle{remark}
 \newtheorem*{remark*}{\textsc{Remark}}
 \newtheorem{remark}{\textsc{Remark}}
+
+
 % 
 % \theoremstyle{break}
 % \theoremheaderfont{\normalfont\bfseries}\theorembodyfont{\slshape}
@@ -193,8 +199,7 @@
 % Listing of acronyms concludes this List of Symbols. Abbreviations of named methods are listed separately.
 % \clearpage }
 
-\makenomenclature
-
+%\makenomenclature
 
 
 %:-------------------------- PDF/PS setup -----------------------

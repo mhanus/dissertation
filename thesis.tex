@@ -147,13 +147,13 @@
 
 % Tie in external source file for definitions: /0_frontmatter/glossary.tex
 % Glossary entries can also be defined in the main text. See glossary.tex
-\include{0/glossary} 
+%\include{0/glossary} 
 
 %\begin{multicols}{2} % \begin{multicols}{#columns}[header text][space]
 %\begin{footnotesize} % scriptsize(7) < footnotesize(8) < small (9) < normal (10)
 
-\printnomenclature[1.5cm] % [] = distance between entry and description
-\label{nom} % target name for links to glossary
+%\printnomenclature[1.5cm] % [] = distance between entry and description
+%\label{nom} % target name for links to glossary
     
 %\end{footnotesize}
 %\end{multicols}
@@ -199,9 +199,25 @@
 %\end{multicols}
 
 \appendix
-\include{appendices/appendixA}
+\makeatletter
+\@addtoreset{theorem}{chapter}% Reset theorem counter with stepping of chapter
+\@addtoreset{lemma}{chapter}% Reset theorem counter with stepping of chapter
+\@addtoreset{remark}{chapter}% Reset theorem counter with stepping of chapter
+\makeatother
+\renewcommand\thetheorem{\thechapter.\arabic{theorem}}
+\renewcommand\thelemma{\thechapter.\arabic{lemma}}
+\renewcommand\theremark{\thechapter.\arabic{remark}}
+\renewcommand\thecorollary{\thechapter.\arabic{corollary}}
+\setcounter{theorem}{0}
+\setcounter{lemma}{0}
+\setcounter{remark}{0}
+\setcounter{corollary}{0}
+
+%\include{appendices/appendixA}
+\include{appendices/appendixB}
+\include{appendices/appendixC}
 %: Declaration of originality
 %\include{7_backmatter/declaration}
-
+\printindex
 
 \end{document}

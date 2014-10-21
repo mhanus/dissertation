@@ -1,1 +1,37 @@
 \chapter{Coupled code system for quasi-static whole-core calculations}\label{chap:coupled}
+
+For the purposes of the project\footnote{
+Project TA01020352 -- Increasing utilization of nuclear fuel through optimization of an inner fuel cycle and
+calculation of neutron-physics characteristics of nuclear reactor cores. Principal investigators: R. {\v C}ada
+(University of West Bohemia) and J. Rataj (Czech Technical University} 
+whose target is an in-core fuel management code for nuclear
+reactors\footnote{ primarily of the pressurized type (i.e. without coolant boiling during operational conditions) but with arbitrary fuel
+assembly geometry, thus applicable to both major designs in use worldwide -- the Russian WWER reactors as well as the
+US PWR reactors.}, the author developed a full three-dimensional multigroup neutron diffusion solver based on the finite
+element discretization described in previous chapters. Its first responsibility is to solve the core criticality problem
+for given input data (macroscopic cross-sections) defined by the proposed fuel loading pattern, i.e. to solve the
+generalized eigenvalue problem
+$$
+	\mat{A}\mat{x} = \lambda\mat{B}\mat{x}
+$$
+for $\lambda$ of smallest magnitude. Refering to \sref{sec:criticality} (Remark \ref{rem:keff}), $\lambda =
+\frac{1}{\keff} \approx 1$ for a (nearly) critical state. We also recall from \alert{ref} that in a general multigroup
+setting, the matrices are non-symmetric and $\mat{B}$ is a singular matrix with zero rows corresponding to low-energy
+groups.
+
+It is written in Python 2.7 with critical parts (typically where loops over mesh cells are needed) in C++ as SWIG
+extension modules. FE matrix assembly is handled by the well-established open-source system FEniCS \cite{dolfin1,
+dolfin2} and its linear algebra backend PETSc \cite{petsc1}. PETSc library and its fork focusing on solving large sparse
+eigenvalue problems, SLEPc \cite{slepc1}, is also primarily used for solving the assembled systems. This has the
+advantage that parallel assembly and solution using the MPI protocol is almost automatic (provided an appropriate
+solver/preconditioner is being used).
+FEniCS also makes it easy to pass arguments directly to the linear-algebra backend, thus facilitating for the user the
+selection of algebraic solver and its properties. 
+
+In the benchmarks below, we found the most robust setting to be the combination of a Jacobi-Davidson generalized
+eigensolver (\cite{slepcjd}) with a PETSc implementation of BiCGStab(\ell) \cite{Sleijpen1} as an inner solver (using
+the default $\ell = 2$). It has been demonstrated already in \cite{Sleijpen1} (and analyzed in many later papers, see
+e.g. \citer{Notay} and references therein) that the Jacobi-Davidson method is remarkably robust with respect to accuracy
+of the solution of the inner solution phase. Therefore, by setting a fixed number of inner iterations to 20 and
+employing a smoothed aggregation algebraic multigrid preconditioner with 1 pre- and 1 post-smoothing Richardson
+iterations, we were able to get solutions fast enough.

@@ -1,0 +1,109 @@
+\chapter{Lack of rotational invariance of the $\SN$ advection-reaction operator}
+
+\begin{theorem*}\label{thm:commut_NTE}
+Let $L : V\to V$ be the advection-collision operator of the NTE satisfying
+$RL = LR$ for all $R\in\mathrm{SO}(3)$. 
+Then the corresponding $\SN$ approximation operator
+\begin{equation}\label{eq:sn_op_app}
+	\Projop[S_N]\op{L}\Projop[S_N]
+\end{equation}
+(with $\Projop[S_N]$ defined by \eqref{eq:proj_sn}, \eqref{eq:map_SN}, \eqref{eq:map_SN_inv} and particular
+ordinates and quadrature sets \mbox{$\omega = \{\bomega_n\}_{\idxset{M}}$, $\mathcal{W} = \{w_n\}_{\idxset{M}}$})
+satisfies $$
+\op{R}\op{L}\Projop[S_N] = \op{L}\Projop[S_N]\op{R}\quad \forall R\in\mathrm{SO}(3)
+$$
+if and only if
+\begin{equation}\label{eq:thm1_cond}
+	\forall n\in \idxset{M}\ \exists m\in\idxset{M}: \mat{R}\bomega_n = \bomega_m \quad \forall \mat{R}\in\mathrm{SO}(3).
+\end{equation} 
+\end{theorem*}
+\begin{remark*}
+	Note that the conditions \eqref{eq:thm1_cond} can be satisfied only in the limit \mbox{$M\to\infty$}.
+\end{remark*}
+\begin{proof}
+First, recall from \sref{sec:opsn} that for any $\SN$ approximate function \mbox{$f_{S_N}\in V_{S_N}$}, 
+$$
+	\Projop[SN]f_{S_N} = f_{S_N}.
+$$
+Also, for $\psi_{S_N} \in V_{S_N}$:
+$$
+	\bomega\cdot\nabla\psi_{S_N}(\br,\bomega) = \left.\pw{
+		\bomega_n\cdot\nabla\psi(\br,\bomega_n)}{if $\bomega = \bomega_n$ for $\bomega_n\in\omega$}
+		{0}{if $\bomega \not \in \omega$.}\right\} \in V_{S_N}
+$$
+where we recall the characterization of $V_{S_N}$ as a space of functions that, as functions of $\bomega$, vanish
+everywhere on $\Sphere$ except points corresponding to the selected ordinates set. Therefore for $\psi_{S_N} \in
+V_{S_N}$, 
+$$
+	L\psi_{S_N} \equiv \bomega\cdot\nabla\psi_{S_N} + \sigma_t\psi_{S_N} \in V_{S_N}.
+$$
+Since \mbox{$\Rng (\PiSN) = V_{S_N}$}, it follows that the $\SN$ operator \eqref{eq:sn_op_app} can be simplified as:
+\begin{equation}\label{eq:sn_op2}
+	\Projop[S_N]\op{L}\Projop[S_N] = \op{L} \Projop[SN].
+\end{equation}
+Because of the commutativity of $L$ and $R$, it therefore suffices to show that $\Projop[S_N]$ commutes
+with $\op{R}$, that is (using def. \eqref{eq:proj_sn})
+\begin{equation}\label{eq:thm1_point}
+	R \PiSN \PihSN \psi = \PiSN \PihSN R \psi\quad  \forall \psi \in V, 
+\end{equation}
+if and only if the condition \eqref{eq:thm1_cond} holds.\\[.2em] 
+
+As in \sref{sec:opsn}, we will suppress the spatial dependence as the $\SN$ approximation concerns only the angular
+dependence. For any $\psi\in V$, we have
+\begin{equation*}
+	\PihSN R\psi(\bomega) = \colset{R\psi(\bomega_n)}{\idxset{M}} = \colset{\psi(\mat{R}^T\bomega_n)}{\idxset{M}}.
+\end{equation*}
+Applying $\PiSN$ thus yields a function $f_\psi = \PiSN\PihSN R\psi \in V_{S_N}$ such that
+\begin{equation}\label{eq:thm1_f}
+f_\psi(\bomega) = \pw{\psi(\mat{R}^T\bomega_n)}{if $\bomega = \bomega_n$ for $\bomega_n\in\omega$}{0}{if $\bomega \not
+	\in \omega$.}
+\end{equation}
+On the other hand, let $u = \PiSN\PihSN\psi$. Then
+$$
+u(\bomega) = \pw{\psi(\bomega_n)}{if $\bomega = \bomega_n$ for $\bomega_n\in\omega$}{0}{if $\bomega \not
+	\in \omega$}
+$$ 
+and the rotated function $g_\psi(\bomega) = R\PiSN\PihSN\psi = R u(\bomega)$ is given by
+$$
+g_\psi(\bomega) = u(\mat{R}^T\bomega) = \pw{\psi(\bomega_n)}{if $\mat{R}^T\bomega = \bomega_n$ for
+$\bomega_n\in\omega$}{0}{if $\mat{R}^T\bomega \not \in \omega$}
+$$
+or, equivalently, by
+\begin{equation}\label{eq:thm1_g}
+g_\psi(\bomega) = \pw{\psi(\bomega_n)}{if $\bomega = \mat{R}\bomega_n$ for
+$\bomega_n\in\omega$}{0}{if $\bomega \not \in \mat{R}\omega$}
+\end{equation}
+(where action of $\mat{R}$ on the set $\omega$ is understood element-wise). If the ordinate set $\omega$ contains for
+any ordinate $\bomega_n$ also its rotated copy $\mat{R}\bomega_n$, i.e., condition \eqref{eq:thm1_cond} holds, then also
+$$
+	\bomega_n = \mat{R}^T\bomega_m
+$$
+and after simple substitution in \eqref{eq:thm1_g} and renumbering in \eqref{eq:thm1_f}, we obtain
+$$
+	f_\psi(\bomega) = g_\psi(\bomega).
+$$
+In order for this equality to hold true for any $\psi \in V$ (and hence for \eqref{eq:thm1_point} to hold true), the
+condition \eqref{eq:thm1_f} is also necessary.
+\end{proof}
+\comment{
+\begin{theorem}\label{thm:commut_NTE2}
+Let $K : V\to V$ be the transfer operator of the NTE satisfying
+$RK = KR$ for all $R\in\mathrm{SO}(3)$. 
+Then the corresponding $\SN$ approximation operator
+\begin{equation}\label{eq:sn_op_app}
+	\Projop[S_N]\op{K_{S_N}}\Projop[S_N]
+\end{equation}
+where $\op{K}_{S_N}: V_{S_N} \to V$ is defined by
+$$
+	\op{K}_{S_N} f(\bomega) = \sum_{n=1}^{M} w_n\kappa(\bomega\cdot\bomega_n) f(\bomega_n), \quad \bomega_n\in \omega,\
+	w_n\in \mathcal{W} $$
+(and definitions of $\Projop[SN]$, $\omega$, $\mathcal{W}$ are as in previous theorem),  satisfies
+$$
+\op{R}\Projop[S_N] \op{K}_{S_N}\Projop[S_N] = \Projop[S_N] \op{K}_{S_N}\Projop[S_N]\op{R}\quad \forall
+R\in\mathrm{SO}(3) $$
+if and only if the condition \eqref{eq:thm1_cond} of Thm. \ref{thm:commut_NTE} holds.
+\end{theorem}
+\begin{proof}
+
+\end{proof}
+}

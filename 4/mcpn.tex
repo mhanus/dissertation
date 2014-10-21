@@ -10,18 +10,19 @@ In this chapter, we start constructing an approximation to the monoenergetic neu
 of the form
 \begin{equation}\label{eq:MC-bte}
     \bomega\cdot\nabla\psi(\br,\bomega) + \sigma_t(\br)\psi(\br,\bomega) - \intA[']{\left[\sigma_s(\br,\bomega\cdot\bomega') + 
-    \frac{\nu(\br)\sigma_f(\br)}{4\pi}\right]\psi(\br,\bomega')} - q(\br,\bomega) = 0.
+    \frac{\nu\sigma_f(\br)}{4\pi}\right]\psi(\br,\bomega')} - q(\br,\bomega) = 0.
 \end{equation}
-We will focus on the angular approximation here and assume that $\psi(\cdot,\bomega)\in\Lp[2](\Sphere)$
-% in the discussion below (even though the final derivation in Sec. \ref{sec:mcpn} actually requires only $\Lp[1](\Sphere)$ integrability)
+We will focus on the angular approximation here and assume that \mbox{$\psi(\cdot,\bomega)\in\Lp[2](\Sphere)$}.
+% in the discussion below (even though the final derivation in Sec. \ref{sec:mcpn} actually requires only 
+% $\Lp[1](\Sphere)$ integrability)
 . 
 Let us start by recalling the well established spherical harmonics method.
 
 \section{$\PN$ approximation}\label{sec:SPH}
 Being a square integrable function on $\Lp[2](\Sphere)$, $\psi(\cdot,\bomega)$ may be represented by a generalized
 Fourier series expansion in terms of a complete orthonormal basis of this space. The $\PN$ method uses the basis of
-tesseral spherical harmonic functions $\{\Y{n}{m}\}$ of degree $n\geq 0$ and order $-n \leq m \leq n$ (shortly
-\textit{tesseral harmonics}). A finite method is obtained by the classical Galerkin approximation of the BTE in a
+spherical harmonic functions $\{\Y{n}{m}\}$ of degree $n\geq 0$ and order $-n \leq m \leq n$ (shortly
+\textit{spherical harmonics}). A finite method is obtained by the classical Galerkin approximation of the BTE in a
 subspace $\Lp[2]_N(\Sphere)\subset\Lp[2](\Sphere)$ spanned by $\{\Y{n}{m}\}$,  $n \leq N$ \footnote{For subtle reasons
 that could be found in the literature (\cite[Sec. 10.3.2]{Davison}, \cite[Sec. 9.6]{Stacey1}), only odd-$N$ $\PN$
 approximations are usually used.} -- i.e. it consists of the expansion
@@ -29,13 +30,13 @@ approximations are usually used.} -- i.e. it consists of the expansion
   \psi(\br,\bomega) \approx \suma[n]{0}{N}\suma[m]{-n}{n}\angmom{n}{m}(\br)\Y{n}{m}(\bomega)
 \end{equation}
 and orthogonal projection of the residual $T\psi - q$ onto $\Lp[2]_N(\Sphere)$ (similarly, the exact boundary conditions 
-are projected onto a subspace of $\Lp[2](\pX[-])$ spanned by the complete set of odd-degree tesseral harmonics; 
+are projected onto a subspace of $\Lp[2](\pX[-])$ spanned by the complete set of odd-degree spherical harmonics; 
 the resulting conditions are known as the \textit{Marshak conditions}\footnote{We only make a remark that there is 
 another form of approximate boundary conditions known as the Mark conditions. The relative merit of one over the other 
 is not completely resolved so both are widely used. We choose the former as they are consistent with the Galerkin 
 derivation of the $\PN$ equations.}).
 
-The choice of the tesseral harmonics basis facilitates the realization of the above procedure. Besides the
+The choice of the spherical harmonics basis facilitates the realization of the above procedure. Besides the
 orthonormality property, they obey a three-term recurrence rule that is used advantageously in expanding the advection
 part
 % (however, a closure relation such as that partial derivatives of $\angmom{N+1}{m}(\br)$ vanish for all relevant $m$
@@ -65,40 +66,44 @@ alternative set of expansion functions for \eqref{eq:exp} that would share with 
 those mentioned above but have a more regular structure.
 
 \subsection{Surface and solid spherical harmonics}
-One possible such set arises by studying the linear combinations of tesseral harmonics of fixed degree. We will simplify
-the notation by setting $\mu = \cost$, replace $\bomega$ with $(\mu, \azimuthal)$ where necessary and also use the
+One possible such set arises by studying the linear combinations of spherical harmonics of fixed degree. We will
+simplify the notation by setting $\mu = \cost$, replace $\bomega$ with $(\mu, \azimuthal)$ where necessary and also use the
 following relations between the velocity and direction vectors in Cartesian coordinates:
 $$
   \bv = [v_x, v_y, v_z]^T = v\bomega,\quad \bomega = [\Omega_x, \Omega_y, \Omega_z]^T = \frac{\bv}{v}.
 $$
-
-\begin{definition}\label{defn:SSH}
-  A general linear combination of the $2n + 1$ tesseral harmonics of degree $n$ is called a \textit{surface spherical 
+\index{$\bv$, v}
+\begin{definition}\label{defn:SSH}\cite[Def. 3.22]{Schreiner}
+  A general linear combination of the $2n + 1$ (tesseral) spherical harmonics of degree $n$ is called a \textit{surface spherical 
   harmonic of degree $n$} and can be written as
   \begin{equation}\label{eq:exp3}
-    Y_n(\mu,\azimuthal) = A_0 P_n(\mu) + \suma[m]{1}{n}\left[ A_m \cos(m\azimuthal)\P{n}{m}(\mu) + B_m \sin(m\azimuthal)\P{n}{m}(\mu)\right]
+    \mathcal{Y}_n(\mu,\azimuthal) = A_0 P_n(\mu) + \suma[m]{1}{n}\left[ A_m \cos(m\azimuthal)\P{n}{m}(\mu) + B_m
+    \sin(m\azimuthal)\P{n}{m}(\mu)\right]
   \end{equation}
-  where $\P{n}{m}$ are the \textit{associated Legendre polynomials} \cite[Chap. VI]{Byerly}. 
+  where $\P{n}{m}$ are the \textit{associated Legendre polynomials} (eq. \eqref{eq:associated_Pn}). 
 \end{definition}
 Note that there is a one-to-one relationship between the coefficients in eq. \eqref{eq:exp} for fixed $n$ and the 
 coefficients in \eqref{eq:exp3}.
 
+\index{solid spherical harmonic}
 Multiplying by $v^n$, we obtain the (regular) \textit{solid spherical harmonic}\footnote{Regular solid spherical
 harmonics are one class of solutions of the Laplace equation $\lap Y = 0$ in spherical coordinates
 $(v,\azimuthal,\polar)$ which vanish as $v\to 0$. The other are the irregular solid spherical harmonics, which have
-singularity of the form $v^{-n-1}$ at the origin (\cite[Chap. VI]{Byerly}).}. Paper \cite{Ackroyd1} appears to be the
-first where solid spherical harmonics were practically used to solve the neutron transport equation. Under the
-assumption of isotropic scattering ($\sigma_{sk} = 0$ for $k \geq 1$ in \eqref{eq:exp2}) he derived for a homogeneous
-region a set of coupled diffusion equations (called SH\PN) without any other requirement (unlike the classical
-derivation of the $\SPN$ equations, which required certain assumptions about dimensionality or material properties, cf.
-\cite{Larsen1}, \cite{Pomraning1}), together with heuristic boundary and interface conditions. As was shown in the
-paper, the SH\PN~ equations reduced by simple substitutions to the set of $\SPN$ equations originally formulated by
-Gelbard and it is interesting to note that this actually showed that the latter are within an isotropically scattering
-homogeneous medium equivalent to the full solid harmonics expansion -- the same result for surface spherical harmonics
-has been independently proven in \cite{Coppa1} and revisited recently (\cite{Coppa2,McClarren1}). Unfortunately, the
-general treatment in \cite{Ackroyd1} is very technically involved and in author's opinion quite difficult to follow --
-this may be the reason why the idea has not been picked up and possible research directions outlined in the paper's
-conclusion not pursued.
+singularity of the form $v^{-n-1}$ at the origin (\cite[Chap. VI]{Byerly}).}. Solid spherical harmonics were utilized
+in the early works \cite{Davison, Rumyantsev} as tools for analyzing the multidimensional spherical harmonics. Since
+then, there appears to be no interest in solid spherical harmonics until the paper by Ackroyd \cite{Ackroyd1}, who used
+these functions to arrive at a set of equations that can be used in practice to approximate solution of the the neutron 
+transport equation. Under the assumption of isotropic scattering ($\sigma_{sk} = 0$ for $k \geq 1$ in \eqref{eq:exp2}) 
+Ackroyd derived for a homogeneous region a set of coupled diffusion equations (called SH\PN) without any other
+requirement (unlike the classical derivation of the $\SPN$ equations, which required certain assumptions about 
+dimensionality or material properties, cf. \cite{Larsen1}, \cite{Pomraning1}), together with heuristic boundary and
+interface conditions. As was shown in the paper, the SH\PN~ equations reduced by simple substitutions to the set of 
+$\SPN$ equations originally formulated by Gelbard and it is interesting to note that this actually showed that the 
+latter are within an isotropically scattering homogeneous medium equivalent to the full solid harmonics expansion -- 
+the same result for surface spherical harmonics has been independently proven in \cite{Coppa1} and revisited recently 
+(\cite{Coppa2,McClarren1}). Unfortunately, the general treatment in \cite{Ackroyd1} is very technically involved and in 
+author's opinion quite difficult to follow -- this may be the reason why the idea has not been picked up and possible 
+research directions outlined in the paper's conclusion not pursued.
 
 \subsection{Cartesian tensors}\label{sec:tensors}
 In order to develop a conceptually simpler and arguably also more useful approach, we need to recall some basic facts
@@ -237,16 +242,19 @@ $n$ into the space of totally symmetric and traceless tensors of rank $n$ (see t
 \cite{Applequist1}). The result of applying the detracer operator on a totally symmetric tensor $\AA$ is a TST tensor
 with components:
 \begin{equation}\label{eq:detr}
-  \detr \AAA{\alpha_1\ldots\alpha_n} = \suma[m]{0}{\lfloor n/2 \rfloor} \frac{(-1)^m(2n-2m-1)!! }{(2n-1)!!}\quad\sum_{\mathclap{\{\perm{\alpha_1\ldots\alpha_n}\}_{\text{d}}}}\quad\kron{\alpha_1}{\alpha_2}\cdots\kron{\alpha_{2m-1}}{\alpha_{2m}}\AAA{\beta_1\beta_1\ldots\beta_m\beta_m\alpha_{2m+1}\ldots\alpha_n},
+\begin{multlined}
+  \detr \AAA{\alpha_1\ldots\alpha_n} = \\ \suma[m]{0}{\lfloor n/2 \rfloor} \frac{(-1)^m(2n-2m-1)!!
+  }{(2n-1)!!}\quad\sum_{\mathclap{\{\perm{\alpha_1\ldots\alpha_n}\}_{\text{d}}}}\quad\kron{\alpha_1}{\alpha_2}\cdots\kron{\alpha_{2m-1}}{\alpha_{2m}}\AAA{\beta_1\beta_1\ldots\beta_m\beta_m\alpha_{2m+1}\ldots\alpha_n},
+\end{multlined}
 \end{equation}
 where $\{\perm{\alpha_1\ldots\alpha_n}\}_{\text{d}}$ denotes the set of all permutations that give distinct terms in 
-the last sum (considering their total symmetry) and $(2n-1)!! = (2n-1)(2n-3)\cdots 3\cdot 1$ with $(-1)!! = 1$. Various 
-properties and different explicit forms of the detracer operator are given in \cite[Sec. 5]{Applequist1}
-%or, in a somewhat more transparent way, in \cite[Eqns. (36), (37)]{Vreoiju}
-.
+the last sum (considering their total symmetry) and $$(2n-1)!! = (2n-1)(2n-3)\cdots 3\cdot 1 \quad \mbox{with}\quad
+(-1)!! = 1.$$
+Various properties and different explicit forms of the detracer operator are given in \cite[Sec. 5]{Applequist1}.
+%or, in a somewhat more transparent way, in \cite[Eqns. (36), (37)]{Vreoiju}.
 
 Being general surface spherical harmonics according to Def. \ref{defn:SSH}, Maxwell's surface spherical harmonics are
-linear combination of tesseral harmonics and hence share many of the properties of the latter. An extensive presentation
+linear combination of spherical harmonics and hence share many of the properties of the latter. An extensive presentation
 of these properties is given in \cite{Applequist1,Applequist2} and we will recall some of them in further sections. We
 will use the following form of Maxwell-Cartesian surface spherical harmonics of degree $n$ as components of rank-$n$ TST
 tensors (called sometimes \textit{Maxwell-Cartesian tensors}):
@@ -272,7 +280,7 @@ polynomials, for instance
 %  \PP[0](\bomega) = 1,\ \PP[n+1](\bomega) = \left[\bomega\otimes\PP[n](\bomega) - \tfrac{n^2}{4n^2-1}\eye\otimes\PP[n-1](\bomega)\right]_{\mbox{\scriptsize sym}},\ n = 1,2,\ldots.
 %\end{equation}
 First few Maxwell-Cartesian surface harmonics generated by this formula are shown in the table below together with the 
-corresponding tesseral harmonics and Legendre polynomials.
+corresponding spherical harmonics and Legendre polynomials.
 \begin{center}
 	\begin{tabular}{|A|B|C|D|}
 	  \hline
@@ -290,16 +298,16 @@ corresponding tesseral harmonics and Legendre polynomials.
 		                                $\Omega_x\Omega_z$, 
 		                                $\Omega_y\Omega_z$ & $\mu^2 - \tfrac13$ \nl
 	\end{tabular}
-	\captionof{table}{Tesseral and Maxwell-Cartesian surface spherical harmonics and Legendre polynomials up to degree 
-	$n = 2$.}
+	\captionof{table}{Spherical harmonics, Maxwell-Cartesian surface harmonics and Legendre polynomials up to
+	degree $n = 2$.}
 	\label{tab:harmonics}
 \end{center}
- The symmetric nature of the Maxwell-Cartesian surface harmonics as opposed to the tesseral harmonics can be seen from 
- the third row in the table. We also note that since there are $\frac{(n+1)(n+2)}{2}$ distinct components in a general 
- totally symmetric tensor of rank $n$, the number of Maxwell-Cartesian harmonics is greater than the number of tesseral 
+ The symmetric nature of the Maxwell-Cartesian surface harmonics as opposed to the ordinary spherical harmonics can be
+ seen from the third row in the table. We also note that since there are $\frac{(n+1)(n+2)}{2}$ distinct components in a general 
+ totally symmetric tensor of rank $n$, the number of Maxwell-Cartesian harmonics is greater than the number of spherical 
  harmonics of the same degree, which is ($2n + 1$) for $n \geq 2$. However, due to the $\frac{n(n-1)}{2}$ conditions 
  arising from the tracelessness property, there are just $2n + 1$ independent components in $\PP$ (see also the footnote 
- on pg. \pageref{pg:indepc}). This also indicates the fact that unlike the tesseral harmonics with same degree but
+ on pg. \pageref{pg:indepc}). This also indicates the fact that unlike the spherical harmonics with same degree but
  different orders, components of $\PP$ are not all $\Lp[2](\Sphere)$-orthogonal. Nevertheless, Maxwell-Cartesian surface
   tensors of different degrees are orthogonal in the following sense:
 \begin{equation}\label{eq:OG}
@@ -321,7 +329,7 @@ However, only the symmetry property appears to be recognized in \cite{Coppa3}. U
 (which are not fully derived in the paper and only conjectured to hold for general $n$), the system is constructed again 
 by analogy with the procedure leading to the $\PN$ system. This could be misleading, however. In particular, there is 
 no indication of why the moments obtained by solving the set could be interpreted as coefficients in an expansion of 
-angular flux. Note that in the usual $\PN$ method where the angular flux is expanded into a series of tesseral 
+angular flux. Note that in the usual $\PN$ method where the angular flux is expanded into a series of spherical 
 harmonics, the key ingredient that allows us to deduce 
 %that allow us to deduce from the residual projection condition
 %$$
@@ -411,9 +419,9 @@ $\sigma_{sn} = 0$ otherwise.}:
 \end{equation*}
 Because of the orthogonality relation \eqref{eq:OG}, the fission part will have the following form:
 \begin{equation}%\label{eq:scat}
-  \intA[']{\frac{\nu(\br)\sigma_f(\br)}{4\pi}\psi(\br,\bomega')} = 
+  \intA[']{\frac{\nu\sigma_f(\br)}{4\pi}\psi(\br,\bomega')} = 
     \suma[n]{0}{\infty}
-    \frac{\nu(\br)\sigma_f(\br)}{4\pi}\fmom(\br)\contr\intA[']{\PP(\bomega')} = \nu(\br)\sigma_f(\br)\phi(\br).
+    \frac{\nu\sigma_f(\br)}{4\pi}\fmom(\br)\contr\intA[']{\PP(\bomega')} = \nu\sigma_f(\br)\phi(\br).
 \end{equation}
 Therefore, by inserting \eqref{eq:MC-exp3} into \eqref{eq:MC-bte} and using these results we obtain
 \begin{equation}\label{eq:MC-bte2}
@@ -543,7 +551,8 @@ that is $n-1$ times $\Sym{\eye\otimes\nabla\cdot\fmom[n-1]}$. We therefore get
 \begin{aligned}\label{eq:MC-split0}
   \nabla\fmom[n-1]\contr\bomega^n &= \Sym{\nabla\fmom[n-1]}\contr\bomega^n\\
     & = \Sym{\nabla\fmom[n-1] - \frac{n-1}{2n-1}\eye\otimes\nabla\cdot\fmom[n-1] + \frac{n-1}{2n-1}\eye\otimes\nabla\cdot\fmom[n-1]}\contr\bomega^n\\
-    & = \Sym{\nabla\fmom[n-1] - \frac{n-1}{2n-1}\eye\otimes\nabla\cdot\fmom[n-1]}\contr\bomega^n + \frac{n-1}{2n-1}\left(\nabla\cdot\fmom[n-1]\right)\contr\bomega^{n-2}
+    & = \Sym{\nabla\fmom[n-1] - \frac{n-1}{2n-1}\eye\otimes\nabla\cdot\fmom[n-1]}\contr\bomega^n \\
+    & +\quad \frac{n-1}{2n-1}\left(\nabla\cdot\fmom[n-1]\right)\contr\bomega^{n-2}
 \end{aligned}
 \end{equation}
 where the last equality comes from the realization that $\eye\cdot\bomega^2 = \bomega\cdot\bomega = 1$ and 
@@ -572,8 +581,10 @@ form of a vanishing linear combination of $\bomega^n$ with TST coefficient tenso
 \ref{thm:MC-suffcond} therefore applies and we get the desired set of first-order partial differential equations for the
 angular flux moments:
 \begin{equation}\label{eq:MC-set}
-  \frac{n+1}{2n+3}\nabla\cdot\fmom[n+1] + \Sym{\nabla\fmom[n-1] - \frac{n-1}{2n-1}\eye\otimes\nabla\cdot\fmom[n-1]} + 
+\begin{multlined}
+  \frac{n+1}{2n+3}\nabla\cdot\fmom[n+1] + \Sym{\nabla\fmom[n-1] - \frac{n-1}{2n-1}\eye\otimes\nabla\cdot\fmom[n-1]} \\+ 
   \sigma_t\fmom - \sigma_{sn}\fmom - \kron{n}{0}\nu\sigma_f\phi = \qmom
+\end{multlined}
 \end{equation}
 for each $n = 0,1,\ldots$. 
 
