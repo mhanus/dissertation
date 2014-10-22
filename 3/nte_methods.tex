@@ -167,9 +167,9 @@ version of the NTE, eq.
 of discrete ordinates ($\SN$) and the method of spherical harmonics ($\PN$).
 Both arise from applying in the
 angular domain a classical well known approach for constructing finite numerical
-approximations of PDEs. Although in the final code, we ultimately use the lowest order approximation that can be obtained
-equivalently from both approaches (the neutron diffusion model) we will briefly introduce the main ideas behind the
-$\SN$ and $\PN$ methods and expose their most important properties in the next two subsections. These properties are
+approximations of PDEs. \comment{Although in the final code, we ultimately use the lowest order approximation that can
+be obtained equivalently from both approaches (the neutron diffusion model) we will briefly introduce the main ideas behind the
+$\SN$ and $\PN$ methods and expose their most important properties in the next two subsections.} These properties are
 generally known, but their origin in mathematical structure of the equations is mostly overlooked in
 literature (rare exceptions will be cited below and in the corresponding appendices). 
 
@@ -203,7 +203,7 @@ given by elements of $s$ as $\diag(s)$. Then, denoting
 \psi_n(\br) \equiv \psi(\br,\bomega_n), \quad q_n(\br) \equiv
 q(\br,\bomega_n),\quad n = 1,\ldots, M	
 \end{equation}
-we will define the vector of angular fluxes and the vector angular sources as
+we will define the vector of angular fluxes and the vector of angular sources as
 \begin{equation}\label{eq:sn_vars}
 \Psi(\br) := \col\{\psi_n(\br)\}_{\idxset{M}},\quad
 \mat{Q}_{S_N}(\br) := \col\{q_n(\br)\}_{\idxset{M}},
@@ -216,62 +216,25 @@ understood component-wise.}:
 \mat{A}_{S_N}^x\pd{\Psi(\br)}{x} + \mat{A}_{S_N}^y\pd{\Psi(\br)}{y} +
 \mat{A}_{S_N}^z\pd{\Psi(\br)}{z} + \bigl[\sigma_t(\br)\mat{I} - \mat{K}_{S_N}(\br)\bigr]\Psi(\br) = \mat{Q}_{S_N}(\br),
 \end{equation}
-where $\mat{I}$ is the $M\times M$ identity matrix and
+where $\mat{I}$ is the $M\times M$ identity matrix,
 $$
 	\mat{A}_{S_N}^x = \diag\{\Omega_{n,x}\}_{\idxset{M}},\ \mat{A}_{S_N}^y = \diag\{\Omega_{n,y}\}_{\idxset{M}},\
-	\mat{A}_{S_N}^z = \diag\{\Omega_{n,z}\}_{\idxset{M}}.
+	\mat{A}_{S_N}^z = \diag\{\Omega_{n,z}\}_{\idxset{M}}
 $$
-
-\subsubsection{Structure of the $\SN$ approximation}
-Equation \eqref{eq:sn1} represents a system of advection-reaction equations, each with constant advection field given by
-the matrices $\mat{A}_{S_N}^x, \mat{A}_{S_N}^y, \mat{A}_{S_N}^z$.  The system is coupled through the term
-$
-	\mat{K}_{S_N}\Psi,
-$
-whose $m$-th component ($1 \leq m \leq M$) is given by
-$$
-\sum_{n=1}^{M} w_n \kappa(\bomega_m\cdot\bomega_n) \psi_n,\quad \bomega_n,\bomega_m\in \omega,\ 
-	w_n\in \mathcal{W}
-$$
-We can therefore see full unknown coupling. In order to recover sparsity (and also facilitate the use of efficient
-constant-advection solvers based on explicit marching in the advection direction), the so-called  \textit{scattering
-source iteration} is utilized, in which the system \eqref{eq:sn1} is fully decoupled by moving $\mat{K}_{S_N}$ to the
-right. Each equation is solved separately using any method suitable for an advection-reaction PDE with constant
-advection vector, using $\psi_n$ from previous iteration to evaluate $\mat{K}_{S_N}\Psi$. Classical iteration methods
-like Jacobi and Gauss-Seidel are typically used to update $\Psi$ during the iteration process; e.g. the Jacobi scheme 
-gives the iteration
-\begin{equation}\label{eq:SI}
-	\mat{A}_{S_N}^x\pd{\Psi_{(i+1)}}{x} + \mat{A}_{S_N}^y\pd{\Psi_{(i+1)}}{y} +
-	\mat{A}_{S_N}^z\pd{\Psi_{(i+1)}}{z} + \sigma_t\mat{I}\Psi_{(i+1)}= \mat{K}_{S_N}\Psi_{(i)} +
-	\mat{Q}_{S_N},\quad
-	i = 0,1,\ldots
+and
+\begin{equation}\label{eq:SNK}
+	\left[\mat{K}_{S_N}\right]_{m,n} = w_n \kappa(\bomega_m\cdot\bomega_n),\quad
+	\bomega_n,\bomega_m\in \omega,\ w_n\in \mathcal{W},\ 1 \leq m,n \leq M.
 \end{equation}
-for given initial approximation $\Psi_{(0)}$. We will return to the convergence characteristics of this iteration later;
-for now, assume that a converged solution vector $\Psi = \colset{\psi_n}{M}$ has been obtained. The important physical
-quantities (scalar flux, neutron current) are then obtained directly from their definition \eqref{eq:scalar_flux} and \eqref{eq:bJ} using
-the quadrature formula, e.g.
-$$
-	\phi(\br) = \intA{\psi(\br,\bomega)} = \sum_{n=1}^{M} w_n \psi(\br,\bomega_n) = \sum_{n=1}^{M} w_n \psi_n, \quad \br\in
-	\VV,\ \bomega_n\in \omega,\ w_n\in \mathcal{W}.
-$$
 
-\myparagraph{Ray effects}
-A major drawback of the $\SN$ angular approximation comes from the fact that it propagates radiation 
-only in a discrete set of directions. Only in the limiting case of infinite number of directions will the
-whole phase space be covered. Otherwise, there will remain under-treated regions, while other regions will receive more radiation in order
-to satisfy the global balance. This will lead to spatial oscillations of the scalar flux  known as the \textit{ray
-effects}. The root cause of ray effects is often attributed to the intuitively obvious lack of rotational invariance 
-(\cite{Reuss}, \cite{Sanchez6}), which shows that the important property of the NTE is not carried over to the $\SN$
-approximation. Various remediesWe give now a rigorous proof of this fact for the simplified transport problem without
-scattering, using the operator form of the $\SN$ equations developed in the previous subsection. We remark that scattering can somewhat ameliorate the
- oscillations caused by ray effects as it increases the coupling between directional fluxes, but it cannot remove the
- inherent lack of rotational invariance of the $\SN$ approximation.
 
 \subsubsection{Operator form}\label{sec:opsn}
 In order to exhibit differences between the $\SN$ approximation and the $\PN$ approximation presented in the following
-section, we write both methods as projections onto an appropriate approximation subspace. To continue our functional
-analytic  We will see that the $\SN$ approximation space is quite poor and solutions found in this subspace by solving
-the $\SN$ system do not possess important properties of the true solution of the NTE, like the rotational invariance. 
+section, we write both methods as projections onto an appropriate approximation subspace. As motivated in
+\cref{chap:nte-review}, we would like to continue with approximating generalized solutions of the NTE, for which the
+classical view of the $\SN$ approximation relying on extracting pointwise values on the sphere is not appropriate. We
+overcome this problem by formulating the $\SN$ method using a finite-volume need to specify a in the pre We will see
+that the $\SN$ approximation space is quite poor and solutions found in this subspace by solving the $\SN$ system do not possess important properties of the true solution of the NTE, like the rotational invariance.
 
 First, note that the $\SN$ approximation concerns only the angular variable. To reduce clutter, we will therefore drop
 the spatial variable in the following discussion.
@@ -334,6 +297,57 @@ It is clear from the definitions \eqref{eq:map_SN} and \eqref{eq:map_SN_inv} tha
 identity operator on $V_{S_N}$.
  Therefore, $\Projop[S_N]$ represents a projection onto the $S_N$ approximation space (and formalizes eq.
  \eqref{eq:sn_approx}).
+
+
+\subsubsection{Structure of the $\SN$ approximation}
+Equation \eqref{eq:sn1} represents a system of advection-reaction equations, each with constant advection field given by
+the matrices $\mat{A}_{S_N}^x, \mat{A}_{S_N}^y, \mat{A}_{S_N}^z$.
+
+Let us for a moment consider the steady-state $\SN$ equations as a limit of the 
+time-dependent equations
+\begin{equation}\label{eq:PN_ss_app}
+	\PihSN \left(\pd{}{t} + A + C\right) \PiSN\Phi = \PihPN q,
+\end{equation}
+in which $\pd{}{t}\PiSN\Phi \to 0$, for time-independent boundary conditions and sources
+\linebreak[3]\mbox{$q(\cdot,\cdot,t) = \text{const}$}.
+Then, the advection matrices describe advection of neutrons introduced into the system by the boundary and internal
+sources, which is in the steady-state limit perfectly balanced by their capture.
+
+As we can see from \eqref{eq:KSN}, the term $\mat{K}_{S_N}\Psi$ induces full unknown coupling. In order to recover 
+sparsity (and also facilitate the use of efficient constant-advection solvers based on explicit marching in the advection direction), the so-called  \textit{scattering
+source iteration} is utilized, in which the system \eqref{eq:sn1} is fully decoupled by moving $\mat{K}_{S_N}$ to the
+right. Each equation is solved separately using any method suitable for an advection-reaction PDE with constant
+advection vector, using $\psi_n$ from previous iteration to evaluate $\mat{K}_{S_N}\Psi$. Classical iteration methods
+like Jacobi and Gauss-Seidel are typically used to update $\Psi$ during the iteration process; e.g. the Jacobi scheme 
+gives the iteration
+\begin{equation}\label{eq:SI}
+	\mat{A}_{S_N}^x\pd{\Psi_{(i+1)}}{x} + \mat{A}_{S_N}^y\pd{\Psi_{(i+1)}}{y} +
+	\mat{A}_{S_N}^z\pd{\Psi_{(i+1)}}{z} + \sigma_t\mat{I}\Psi_{(i+1)}= \mat{K}_{S_N}\Psi_{(i)} +
+	\mat{Q}_{S_N},\quad
+	i = 0,1,\ldots
+\end{equation}
+for given initial approximation $\Psi_{(0)}$. We will return to the convergence characteristics of this iteration later;
+for now, assume that a converged solution vector $\Psi = \colset{\psi_n}{M}$ has been obtained. The important physical
+quantities (scalar flux, neutron current) are then obtained directly from their definition \eqref{eq:scalar_flux} and \eqref{eq:bJ} using
+the quadrature formula, e.g.
+$$
+	\phi(\br) = \intA{\psi(\br,\bomega)} = \sum_{n=1}^{M} w_n \psi(\br,\bomega_n) = \sum_{n=1}^{M} w_n \psi_n, \quad \br\in
+	\VV,\ \bomega_n\in \omega,\ w_n\in \mathcal{W}.
+$$
+
+\myparagraph{Ray effects}
+A major drawback of the $\SN$ angular approximation comes from the fact that it propagates radiation 
+only in a discrete set of directions. Only in the limiting case of infinite number of directions will the
+whole phase space be covered. Otherwise, there will remain under-treated regions, while other regions will receive more radiation in order
+to satisfy the global balance. This will lead to spatial oscillations of the scalar flux  known as the \textit{ray
+effects}. The root cause of ray effects is often attributed to the intuitively obvious lack of rotational invariance 
+(\cite{Reuss}, \cite{Sanchez6}), which shows that the important property of the NTE is not carried over to the $\SN$
+approximation. Various remediesWe give now a rigorous proof of this fact for the simplified transport problem without
+scattering, using the operator form of the $\SN$ equations developed in the previous subsection. We remark that scattering can somewhat ameliorate the
+ oscillations caused by ray effects as it increases the coupling between directional fluxes, but it cannot remove the
+ inherent lack of rotational invariance of the $\SN$ approximation.
+
+
 
 
 \label{sec:SI}
@@ -538,26 +552,35 @@ or
 \end{equation}
 
 \subsubsection{Structure of the $\PN$ system}
+\myparagraph{Advection part}
 The system has the same form as that for the $\SN$ approximation, but the advection matrices:
 \begin{equation}\label{eq:advmat_PN}
 	\left[\mat{A}_{P_N}^s\right]_{k,l} = \intA{\Omega_s \Y{k}{}(\bomega)\Yc{l}{}(\bomega)},\quad s\in\{x,y,z\},\ 
 	1 \leq k,l \leq  K
 \end{equation}
 are no longer diagonal (although they couple no more than 6 angular flux moments, see \ref{app:C} for an example for $N
-= 3$ or \cite[App. A]{Sanchez8} for general treatment). On the other hand, the collision matrix $\mat{K}_{P_N}$ is
-diagonal (as we explicitely show in App. \ref{app:C}), which makes the method computationally more attractive than the 
-fully coupled $\SN$ method in cases when scattering source iteration cannot be efficiently used. However, it also
-complicates the formulation of boundary (and interface) conditions. Each of the advection matrix \eqref{eq:advmat_PN} 
+= 3$ or \cite[App. A]{Sanchez8} for general treatment). Each of the advection matrices \eqref{eq:advmat_PN} 
 is symmetric and hence for any $\bn = [n_x,n_y,n_z]^T$, 
 $$
 	\mat{A}_{P_N}^{\bn} = n_x \mat{A}_{P_N}^x + n_y \mat{A}_{P_N}^y + n_z \mat{A}_{P_N}^z
 $$
 is symmetric and diagonalizable with real eigenvalues. The $\PN$ system is thus (strongly) hyperbolic in the sense of 
-\cite[Def. 18.1]{leveque} (as is obviously the already diagonal system of $\SN$ equations). The eigenvalues depend on 
-$\bn$ only through its length $\norm{\bn}$ (see \sref{sec:app-adv} for an example when $N = 3$,  though this property
+\cite[Def. 18.1]{leveque}. The eigenvalues depend on 
+$\bn$ only through its length $\norm{\bn}$ (see \sref{app:C} for an example when $N = 3$,  though this property
 holds for general $N$), which shows that the $\PN$ system propagates radiation at the same speed in any
-direction\footnote{Here we consider the $\PN$ system as a steady-state limit of the time-dependent equation, as
-explained in \sref{sec:app-adv}.}.
+direction. This is in a contrast to the $\SN$ advection \footnote{Here we consider the $\PN$ system as a steady-state
+limit of the time-dependent equation, as explained in \sref{app:C}.}.
+
+It is more convenient for this analysis to consider the steady-state $\PN$ equations \eqref{eq:PN_ss_app} as a limit of the 
+time-dependent equations
+\begin{equation}\label{eq:PN_ss_app}
+	\PihPN \left(\pd{}{t} + A + C\right) \PiPN\Phi = \PihPN q,
+\end{equation}
+in which $\pd{\psi}{t} \to 0$, for time-independent boundary conditions and sources
+\linebreak[4]\mbox{$q(\cdot,\cdot,t) = \text{const}$}.
+Then, the advection matrices describe advection of neutrons introduced into the system by the boundary and internal
+sources, which is in the steady-state limit perfectly balanced by their capture.
+
 This hints that rotational invariance of the NTE is preserved by the $\PN$ system, as we will directly show in 
 \sref{sec:dirinvPN}. The eigenstructure of the advection matrices also provides a clue on how many boundary conditions
 should be prescribed for the $\PN$ system. Matrix $A_{P_N}^{\bn}$ for given $N$ has
@@ -588,6 +611,98 @@ $$
 $$
 We will call boundary conditions of this form (as in \cite{Davis}) \textit{Marshak boundary conditions}.
 
+\myparagraph{Collision part}
+As we have discussed above, the increased coupling between the
+unknowns in the $\PN$ system may be seen as a price for rotational invariance
+that prevents ray effects appearing in $\SN$ solutions. On the other hand, the collision matrix $\mat{K}_{P_N}$ is
+diagonal, which can make the method computationally more attractive than the fully coupled $\SN$ method in cases when 
+scattering source iteration cannot be efficiently used. This property is a consequence of the following lemma:
+
+\begin{lemma}\label{lem:appC}
+The spherical harmonic functions $\Y{n}{m}$ diagonalize the collision operator $K$ and
+$$
+	K\Y{n}{m} = \kappa_n \Y{n}{m},\quad n = 0,1,\ldots,\quad -n \leq m \leq n,
+$$
+where
+$$
+	\kappa_n = 2\pi \muint[_0]{\P{n}{}(\mu_0)\kappa(\mu_0)},\quad \mu_0 = \bomega\cdot\bomega'
+$$
+is the $n$-th Legendre moment of the collision kernel $\kappa$.
+\end{lemma}  
+\begin{proof}
+	As we assume the collision kernel to be a square integrable function of the collision cosine  
+	$\mu_0 \equiv \cos \polar_0 = \bomega\cdot\bomega'$ (see \fref{fig:scatter})
+	and the Legendre polynomials \eqref{eq:leg} form a complete orthogonal system on $\Lp[2]([-1,1])$, we can express the
+	collision kernel as a sum of the Fourier series
+	$$
+		\kappa(\mu_0) = \suma[n]{0}{\infty}\frac{2n+1}{4\pi}\kappa_n\P{n}{}(\mu_0),\quad
+		\kappa_n = 2\pi \muint[_0]{\kappa(\mu_0)\P{n}{}(\mu_0)}.
+	$$
+	Then for any $n = 0,1,\ldots,\quad -n \leq m \leq n$,
+	$$
+\begin{aligned}
+	K\Y{n}{m}(\bomega) &= \intA[']{\kappa(\bomega\cdot\bomega')\Y{n}{m}(\bomega')} \\
+	&= \intA[']{\suma[r]{0}{\infty}\frac{2r+1}{4\pi}\kappa_r\P{r}{}(\bomega\cdot\bomega')\Y{n}{m}(\bomega')} \\
+	&= \suma[r]{0}{\infty}\kappa_r\suma[s]{-r}{r}\Y{r}{s}(\bomega)\intA[']{\Y{r}{s}(\bomega')\Y{n}{m}(\bomega')} \\
+	&= \kappa_n\Y{n}{m}(\bomega).
+\end{aligned}
+	$$
+	where the addition theorem \eqref{eq:additionThm} has been used on third line and orthogonality relation \eqref{eq:og}
+	on the fourth, completing the proof.
+\end{proof}
+
+\begin{corollary}
+	Matrix $\mat{K}_{P_N} = \PihPN K \PiPN$ is diagonal, with entries given by the (repeated) Legendre moments $\kappa_n$.
+\end{corollary}
+\begin{proof}
+	The $j$-th column of $\mat{K}_{P_N}$ is given by
+	$$
+		\mat{K}_{P_N}\mat{e}_j = \PihPN K \PiPN \mat{e}_j,
+	$$
+	where $\mat{e}_j$ is the $j$-th canonical basis vector in $\R[K]$. By definition, each index \mbox{$j = 0,1,\ldots K$}
+	corresponds to a unique double index ${}_n^m$ ($n = 0,1,\ldots N$, $-n \leq m \leq n$), so that $\Y{j}{} \equiv
+	\Y{n}{m}$.
+	We can therefore write 
+	$$
+		\bigl(\PiPN \mat{e}_j\bigr)(\bomega) = \Y{j}{}(\bomega) = Y_n^m(\bomega).
+	$$
+	Using lemma \ref{lem:appC}, we have 
+	$$
+		K \PiPN \mat{e}_j = \kappa_n \Y{n}{m}
+	$$
+	so, when associating the index $i$ to a double index ${}_r^s$ and using the orthogonality relation \eqref{eq:og},
+	$$
+	\left[\mat{K}_{P_N}\right]_{ij} = \left[\PihPN K \PiPN \mat{e}_j\right]_i = (\kappa_n \Y{n}{m},
+		\Y{r}{s})_{\Lp[2](\Sphere)} = \kappa_n\delta_{n}^{r}\delta_{m}^{s} = \kappa_n\kron{i}{j}
+	$$
+	Note that there is a single value $\kappa_n$ for all $2n + 1$ functions  $\Y{n}{m}$, so the $\mat{K}_{P_N}$ consists of
+	$N+1$ diagonal blocks having consecutively $\lambda_0$, 3 times $\lambda_1$, 5 times $\lambda_3$, etc.  as their
+	entries.
+\end{proof}
+\begin{corollary}
+The complete ``capture'' matrix 
+$$
+	\mat{C}_{P_N} = \PihPN C \PiPN \equiv \PihPN (\Sigma_t - K) \PiPN 
+$$
+(corresponding to the capture cross-section $\sigma_c$ in \eqref{eq:st} and characterizing net neutron loss due to
+all types of neutron-nuclei interactions) is diagonal.
+\end{corollary}
+\vspace*{1em}
+\begin{remark}[\textsc{Isotropic scattering moment}]\label{rem:app:c}
+	Fix a direction $\bomega\in\Sphere$ (the outgoing direction). Then the $0$-th Legendre moment of the scattering
+	component of the collision kernel $\kappa$ (i.e. the first term on the right of \eqref{eq:splitting}), satisfies 
+	$$
+		\sigma_{s0} = 2\pi \muint[_0]{\P{0}{}(\mu_0)\sigma_s(\mu_0)} = \int_{0}^{2\pi} \int_{0}^{\pi}
+		\sigma_s(\cos \polar_0) \sin \polar_0\d{\polar_0} = 
+		\int_{\Sphere} \sigma_s(\bomega\cdot\bomega') \d{\bomega'}.
+	$$
+	Comparing with def. \eqref{eq:ddifxs}), 
+	$$
+		\sigma_{s0} = \eta\sigma_s
+	$$
+	i.e., the $0$-th Legendre moment of scattering represents the expected number of neutrons coming out of 
+	scattering collisions in any direction.
+\end{remark} 
 
 \subsubsection{Rotational invariance of the $\PN$ equations}\label{sec:dirinvPN}
 The increased coupling between the unknowns in the $\PN$ system is the price for rotational invariance of spherical
@@ -595,6 +710,7 @@ harmonics that prevents ray effects appearing in $\SN$ solutions. To prove it, w
 spherical harmonics (see e.g, \cite[Chap.
 3]{Sansone}, \cite[Sec. 3.9]{Schreiner}). 
 
+\comment{
 \myparagraph{Orthogonal decomposition of $\Lp[2](\Sphere)$}
 Spherical harmonic functions of given degree $n$ generate a rotationally invariant subspace
 of $\Lp[2](\Sphere)$, which we denote by $\Lambda_n$:
@@ -602,9 +718,8 @@ of $\Lp[2](\Sphere)$, which we denote by $\Lambda_n$:
 	\label{eq:subspace}
     	\Lambda_n = \text{Span}\bigl\{\Y{n}{m}; -n \leq m \leq n\bigr\},
 \end{equation}
-This means that $\op{R}(\Lambda_n) \subset \Lambda_n$ for any rotation transformation $\op{R}\in\mathrm{SO}(3)$ (cf. the
-paragraph on ray effects in \Sref{sec:1-SN}). Moreover, there is no proper subspace $\Lambda_n' \subset \Lambda_n$ that
-is rotationally invariant by itself. For given $n$, $\Lambda_n$ is the eigenspace associated with
+This means that $\op{R}(\Lambda_n) \subset \Lambda_n$ for any rotation transformation $\op{R}\in\mathrm{SO}(3)$. 
+Moreover, there is no proper subspace $\Lambda_n' \subset \Lambda_n$ that is rotationally invariant by itself. For given $n$, $\Lambda_n$ is the eigenspace associated with
 the $n$-th eigenvalue of the Laplace operator on $\Sphere$:
 $$
 	\lap_{\Sphere} \Y{n}{m}(\bomega) = -n(n+1)\Y{n}{m}(\bomega) \quad \forall -n \leq m \leq n.
@@ -623,7 +738,7 @@ $$
 	\Projop[\Lambda_n]\psi(\br,\bomega) = \suma[m]{-n}{n}\angmom{n}{m}(\cdot)\Y{n}{m}(\bomega)
 $$
 is the orthogonal projection onto $\Lambda_n$.  
-
+}
 
 
 \subsubsection{Drawbacks of the $\PN$ approximation}

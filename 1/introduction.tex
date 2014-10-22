@@ -19,15 +19,16 @@ numerical methods described in this thesis.
 
 All forms of radiative transfer are governed by physical laws that can be abstracted by a single mathematical model,
 represented by the Boltzmann transport equation. In nuclear reactors, the effects of neutron-induced reactions dominate
-those caused by other types of particles and we will therefore consider the transport equation for neutrons in this 
-thesis, even though it has the same form for other types of non-charged particles, such as photons. While the
-short-term transient simulations require accurate solution methods for the time-dependent NTE, a quasi-steady state solution (a sequence of steady state calculations) is generally sufficient
-to capture slow changes in core configuration and material characteristics during its long-term stable operation.
-As we focus on the latter application domain in this thesis, its main subject will be the \textit{steady
-state neutron transport equation}, shortly NTE \index{NTE}. In the final chapter, we will consider the quasi-steady
-state NTE (i.e., without time derivative but with time-dependent coefficients) together with the most important feedbacks from
-varying thermal/hydraulic conditions in the core and fuel depletion.
+those caused by other types of particles and we will therefore consider the transport equation for neutrons in this
+thesis, even though it has the same form for other types of non-charged particles, such as photons. While the short-term
+transient simulations require accurate solution methods for the time-dependent NTE, a quasi-steady state solution (a
+sequence of steady state calculations) is generally sufficient to capture slow changes in core configuration and
+material characteristics during its long-term stable operation.
+Author's work focus on the latter application domain further narrows scope of this thesis to the \textit{steady state
+neutron transport equation}, shortly NTE \index{NTE}. It is worth recalling, however, that many common numerical methods
+for solving transport problems involve repeated execution of methods designed for steady-state problems.
 
+\paragraph{Numerical modelling of neutron transport}
 We will introduce the NTE in Chap. \ref{chap:nte-review} as an integro-differential equation in 6 dimensions.
 This high dimensionality requires either the use of direct simulation of neutrons and using statistical methods to obtain the
 required physical quantities (the Monte Carlo approach) or a deterministic approach involving multiple discretizations.
@@ -36,8 +37,6 @@ study classical discretization methods for the NTE in Chap. \ref{chap:nte-method
 their intrinsic properties that have important consequences for their practical use. Although these properties are
 generally known, they are usually described in an intuitive manner, so we will try to uncover their roots in the
 mathematical structure of the corresponding equations.
-
-The following subsections present the main results of author's work during his Ph.D. studies.
 
 \paragraph{The $\MCPN$ approximation and its relation to the $\SPN$ approximation} 
 One of the traditional discretization methods that converts the 6-dimensional integro-differential NTE into a system of
@@ -120,6 +119,7 @@ approximation of the transport equation (the $\SN$ method, introduced in \Sref{s
 the NTE (unlike the $\SPN$ approximation in multidimensional, multiregion domains). This will be addressed in Sec.
 \sref{sec:DO}.
 
+\comment{
 \myparagraph{3D coupled neutron-physical finite element code based on the multigroup diffusion approximation}
 Unfortunately, the 3D version of Hermes has not yet been released and thus the main utility of the neutronics framework
 introduced in previous paragraph is in testing new ideas on hp-adaptivity for neutron transport problems. For the
@@ -157,3 +157,4 @@ solvers from the SLEPc library (in terms of execution speed), the method itself 
 connected with solving large-scale eigenvalue problems. The paper describing this development has not yet been 
 published, so it is included here as \cref{chap:evc} with minor corrections and comments. This last chapter also
 includes numerical experiments on simpler problems, which confirm the theory presented in the paper.
+}

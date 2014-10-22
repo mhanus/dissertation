@@ -1,4 +1,5 @@
-\chapter{Matrices of the $\PN$ method}\label{app:C}
+\chapter{$\PN[3]$ advection matrices}\label{app:C}
+\comment{
 Recall from \sref{sec:pn_op} that the steady-state $\PN$ system can be written in the operator form as follows (eq.
 \eqref{eq:pn_op}):
 \begin{equation}\label{eq:PN_ss_app}
@@ -17,117 +18,23 @@ and for $\mat{F} = \col \{f_k\}_{\idxset{K}}$,
 \bigl(\PiPN\mat{F}\bigr)(\bomega) := \sum_{k=1}^{ K} f_k\Y{k}{}(\bomega), \quad
 \PihPN f(\bomega) = \col \left\{(f, \Y{k}{})_{\Lp[2](\Sphere)}\right\}_{\idxset{K}}
 \end{equation}
-(def. \eqref{eq:pn_op_def}). We will first investigate the form of the collision matrix $\mat{K}_{P_N} = \PihPN K
-\PiPN$. As before, we will suppress the spatial dependence as it is not relevant for the following analysis.
-
-\section{Collisions}
-\begin{lemma}\label{lem:appC}
-The spherical harmonic functions $\Y{n}{m}$ diagonalize the collision operator $K$ and
-$$
-	K\Y{n}{m} = \kappa_n \Y{n}{m},\quad n = 0,1,\ldots,\quad -n \leq m \leq n,
-$$
-where
-$$
-	\kappa_n = 2\pi \muint[_0]{\P{n}{}(\mu_0)\kappa(\mu_0)},\quad \mu_0 = \bomega\cdot\bomega'
-$$
-is the $n$-th Legendre moment of the collision kernel $\kappa$.
-\end{lemma}  
-\begin{proof}
-	As we assume the collision kernel to be a square integrable function of the collision cosine  
-	$\mu_0 \equiv \cos \polar_0 = \bomega\cdot\bomega'$ (see \fref{fig:scatter})
-	and the Legendre polynomials \eqref{eq:leg} form a complete orthogonal system on $\Lp[2]([-1,1])$, we can express the
-	collision kernel as a sum of the Fourier series
-	$$
-		\kappa(\mu_0) = \suma[n]{0}{\infty}\frac{2n+1}{4\pi}\kappa_n\P{n}{}(\mu_0),\quad
-		\kappa_n = 2\pi \muint[_0]{\kappa(\mu_0)\P{n}{}(\mu_0)}.
-	$$
-	Then for any $n = 0,1,\ldots,\quad -n \leq m \leq n$,
-	$$
-\begin{aligned}
-	K\Y{n}{m}(\bomega) &= \intA[']{\kappa(\bomega\cdot\bomega')\Y{n}{m}(\bomega')} \\
-	&= \intA[']{\suma[r]{0}{\infty}\frac{2r+1}{4\pi}\kappa_r\P{r}{}(\bomega\cdot\bomega')\Y{n}{m}(\bomega')} \\
-	&= \suma[r]{0}{\infty}\kappa_r\suma[s]{-r}{r}\Y{r}{s}(\bomega)\intA[']{\Y{r}{s}(\bomega')\Y{n}{m}(\bomega')} \\
-	&= \kappa_n\Y{n}{m}(\bomega).
-\end{aligned}
-	$$
-	where the addition theorem \eqref{eq:additionThm} has been used on third line and orthogonality relation \eqref{eq:og}
-	on the fourth, completing the proof.
-\end{proof}
-
-\begin{corollary}
-	Matrix $\mat{K}_{P_N} = \PihPN K \PiPN$ is diagonal, with entries given by the (repeated) Legendre moments $\kappa_n$.
-\end{corollary}
-\begin{proof}
-	The $j$-th column of $\mat{K}_{P_N}$ is given by
-	$$
-		\mat{K}_{P_N}\mat{e}_j = \PihPN K \PiPN \mat{e}_j,
-	$$
-	where $\mat{e}_j$ is the $j$-th canonical basis vector in $\R[K]$. By definition, each index \mbox{$j = 0,1,\ldots K$}
-	corresponds to a unique double index ${}_n^m$ ($n = 0,1,\ldots N$, $-n \leq m \leq n$), so that $\Y{j}{} \equiv
-	\Y{n}{m}$.
-	We can therefore write 
-	$$
-		\bigl(\PiPN \mat{e}_j\bigr)(\bomega) = \Y{j}{}(\bomega) = Y_n^m(\bomega).
-	$$
-	Using lemma \ref{lem:appC}, we have 
-	$$
-		K \PiPN \mat{e}_j = \kappa_n \Y{n}{m}
-	$$
-	so, when associating the index $i$ to a double index ${}_r^s$ and using the orthogonality relation \eqref{eq:og},
-	$$
-	\left[\mat{K}_{P_N}\right]_{ij} = \left[\PihPN K \PiPN \mat{e}_j\right]_i = (\kappa_n \Y{n}{m},
-		\Y{r}{s})_{\Lp[2](\Sphere)} = \kappa_n\delta_{n}^{r}\delta_{m}^{s} = \kappa_n\kron{i}{j}
-	$$
-	Note that there is a single value $\kappa_n$ for all $2n + 1$ functions  $\Y{n}{m}$, so the $\mat{K}_{P_N}$ consists of
-	$N+1$ diagonal blocks having consecutively $\lambda_0$, 3 times $\lambda_1$, 5 times $\lambda_3$, etc.  as their
-	entries.
-\end{proof}
-\begin{corollary}
-The complete ``capture'' matrix 
-$$
-	\mat{C}_{P_N} = \PihPN C \PiPN \equiv \PihPN (\Sigma_t - K) \PiPN 
-$$
-(corresponding to the capture cross-section $\sigma_c$ in \eqref{eq:st} and characterizing net neutron loss due to
-all types of neutron-nuclei interactions) is diagonal.
-\end{corollary}
-\vspace*{1em}
-\begin{remark}[\textsc{Isotropic scattering moment}]\label{rem:app:c}
-	Fix a direction $\bomega\in\Sphere$ (the outgoing direction). Then the $0$-th Legendre moment of the scattering
-	component of the collision kernel $\kappa$ (i.e. the first term on the right of \eqref{eq:splitting}), satisfies (see
-	\fref{fig:scatter} for notation) 
-	$$
-		\sigma_{s0} = 2\pi \muint[_0]{\P{0}{}(\mu_0)\sigma_s(\mu_0)} = \int_{0}^{2\pi} \int_{0}^{\pi}
-		\sigma_s(\cos \polar_0) \sin \polar_0\d{\polar_0} = 
-		\int_{\Sphere} \sigma_s(\bomega\cdot\bomega') \d{\bomega'}.
-	$$
-	Comparing with def. \eqref{eq:ddifxs}), 
-	$$
-		\sigma_{s0} = \eta\sigma_s
-	$$
-	i.e., the $0$-th Legendre moment of scattering represents the expected number of neutrons coming out of 
-	scattering collisions in any direction.
-\end{remark}
-\newpage
-\section{Advection}\label{sec:app-adv}
-Now, let us investigate the advection matrices $A_{P_N}^s$ ($s = x,y,z$). It is more
-convenient for this analysis to consider the steady-state $\PN$ equations \eqref{eq:PN_ss_app} as a limit of the 
+}
+In this appendix, we investigate the advection matrices $\mat{A}_{P_N}^s$ ($s = x,y,z$) for the special case $N = 3$ 
+(the statements that follow have been computationally verified to hold for $N = 1,2,\ldots,11$ using the symbolic 
+system Mathematica 9.0).
+It is more convenient for this analysis to consider the steady-state $\PN$ equations \eqref{eq:PN_ss_app} as a limit of the 
 time-dependent equations
 \begin{equation}\label{eq:PN_ss_app}
 	\PihPN \left(\pd{}{t} + A + C\right) \PiPN\Phi = \PihPN q,
 \end{equation}
-in which $\pd{\psi}{t} \to 0$, for time-independent boundary conditions and sources \linebreak[4]\mbox{$q(\cdot,\cdot,t)
-= \text{const}$}.
+in which $\pd{\psi}{t} \to 0$, for time-independent boundary conditions and sources
+\linebreak[4]\mbox{$q(\cdot,\cdot,t) = \text{const}$}.
 Then, the advection matrices describe advection of neutrons introduced into the system by the boundary and internal
-sources, which is in the steady-state limit perfectly balanced by their capturing represented by $\mat{C}_{P_N}$. We
-will limit the exposition to the case of a $\PN[3]$ approximation (the statements below have been computationally
-verified to hold for $N = 1,2,\ldots,11$ using the symbolic system Mathematica 9.0).
-\newpage
-
+sources, which is in the steady-state limit perfectly balanced by their capture.
 $$
 \scriptsize
 \hspace*{-2cm}
-\begin{aligned}
-\mat{A}_{P_N}^x &=
+\mat{A}_{P_N}^x =
 \left[
 \begin{array}{cccccccccccccccc}
  0 & 0 & 0 & \frac{1}{\sqrt{3}} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
@@ -147,7 +54,13 @@ $$
  0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{1}{\sqrt{7}} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
  0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \sqrt{\frac{3}{14}} & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
 \end{array}
-\right]\\[.3em]
+\right]
+$$
+
+$$
+\scriptsize
+\hspace*{-2cm}
+\begin{aligned}
 \mat{A}_{P_N}^y &=
 \left[
 \begin{array}{cccccccccccccccc}
