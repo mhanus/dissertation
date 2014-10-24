@@ -94,6 +94,14 @@ while the boundary measure
 is used when integrating over $\pX[\pm]$. When refering to physical units, we will consider the length scale of $\VV$ in
 centimeters.
 
+\comment{
+When discussing various semi-discretizations of the NTE, we will also refer to the following subspaces  (``sections''
+through the phase space):
+\begin{equation}\label{eq:pssec}
+	X_E := \{(\br,\bomega,E):\ \br\in \VV\subset\R[3], \bomega\in \Sphere, E \in [\Emin,\Emax]\}
+\end{equation}
+}
+
 Since the direction vectors are confined to the sphere, we can express the three
 Cartesian components of $\bomega$ by only two spherical coordinates $\polar\in[0,\pi]$ and
 $\azimuthal\in[0,2\pi)$\nomenclature[g]{$\polar$}{polar angle}\nomenclature[g]{$\azimuthal$}{azimuthal
@@ -194,7 +202,7 @@ conditions are:
 	treatment of albedo condition is given in \cite{Sanchez4} (see also \cite{Sanchez3}), where an integral albedo operator
 	$\beta$ is introduced, such that
 \begin{equation}\label{eq:albedo-general}
-	\angflux(x)\big\vert_{\pX[-]} = (\beta\angflux)(x) = \bndint[']{\pX[+]}\beta(x'\sra x)\angflux(x'),
+	\angflux(x)\big\vert_{\pX[-]} = (\beta\angflux)(x) = \bndint[']{\pX[+]}\beta(x\sla x')\angflux(x'),
 \end{equation}
 	where $x = (\br,\bomega,E)$ and $x' = (\br',\bomega',E')$. 
 \end{remark}
@@ -263,9 +271,9 @@ probability that neutrons undergo collisions of the above type irrespective of t
 \begin{equation}\label{eq:ddifxs}
 \begin{aligned}
 \eta\sigma_s(\br, E) &= \intE[']{\Emin}{\Emax}{\intA{\sigma_s(\br,\bomega\cdot\bomega', 
-	E\shortrightarrow E')}},\\
+	E'\sla E)}},\\
 \nu\sigma_f(\br, E) &= \intE[']{\Emin}{\Emax}{\intA{\sigma_f(\br,\bomega\cdot\bomega', 
-	E\shortrightarrow E')}}
+	E'\sla E)}}
 \end{aligned}
 \end{equation}
 where $\eta$ and $\nu$, respectively, are the mean (net) number of neutrons coming out of the scattering event ($=1$ in
@@ -380,12 +388,12 @@ We formulate the fixed source problem using the following operators:
   \end{gathered}
 \end{equation*}
 We shall call $A$, $\Sigma_t$, $K$ and $T = A + \Sigma_t - K$ the \textit{advection}, \textit{reaction}, 
-\textit{collision} and \textit{transport} operator, respectively. The reaction operator $\Sigma_t : \Lp(X) \to
-\Lp(X)$ is a simple multiplication operator in $\Lp(X)$, self-adjoint and bounded, while the operator $K:
-\Lp(X) \to \Lp(X)$ is bounded under additional (physically justifiable) conditions (conditions (c) and/or (d) of the following theorem, depending on the chosen $p$) as
-a consequence of H\"older inequality (\cite[Chap. XXI, \S 2]{DautrayLions}), but is self-adjoint if and only if
-the kernel $\kappa$ of $K$ is symmetric in $E$ and $E'$. With the exception of the mono-energetic case, this is
-generally not true (a fact to which we return again in \sref{sec:MG}). 
+\textit{collision} and \textit{transport} operator, respectively. All these operators are continuous; the reaction
+operator $\Sigma_t : \Lp(X) \to \Lp(X)$ is a simple multiplication operator in $\Lp(X)$, self-adjoint and bounded,
+while the operator $K: \Lp(X) \to \Lp(X)$ is bounded under additional (physically justifiable) conditions
+(e.g. conditions (c) and/or (d) of the following theorem, depending on the chosen $p$; cf. also Lemma
+\ref{lem:Kbounded} below), but is self-adjoint if and only if the kernel $\kappa$ of $K$ is symmetric in $E$ and $E'$. 
+With the exception of the mono-energetic case, this is generally not true (a fact to which we return again in \sref{sec:MG}). 
 
 For piecewise smooth
 $\pV$ and $1\leq p < \infty$, the traces $\gamma\psi \equiv \psi\vert_{\pX[\pm]}\in\Lp(\pX[\pm])$ are well defined for
@@ -421,7 +429,7 @@ Assume that
 	\item $\displaystyle c(x) < 1$ a.e. in $X$, where
 	  \begin{equation}\label{eq:c}
 	    c(\br,E) := \frac{1}{\sigma_t(\br,E)}\int_{\Emin}^{\Emax}\int_{\Sphere} \kappa(\br,\bomega\cdot\bomega',
-	    E\shortrightarrow E')\,\d{E'}\d{\bomega'}.
+	    E'\sla E)\,\d{E'}\d{\bomega'}.
 	  \end{equation}
 \end{enumerate}
 Then the fixed source, steady state neutron transport problem with vacuum boundary conditions 
@@ -460,10 +468,11 @@ element methods). In this case, however, we need to add to assumptions (a-c) ano
   \item[(d)] $d(x) < 1$ a.e. in $X$, 
 \end{enumerate}
 where
-$$ d(\br,E) := 
+\begin{equation}\label{eq:d} 
+d(\br,E) := 
   \frac{1}{\sigma_t(\br,E)}\int_{\Emin}^{\Emax}\int_{\Sphere} \kappa(\br,\bomega\cdot\bomega',
 	    E\sla E')\,\d{E'}\d{\bomega'}
-$$
+\end{equation}
 can be interpreted as the average number of neutrons emitted with energy $E$ (into any direction) from
 collisions induced by all possible neutrons impinging on the nucleus at $\br$ (again, this is a reasonable condition
 in the subcritical state). Note that because angular dependence of $\kappa$ is only through the cosine of the collision
@@ -481,6 +490,78 @@ state the existence of unique solution in $\Lp[\infty](X)$ for $q\in \Lp[\infty]
   (the \textit{void regions}). Note that if we assume (a) of Thm. \ref{thm1}, the norms of $\Lp[1]$ and
   $\Lp[1]_{\sigma}$ are equivalent and the measure $\d{\tau} = \sigma_t(x) \d{x}$ associated with the space
   $\Lp[1]_{\sigma}$ represents a differential optical path length (see eq. \eqref{eq:tau}).
+  
+\subsubsection{$\Lp[2](X)$ setting}
+
+Let us now make a short stop in the $\Hp[2](X)$ space and quote some results that we will make use of later. This is a
+Hilbert space when equipped with the inner product
+$$
+	\ip[\Hp[2](X)]{f,g} := \ip[\Lp[2](X)]{\bomega\cdot\nabla f, \bomega\cdot\nabla g} + \ip[\Lp[2](X)]{f,g} +
+	\ip[\Lp[2](\pX)]{f,g} 
+$$
+where
+\begin{equation}\label{eq:ipL2}
+	\ip[\Lp[2](X)]{f,g} = \int_X f g \d{x},\quad  \ip[\Lp[2](\pX)]{f,g} f g \d{\xi}
+\end{equation}
+Let us denote 
+\begin{equation}\label{eq:opL}
+	$\op{L} := A + \Sigma_t$.
+\end{equation}
+Using the Poincar{\' e}-Friedrichs inequality and integration by parts (see e.g. \cite[Chap.
+2]{Agoshkov}), one can show the following:
+\begin{lemma}\label{lem:Lcoercive}
+	Assume (as in item (a) in Thm. \ref{thm1}) that 
+	$$
+		0 < \mst \leq \sigma_t \leq \Mst \ \text{a.e. in } \VV\times[\Emin,\Emax].
+	$$
+	Then the operator $\op{L} : \Hp[2](X) \to \Lp[2](X)$ is
+	bounded and coercive with constants $\Mst$ and $\mst$, respectively: 
+	$$
+		\ip[\Lp[2](X)]{Lu, u} \geq \mst \norm[\Lp[2](X)]{u}^2,\quad  \norm[\Lp[2](X)]{Lu} \leq \Mst \norm[\Lp[2](X)]{u}^2.
+	$$
+\end{lemma}
+Also, as a consequence of H\"older inequality, the collision operator $\op{K} : \Lp[2](X) \to \Lp[2](X)$ is
+bounded:
+\begin{lemma}[\cite[Lemma 1, \S 3, Chap. XXI]{DautrayLions}]\label{lem:Kbounded}
+	Assume that there exist $M_a > 0$, $M_b > 0$, such that for a.e. $(\br,E) \in \VV\times[\Emin,\Emax]$
+	$$
+	\int_{\Emin}^{\Emax}\int_{\Sphere} \kappa(\br,\bomega\cdot\bomega',
+	    E'\sla E)\,\d{E'}\d{\bomega'} \leq M_a,\quad
+	\int_{\Emin}^{\Emax}\int_{\Sphere} \kappa(\br,\bomega\cdot\bomega',
+	    E\sla E')\,\d{E'}\d{\bomega'} \leq M_b.    
+	$$
+	Then 
+	$$
+	\norm[\Lp[2](X)]{Ku} \leq M_a^{\frac12} M_b^{\frac12} \norm[\Lp[2](X)]{u}.
+	$$
+\end{lemma}
+\begin{remark}
+	Note that from \eqref{eq:c} and \eqref{eq:d}, 
+	$$
+	M_a = \esssup_{\VV\times[\Emin,\Emax]} c(\br,E)\sigma_t(\br,E), \quad M_b = \esssup_{\VV\times[\Emin,\Emax]}
+	d(\br,E)\sigma_t(\br,E). 
+	$$
+\end{remark}
+These results may be used to establish coercivity and boundednes of the transport operator 
+$T = L - K$ and prove well-posedness in the $\Lp[2](X)$ setting via the Lax-Milgram lemma. Although this follows rather
+straightforwardly from the assumptions (a-d) above, we won't go into details; nevertheless, we state the Lax-Milgram
+lemma here for the purposes of \sref{sec:SI}. We state it in its general form for an operator $\genop{A}$ being an 
+element of space $\mathcal{L}_{V,V'}$ of bounded linear operators acting from $V$ to its dual $V'$.
+\begin{lemma}[Lax-Milgram]
+	Let $\genop{A}\in\mathcal{L}_{V,V'}$ be a bounded and coercive operator with constants $C_b$ and $C_c$, respectively.
+	Then for any $f\in V'$, there exists a unique $u\in V$ such that
+	$$
+		\langle Au, v \rangle = \langle f, v \rangle  \quad \forall v\in V,
+	$$
+	and
+	$$
+		\norm[V]{u} \leq \frac{1}{C_c}\norm[V']{f}.
+	$$
+\end{lemma}
+In our case, $V = \Hp[2](X)$, $\genop{A} \equiv T : V \to \Lp[2](X) \subset V'$ and the duality pairing
+$\langle \cdot,\cdot\rangle$ coincides with the $\Lp[2](X)$ inner product. %We only note that considering $T:V\toV'$ (thus
+%allowing more general right-hand sides) is possible, but we don't go into details here.
+
 
 \subsection{Criticality problem}\label{sec:criticality}
 
@@ -540,7 +621,7 @@ Proving existence and uniqueness of solution of \eqref{eq:critical} can proceed 
 		emitted from scattering collisions: 
 		\begin{equation}\label{eq:tildec}
 		\tilde c(\br,E) := \frac{1}{\sigma_t(\br,E)}\int_{\Emin}^{\Emax}\int_{\Sphere}
-		\sigma_s(\br,\bomega\cdot\bomega', E\shortrightarrow E')\,\d{E'}\d{\bomega'}.
+		\sigma_s(\br,\bomega\cdot\bomega', E'\sla E)\,\d{E'}\d{\bomega'}.
 	    \end{equation}
 	\item
 		Prove that operator $B^{-1}F$ is (strongly) positive and compact. As such, it has countably many eigenfunctions. 
@@ -597,7 +678,8 @@ section. The result is the following theorem:
 	\lim_{n\to\infty}\Vert S-S_n\Vert_{\mathcal{L}(\Lp[1]_{\sigma},\Lp[1])} = 
 	\lim_{n\to\infty}\Vert F-F_n\Vert_{\mathcal{L}(\Lp[1]_{\sigma},\Lp[1])} = 0
 \end{equation}
-(where $\mathcal{L}(V,W)$ denotes the usual operator norm for an operator mapping $V$ to $W$).
+(where $\mathcal{L}(V,W)$ \index{$\mathcal{L}(V,W)$} denotes the Banach space of bounded linear operators mapping $V$ to
+$W$).
 Then the equation
 \begin{equation*}
 \left\{
@@ -624,24 +706,23 @@ by direct streaming or through collisions. Essentially similar conditions are of
 unphysical restriction of almost everywhere strictly positive fission cross-sections 
 (\cite{MokhtarKharroubi,AllaireHomogenization}). Assumption \eqref{eq:iops} is needed for proving power compactness of
 $B^{-1}F$ and is physically non-restrictive as it requires only uniform continuity of functions that
-characterize probability of transfer from $(\bomega', E') \sra (\bomega,E)$ (for $\sigma_f$, this is actually the
+characterize probability of transfer from $(\bomega, E) \sla (\bomega',E')$ (for $\sigma_f$, this is actually the
 function $\chi(E)$ of \eqref{eq:sf}) and not that of physical cross-sections $\sigma_{sn}(\br,E')$ and
 $\sigma_{fn}(\br,E')$ themselves (see \cite{Sanchez3}).
 
-\subsection{Rotational invariance of the NTE}
+\subsection{Rotational invariance of the NTE}\label{sec:rotinv}
 An important property of the neutron transport equation is its rotational invariance, which says that under certain
 circumstances, to obtain a solution of the NTE with source term rotated around origin it is sufficient to apply the same
 rotation the solution corresponding to the original source. We will use the following definition to make this
-statement precise. In the definition and the following lemma, $A$ is a general operator on some vector space $V$, $f$ a
-general functional in the dual space $V'$.
+statement precise.
  
 \begin{definition}
 We will say that an
 operator equation
 \begin{equation}\label{eq:op1} 
-Au = f
+\genop{A}u = f
 \end{equation}
-is rotationally invariant, if $Au = f$ implies $ARu = Rf$ for any operator
+is rotationally invariant, if $\genop{A}u = f$ implies $ARu = Rf$ for any operator
 $\op{R}$ corresponding to a rotation $\mat{R}\in\R[3\times3]$ of coordinate system around origin:
 \begin{equation}\label{eq:def_rot}
 \begin{gathered}
@@ -656,12 +737,12 @@ consider the operator itself to be an element of that group, i.e.
 $\op{R} \in \mathrm{SO}(3)$. The following lemma shows that equation \eqref{eq:op1} is rotationally invariant if and
 only if its operator commutes with rotations.
 \begin{lemma}\label{lemma1}
-	$Au = f \ \Rightarrow ARu = Rf\,\ \forall R\in \mathrm{SO}(3)$ if and only if $AR = RA$.
+	$\genop{A}u = f \ \Rightarrow ARu = Rf\,\ \forall R\in \mathrm{SO}(3)$ if and only if $AR = RA$.
 \end{lemma}
 \begin{proof}
 	Sufficiency is obvious by operating with $R$ on both sides of eq. \eqref{eq:op1}.
 	We will show neccessity indirectly, i.e. we suppose that there exists $R\in\mathrm{SO}(3)$ such that $AR \neq RA$
-	and show that then we can have $Au = f$ but $ARu \neq Rf$. Indeed, assuming $Au = f$ and operating by $R$, we get  
+	and show that then we can have $\genop{A}u = f$ but $ARu \neq Rf$. Indeed, assuming $\genop{A}u = f$ and operating by $R$, we get  
 	$$
 		Rf = RAu \neq ARu,
 	$$
@@ -670,7 +751,7 @@ only if its operator commutes with rotations.
 
 Using definitions from the previous subsections, let us write eq. \eqref{eq1} in the form of \eqref{eq:op1}:
 \begin{equation}\label{eq1op}
-	T\psi \equiv (\op{L} - \op{K})\psi = \op{q},\quad L = A + \Sigma_t,
+	T\psi \equiv (\op{L} - \op{K})\psi = \op{q},
 \end{equation} 
 where we now suppose generally $\op{T}:V\to V$ for some suitable function space $V$ in which we have assured existence
 of unique solution of \eqref{eq1op} (see \sref{sec:fixed-source} for examples). Then it is not difficult to see that
@@ -685,7 +766,7 @@ angular integral (with unit Jacobian); this has already been proven as Theorem 3
 This will be the case, e.g., in an isotropic homogeneous region where  $\sigma_t(\br) \equiv \sigma_t$ and invariance of
 $\kappa$ follows from \eqref{eq:iso}. If we also assume that the sources (and
 boundary conditions) are  rotationally invariant ($q = Rq$), the true solution of NTE is necessarily
-spherically symmetric, i.e. 
+spherically symmetric or, in other words, the rotated solution satisfies the original equation: 
 $$
 T\psi = q \quad \Rightarrow \quad TR\psi = q.
 $$
