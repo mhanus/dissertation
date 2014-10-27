@@ -29,7 +29,7 @@ FEniCS also makes it easy to pass arguments directly to the linear-algebra backe
 selection of algebraic solver and its properties. 
 
 In the benchmarks below, we found the most robust setting to be the combination of a Jacobi-Davidson generalized
-eigensolver (\cite{slepcjd}) with a PETSc implementation of BiCGStab(\ell) \cite{Sleijpen1} as an inner solver (using
+eigensolver (\cite{slepcjd}) with a PETSc implementation of BiCGStab($\ell$) \cite{Sleijpen1} as an inner solver (using
 the default $\ell = 2$). It has been demonstrated already in \cite{Sleijpen1} (and analyzed in many later papers, see
 e.g. \citer{Notay} and references therein) that the Jacobi-Davidson method is remarkably robust with respect to accuracy
 of the solution of the inner solution phase. Therefore, by setting a fixed number of inner iterations to 20 and

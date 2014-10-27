@@ -27,7 +27,7 @@ Function $\sigma_t$\index{$\sigma_t$} groups all reactions that result in a loss
 $\kappa$\index{$\kappa$} represents reactions that introduce neutrons into direction $\bomega$ and energy $E$ by, e.g.,
 scattering from direction $\bomega'$, slowing down (or accelerating) from higher (lower) energies $E'$ or releasing new neutrons from fissioned nuclei.
 They are given by material composition of the domain and we will return to their more detailed description, as
-well as to boundary conditions when $\VV$ is bounded, in section \ref{sec:NTE}.
+well as to boundary conditions for \eqref{eq0}, in section \ref{sec:NTE}.
 
 Solution of eq. \eqref{eq0}, the \textit{angular neutron flux density} $\psi$ -- is a function of the following
 independent variables, which define the neutron phase space:
@@ -38,7 +38,7 @@ independent variables, which define the neutron phase space:
  	 neutrons,
  	\item $\bomega$\nomenclature[g]{$\bomega$}{unit vector of neutrons flow direction}\index{$\bomega$} represents the
  	angular distribution of neutrons on a unit sphere $\Sphere$\nomenclature[A]{\Sphere}{unit sphere ($\{x\in\R[3]: \norm{x} =
- 	1\}$)} ,i.e. their flow direction ($\br\in\R[3]$, $\norm{\br}=1$);
+ 	1\}$)} ,i.e. their flow direction ($\bomega\in\R[3]$, $\norm{\bomega}=1$);
  	\item $E\in [E_{\text{min}},E_{\text{max}}]$\nomenclature[g]{$E$}{Energy of neutrons\nomunit{eV}}\index{E} is the
  	kinetic energy of neutrons
 \end{itemize}
@@ -74,15 +74,20 @@ $$
 together with its outflow and inflow boundary subsets, respectively:
 $$
   \pX[\pm] := \bigl\{ (\br,\bomega,E) \in \pV \times \Sphere \times [E_m, E_M], \mbox{ s.t. } \bomega\cdot\bn(\br)
-  \gtrless 0 \bigr\}
-$$%
+  \gtrless 0 \bigr\}.
+$$
+The whole boundary $\pX$ can be written as
+$$
+	\pX = \pX[+]\cup \pX[-] \cup \pX[0]
+$$
+where $\pX[0]$ (boundary subset tangential to the flow), so that $\overline X = X \cup \pX$.  
 \begin{figure}[!hbt]
     \centering
     \includegraphics[scale=1]{phase_space.eps}
     \caption[Phase space of neutrons]{Phase space of neutrons}
     \label{fig:phase_space}
 \end{figure}%
-The product measure
+The product Lebesgue measure
 \begin{equation}\label{eq:measure}
   \d{x} = \d{\mu(X)} = \d{\mu(V\times\Sphere\times [\Emin,\Emax])} = \d{\br}\d{\bomega}\d{E}
 \end{equation}
@@ -91,7 +96,10 @@ while the boundary measure
 \begin{equation}\label{eq:measure2}
 \db = \abs{\bomega\cdot\bn}\d{\gamma}\d{\bomega}\d{E},\quad \d{\gamma} = \d{\mu(\pV)},
 \end{equation}
-is used when integrating over $\pX[\pm]$. When refering to physical units, we will consider the length scale of $\VV$ in
+is used when integrating over $\pX[\pm]$. We note that because of the assumed regularity of the boundary, $\pX[0]$ is a
+closed subset of $\pX$ of $\db$-measure zero (\cite[Chap. XXI, Sec. 2.2]{DautrayLions}). This will allow us to decompose
+spaces of measurable functions defined on $\pX$ into a direct sum of subspaces of measurable functions defined on
+$\pX[+]$ and $\pX[-]$, respectively. When refering to physical units, we will consider the length scale of $\VV$ in
 centimeters.
 
 \comment{
@@ -240,7 +248,7 @@ where
 	\tau(\br,\br') &= \tau(\br,\br-s'\bomega) = \int_0^{s'} \sigma_t(\br - s''\bomega)\,\d{s''} \label{eq:tau}
 \end{align}
 In reference to \fref{fig:trepka}
-\begin{figure}[hbp]
+\begin{figure}[htp]
 \begin{center}
   \includegraphics[scale=.75]{trepka}
   \caption{Illustration for the solution on a characteristic}
@@ -267,16 +275,18 @@ differential element around $\br$). Such collisions can either just change the d
 inducing neutrons (elastic scattering) or cause absorption of the neutrons followed by release of
 new ones in the considered direction and energy range (fission), or both (inelastic scattering).
 Ordinary macroscopic cross-sections $\sigma_s(\br,E)$, $\sigma_f(\br,E)$ are then introduced to characterize the total
-probability that neutrons undergo collisions of the above type irrespective of the outgoing direction, i.e.
+probability that $(\bomega,E)$ neutrons undergo collisions of the above type irrespective of the outgoing direction and
+energy\footnote{Recall that the direction $\bomega$ of the incoming neutrons is irrelevant for the result as a
+consequence of the assumption of isotropic medium (and eq. \eqref{eq:invint}).}, i.e.
 \begin{equation}\label{eq:ddifxs}
 \begin{aligned}
-\eta\sigma_s(\br, E) &= \intE[']{\Emin}{\Emax}{\intA{\sigma_s(\br,\bomega\cdot\bomega', 
-	E'\sla E)}},\\
-\nu\sigma_f(\br, E) &= \intE[']{\Emin}{\Emax}{\intA{\sigma_f(\br,\bomega\cdot\bomega', 
+\eta\sigma_s(\br, E) &=
+\intE[']{\Emin}{\Emax}{\intA[']{\sigma_s(\br,\bomega'\cdot\bomega, E'\sla E)}},\\
+\nu\sigma_f(\br, E) &= \intE[']{\Emin}{\Emax}{\intA[']{\sigma_f(\br,\bomega'\cdot\bomega, 
 	E'\sla E)}}
 \end{aligned}
 \end{equation}
-where $\eta$ and $\nu$, respectively, are the mean (net) number of neutrons coming out of the scattering event ($=1$ in
+where $\eta$ and $\nu$, respectively, are the expected number of neutrons coming out of the scattering event ($=1$ in
 case of elastic scattering, might be $> 1$ when elastic scattering takes place) and the fission event, respectively. 
 
 The \textit{total macroscopic cross-section}, $\sigma_t$, characterizing the probability that neutron with energy $E$
@@ -306,11 +316,11 @@ shows a typical shape of that function); using the second eq.
 \eqref{eq:ddifxs}, we can then write:
 \begin{equation}\label{eq:sf}
 \sigma_f(\br,\bomega\cdot\bomega',E\sla E') = \frac{\chi(E)\nu\sigma_f(\br,E')}{4\pi},\quad 
-\intE[']{\Emin}{\Emax}{\chi(E')} = 1.
+\intE{\Emin}{\Emax}{\chi(E)} = 1.
 \end{equation}
  
 A physically realistic assumption is that all the macroscopic cross-sections are bounded measurable functions
- \footnote{with respect to product measure of type \eqref{eq:measure} appropriate for their particular set of arguments,
+\footnote{with respect to product measure of type \eqref{eq:measure} appropriate for their particular set of arguments,
  or with respect to $\d{\mu(V\times\Sphere^2\times [\Emin,\Emax]^2)}$ in case of double-differential cross-section},
  piecewise continuous in $\VV$. The unit of macroscopic cross-sections is \SI{}{cm^{-1}}.
 
@@ -334,7 +344,7 @@ The integral
 \begin{equation}\label{eq:rr}
   \intE{E_1}{E_2}{\sigma_x(\br, E) \phi(\br, E)}
 \end{equation}
-represents the \textit{reaction rate density} (per unit time) of given type ($x = t,a,f,s,c$, see \eqref{eq:st}), 
+represents the \textit{reaction rate density} (per unit time) ou viven type ($x = t,a,f,s,c$, see \eqref{eq:st}), 
 induced by neutrons of energies in range $[E_1, E_2]$. 
 As well as the scalar flux itself, reaction rates may be experimentally measured
 by various detector mechanisms, which is the reason why these quantities are more important in practical calculations
@@ -347,13 +357,14 @@ where $e$ is the energy conversion factor converting fission rate to watts.
 
 \subsection{Solvability of neutron transport problems}\label{sec:ntp}
 In this section, we will formulate the two basic problems of neutron transport in an operator form.
-We will consider the generalized statements in which the equation and boundary conditions are assumed to be satisfied a.e. in $X$ and
-$\bomega\cdot\nabla$ represents the generalized derivative in the usual Sobolev sense. This is motivated by the low
+We will consider the generalized statements in which the equation and boundary conditions are assumed to be
+satisfied a.e. in $X$ and $\bomega\cdot\nabla$ represents the generalized derivative in the usual Sobolev sense. This is motivated by the low
 regularity that can be expected from the exact solution of the NTE -- for example, even for piecewise smooth material data
 (cross-sections $\sigma_x$) and sources $q$, the solution of the NTE is known to possibly exhibit singularities in 
 first partial derivatives (or be discontinuous as a function of $\bomega$) at surfaces of material discontinuities 
 coinciding with characteristic curves of the left-hand side of \eqref{eq1} (that is, straight lines; see \cite[Chap.
-1]{Agoshkov}, \cite[Sec. III]{Vladimirov}).
+1]{Agoshkov}, \cite[Sec. III]{Vladimirov}). We will call the solution of such a generalized problem a \textit{weak
+solution}.
 
 
 
@@ -426,9 +437,9 @@ Assume that
 \begin{enumerate}[label=(\alph*)]
 	\item $\sigma_t \in \Lp[\infty](X)$, $\sigma_t \geq \mst > 0$ a.e. in $\VV\times[\Emin,\Emax]$,
 	\item $\kappa \geq 0$ a.e. in $\VV\times\Sphere^2\times[\Emin,\Emax]^2$,
-	\item $\displaystyle c(x) < 1$ a.e. in $X$, where
+	\item $\displaystyle c \leq \bar c < 1$ a.e. in $\VV\times[\Emin,\Emax]$ where
 	  \begin{equation}\label{eq:c}
-	    c(\br,E) := \frac{1}{\sigma_t(\br,E)}\int_{\Emin}^{\Emax}\int_{\Sphere} \kappa(\br,\bomega\cdot\bomega',
+	    c(\br,E) := \frac{1}{\sigma_t(\br,E)}\int_{\Emin}^{\Emax}\int_{\Sphere} \kappa(\br,\bomega'\cdot\bomega,
 	    E'\sla E)\,\d{E'}\d{\bomega'}.
 	  \end{equation}
 \end{enumerate}
@@ -441,31 +452,31 @@ Then the fixed source, steady state neutron transport problem with vacuum bounda
   \end{aligned}
   \right.
 \end{equation*}
-has a unique solution $\psi(\br,\bomega,E)\in\Dom{T}\subset\Lp[1](X)$ for any $q\in \Lp[1](X)$.
+has a unique weak solution $\psi(\br,\bomega,E)\in\Dom{T}\subset\Lp[1](X)$ for any $q\in \Lp[1](X)$.
 \end{theorem}
 \begin{proof}
 \cite[Chap. XXI, \S 2, Proposition 5]{DautrayLions}
 \end{proof}
 
-The value $c$ in Thm. \ref{thm1} has the physical meaning of the average number of neutrons emitted (in all possible
-directions and energies) after a neutron with energy $E$ (coming from any direction) collides with a nucleus at point
-$\br\in V$.\footnote{\label{ftn:c}Notice that (using \eqref{eq:ddifxs})
-$
-	c\sigma_t(\br,E)\equiv c(\br,E)\sigma_t(\br,E) = \eta\sigma_s(\br,E) + \nu\sigma_f(\br,E).
-$}
+The value $c$ in Thm. \ref{thm1} has the physical meaning of the mean (net) number of neutrons emitted (in all possible
+directions and energies) per a neutron with energy $E$ (coming from any direction) colliding with a nucleus at point
+$\br\in V$. 
 Condition (c) thus expresses the requirement that the system be \textit{subcritical} in order for a
 steady solution in presence of external sources to be achieved (the notion of criticality will be formally introduced in the following
 subsection).
+Notice that (using \eqref{eq:ddifxs})
+\begin{equation}\label{eq:scattering_ratio}
+	c(\br,E) = \frac{\eta\sigma_s(\br,E) + \nu\sigma_f(\br,E)}{\sigma_t(\br,E)}
+\end{equation}
+and is usually called \textit{collision ratio} \index{c|see{collision ratio}}\index{collision ratio} (or
+\textit{scattering ratio} in non-fissioning domains)\index{scattering ratio}.
 
-Dautray and Lions in 
-\cite[\S2, Chap. XXI]{DautrayLions} also outline the proof based on the same ideas (the theory of monotone 
-operators)\footnote{For a different approach, we refer to \cite[Chap. 3]{Agoshkov}, where the $\Lp[2](X)$ case has been extensively studied via variational methods.} in
-general $\Lp(X)$ spaces for $1 < p < \infty$, where in particular the case $p = 2$ is important\footnote{even though it does not lead to a direct 
-physical interpretation as the $\Lp[1](X)$ setting} as the Hilbert space structure of $\Lp[2](X)$ allows to use richer 
-set of mathematical tools to formulate practical solution methods (like those based on Fourier transform or the finite 
-element methods). In this case, however, we need to add to assumptions (a-c) another assumption
+In Proposition 6, Dautray and Lions also 
+show the existence of unique solution in $\Lp[\infty](X)$ for $q\in \Lp[\infty](X)$; the proof in this case is based on
+ the inversion of the transport operator along characteristics (see \ref{sec:advection} above) and requires instead of
+ (c) the condition
 \begin{enumerate}
-  \item[(d)] $d(x) < 1$ a.e. in $X$, 
+  \item[(d)] $d \leq \bar d < 1$ a.e. in $\VV\times[\Emin,\Emax]$
 \end{enumerate}
 where
 \begin{equation}\label{eq:d} 
@@ -475,14 +486,9 @@ d(\br,E) :=
 \end{equation}
 can be interpreted as the average number of neutrons emitted with energy $E$ (into any direction) from
 collisions induced by all possible neutrons impinging on the nucleus at $\br$ (again, this is a reasonable condition
-in the subcritical state). Note that because angular dependence of $\kappa$ is only through the cosine of the collision
-angle ($\bomega\cdot\bomega'$), assumptions (c) and (d) really represent different assumptions about just the energy
-transfer in collisions.
-
-In Proposition 6, Dautray and Lions also 
-state the existence of unique solution in $\Lp[\infty](X)$ for $q\in \Lp[\infty](X)$; the proof in this case is based on
- the inversion of the transport operator along characteristics (see \ref{sec:advection} above) and uses condition (d)
- instead of (c).
+in the subcritical state). Notice that because angular dependence of $\kappa$ is only through the cosine of the
+collision angle ($\bomega\cdot\bomega'$), assumptions (c) and (d) really represent different assumptions about just the energy
+transfer in collisions. 
  The approach based on the characteristic form of the NTE has also been used by Sanchez in \cite{Sanchez3}, who proved  
  existence and uniqueness of solution in the cross-section weighted space $\Lp[1]_{\sigma}(X)$.
  This appears to be an alternative physically natural functional setting due to the definition of the reaction rate, eq. 
@@ -490,22 +496,34 @@ state the existence of unique solution in $\Lp[\infty](X)$ for $q\in \Lp[\infty]
   (the \textit{void regions}). Note that if we assume (a) of Thm. \ref{thm1}, the norms of $\Lp[1]$ and
   $\Lp[1]_{\sigma}$ are equivalent and the measure $\d{\tau} = \sigma_t(x) \d{x}$ associated with the space
   $\Lp[1]_{\sigma}$ represents a differential optical path length (see eq. \eqref{eq:tau}).
-  
-\subsubsection{$\Lp[2](X)$ setting}
 
-Let us now make a short stop in the $\Hp[2](X)$ space and quote some results that we will make use of later. This is a
-Hilbert space when equipped with the inner product
+In general $\Lp(X)$ spaces with $1 < p < \infty$, Dautray and Lions in 
+\cite[\S2, Chap. XXI]{DautrayLions} also outline the proof based on the same ideas as those used in the proof of Theorem
+\ref{thm1} (theory of monotone operators), utilizing assumptions (a-d) of Thm. \ref{thm1}. The case $p = 2$ is
+particularly important\footnote{even though it does not lead to a direct physical interpretation as the $\Lp[1](X)$ setting} as the Hilbert space structure of 
+$\Lp[2](X)$ allows to use richer set of mathematical tools to formulate practical solution methods  (like those based on
+Fourier transform or the finite element methods). Agoshkov provides in \cite[Chap. 3]{Agoshkov} an
+extensive study of this case using variational methods. We will now take yet another approach and prove the
+existence and uniqueness in $\Lp[2](X)$ using the contraction principle (\cite[Thm. 2.3.1]{DrabekNFA}). As we will see
+in the following chapter, the results from next subsection will have direct consequences for the numerical solution methods for the NTE.
+
+\subsubsection{$\Lp[2](X)$ setting}\label{sec:L2}
+
+Let us start by stating some well-known results that hold in the $\Hp[2](X)$.
+This is a Hilbert space when equipped with the inner product
 $$
-	\ip[\Hp[2](X)]{f,g} := \ip[\Lp[2](X)]{\bomega\cdot\nabla f, \bomega\cdot\nabla g} + \ip[\Lp[2](X)]{f,g} +
-	\ip[\Lp[2](\pX)]{f,g} 
+	\ip{\Hp[2](X)}{\psi,\varphi} := \ip{\Lp[2](X)}{\bomega\cdot\nabla \psi, \bomega\cdot\nabla \varphi} +
+	\ip{\Lp[2](X)}{\psi,\varphi} +
+	\ip{\Lp[2](\pX)}{\psi,\varphi} 
 $$
 where
 \begin{equation}\label{eq:ipL2}
-	\ip[\Lp[2](X)]{f,g} = \int_X f g \d{x},\quad  \ip[\Lp[2](\pX)]{f,g} f g \d{\xi}
+	\ip{\Lp[2](X)}{\psi,\varphi} = \int_X \psi \varphi \,\d{x},\quad
+	\ip{\Lp[2](\pX)}{\psi,\varphi} = \int_{\pX} \psi \varphi \,\d{\xi}.
 \end{equation}
 Let us denote 
 \begin{equation}\label{eq:opL}
-	$\op{L} := A + \Sigma_t$.
+	\op{L} := A + \Sigma_t.
 \end{equation}
 Using the Poincar{\' e}-Friedrichs inequality and integration by parts (see e.g. \cite[Chap.
 2]{Agoshkov}), one can show the following:
@@ -517,51 +535,142 @@ Using the Poincar{\' e}-Friedrichs inequality and integration by parts (see e.g.
 	Then the operator $\op{L} : \Hp[2](X) \to \Lp[2](X)$ is
 	bounded and coercive with constants $\Mst$ and $\mst$, respectively: 
 	$$
-		\ip[\Lp[2](X)]{Lu, u} \geq \mst \norm[\Lp[2](X)]{u}^2,\quad  \norm[\Lp[2](X)]{Lu} \leq \Mst \norm[\Lp[2](X)]{u}^2.
+		\ip{\Lp[2](X)}{L\psi, \psi} \geq \mst \norm[{\Hp[2](X)}]{\psi}^2,\quad  \norm[{\Lp[2](X)}]{L\psi} \leq \Mst
+		\norm[{\Hp[2](X)}]{\psi}^2.
 	$$
 \end{lemma}
-Also, as a consequence of H\"older inequality, the collision operator $\op{K} : \Lp[2](X) \to \Lp[2](X)$ is
-bounded:
-\begin{lemma}[\cite[Lemma 1, \S 3, Chap. XXI]{DautrayLions}]\label{lem:Kbounded}
+Also, as a consequence of H\"older inequality, the collision operator
+\linebreak[4]\mbox{$\op{K} :
+\Lp[2](X) \to \Lp[2](X)$} is bounded (this is a special case of \cite[Lemma 1, \S 3, Chap. XXI]{DautrayLions} for $p =
+2$):
+\begin{lemma}\label{lem:Kbounded}
 	Assume that there exist $M_a > 0$, $M_b > 0$, such that for a.e. $(\br,E) \in \VV\times[\Emin,\Emax]$
 	$$
-	\int_{\Emin}^{\Emax}\int_{\Sphere} \kappa(\br,\bomega\cdot\bomega',
-	    E'\sla E)\,\d{E'}\d{\bomega'} \leq M_a,\quad
-	\int_{\Emin}^{\Emax}\int_{\Sphere} \kappa(\br,\bomega\cdot\bomega',
+	\begin{aligned}
+	&\int_{\Emin}^{\Emax}\int_{\Sphere} \kappa(\br,\bomega\cdot\bomega',
+	    E'\sla E)\,\d{E'}\d{\bomega'} \leq M_a,\\
+	&\int_{\Emin}^{\Emax}\int_{\Sphere} \kappa(\br,\bomega\cdot\bomega',
 	    E\sla E')\,\d{E'}\d{\bomega'} \leq M_b.    
+	\end{aligned}
 	$$
 	Then 
 	$$
-	\norm[\Lp[2](X)]{Ku} \leq M_a^{\frac12} M_b^{\frac12} \norm[\Lp[2](X)]{u}.
+	\norm[{\Lp[2](X)}]{K\psi} \leq M_a^{\frac12} M_b^{\frac12} \norm[{\Lp[2](X)}]{\psi}.
 	$$
 \end{lemma}
-\begin{remark}
-	Note that from \eqref{eq:c} and \eqref{eq:d}, 
-	$$
-	M_a = \esssup_{\VV\times[\Emin,\Emax]} c(\br,E)\sigma_t(\br,E), \quad M_b = \esssup_{\VV\times[\Emin,\Emax]}
-	d(\br,E)\sigma_t(\br,E). 
-	$$
-\end{remark}
-These results may be used to establish coercivity and boundednes of the transport operator 
-$T = L - K$ and prove well-posedness in the $\Lp[2](X)$ setting via the Lax-Milgram lemma. Although this follows rather
-straightforwardly from the assumptions (a-d) above, we won't go into details; nevertheless, we state the Lax-Milgram
-lemma here for the purposes of \sref{sec:SI}. We state it in its general form for an operator $\genop{A}$ being an 
-element of space $\mathcal{L}_{V,V'}$ of bounded linear operators acting from $V$ to its dual $V'$.
-\begin{lemma}[Lax-Milgram]
-	Let $\genop{A}\in\mathcal{L}_{V,V'}$ be a bounded and coercive operator with constants $C_b$ and $C_c$, respectively.
+
+We will now use these results to show the existence and uniqueness of a weak solution to the steady state neutron
+transport problem in $\Lp[2](X)$. For this we will utilize the famous Lax-Milgram lemma, which we now state in its
+general form for an operator $\genop{A}$ being an element of space $\mathcal{L}(V,V')$ of bounded linear operators acting from 
+a Hilbert space $V$ to its dual $V'$ \footnote{In general, we will denote by
+$\mathcal{L}(V,W)$
+\index{$\mathcal{L}(V,W)$} the Banach space of bounded linear operators mapping Banach space $V$ to a Banach space $W$ 
+with norm $\norm[\mathcal{L}(V,W)]{\genop{A}} = \sup_{\norm[V]{v}=1} \norm[W]{\genop{A}v}$.} equipped with norm
+$\norm[V']{f} = \sup_{\norm[V]{v} = 1} \abs{\langle f,v \rangle}$ ($\langle \cdot,\cdot\rangle$ being the duality 
+pairing between $V$ and $V'$). Here and below, we use letters $u$, $v$ to denote general members of some vector space
+$V$; this should not cause confusion, as $v$ with its other meaning of neutron's speed will never be used in the same
+context.
+
+\begin{lemma}[Lax-Milgram]\label{lem:lax-milgram}
+	Let $\genop{A}\in\mathcal{L}(V,V')$ be a bounded and coercive operator with constants $C_b$ and $C_c$, respectively.
 	Then for any $f\in V'$, there exists a unique $u\in V$ such that
-	$$
-		\langle Au, v \rangle = \langle f, v \rangle  \quad \forall v\in V,
-	$$
+	\begin{equation}\label{eq:laxmilgram}
+		\langle \genop{A}u, v \rangle = \langle f, v \rangle  \quad \forall v\in V,
+	\end{equation}
 	and
 	$$
 		\norm[V]{u} \leq \frac{1}{C_c}\norm[V']{f}.
 	$$
 \end{lemma}
-In our case, $V = \Hp[2](X)$, $\genop{A} \equiv T : V \to \Lp[2](X) \subset V'$ and the duality pairing
-$\langle \cdot,\cdot\rangle$ coincides with the $\Lp[2](X)$ inner product. %We only note that considering $T:V\toV'$ (thus
-%allowing more general right-hand sides) is possible, but we don't go into details here.
+As usual, we will call eq. \eqref{eq:laxmilgram} a weak form of the operator equation $\genop{A}u = f$.
+%We only note that considering $T:V\toV'$ (thus allowing more general right-hand sides) is possible, but we don't go into details here.
 
+Lax-Milgram lemma allows us to prove the following lemma.
+\begin{lemma}
+	Let $\genop{A}\in\mathcal{L}(V,V')$ be bounded and coercive with constant $C_c$
+	and let $\genop{F}:V\to V'$ be Lipschitz with constant $C_L$, i.e. 
+	$$
+		\exists C_L > 0: \norm[V']{\mathcal{F}v_1 - \mathcal{F}v_2} \leq C_L \norm[V]{v_1 - v_2}\quad \forall v_1,v_2 \in V. 
+	$$
+	If
+	$$
+		\frac{C_L}{C_c} < 1
+	$$
+	then the mapping $\mathcal{T} : v\in V \mapsto \mathcal{T}v\in V$ defined by solving
+	$$
+		\langle\genop{A}\mathcal{T}v, w\rangle = \langle \genop{F}v, w \rangle\quad \forall w \in V 
+	$$
+	is contraction.
+\end{lemma}
+\begin{proof}
+	By Lax-Milgram lemma, the mapping $\mathcal{T}$ is well defined. For any $v_1,v_2\in V$, coercivity and
+	linearity of $\genop{A}$, definition of $\genop{T}$ and Lipschitz property of $\genop{F}$ yields 
+	$$
+	\begin{aligned}
+		C_c \norm[V]{\mathcal{T}v_1 - \mathcal{T}v_2}^2 &\leq 
+		\langle \genop{A}\mathcal{T}v_1 - \genop{A}\mathcal{T}v_2, \mathcal{T}v_1 - \mathcal{T}v_2 \rangle \\
+		& = \langle \genop{F}v_1 - \genop{F}v_2,  \mathcal{T}v_1 - \mathcal{T}v_2 \rangle \\
+		& \leq \norm[V']{\mathcal{F}v_1 - \mathcal{F}v_2} \norm[V]{\mathcal{T}v_1 - \mathcal{T}v_2}\\
+		& \leq C_L \norm[V]{v_1 - v_2} \norm[V]{\mathcal{T}v_1 - \mathcal{T}v_2}.
+	\end{aligned}
+	$$
+	Therefore
+	$$
+		\norm[V]{\mathcal{T}v_1 - \mathcal{T}v_2}^2 \leq \frac{C_L}{C_c}\norm[V]{v_1 - v_2} 
+	$$ 
+	for arbitrary $v_1, v_2\in V$, proving the claim.
+\end{proof}
+As an immediate corollary, we obtain from the contraction principle
+\begin{corollary}
+	Let 
+	$$
+		\rho := \frac{C_L}{C_c} < 1.
+	$$
+	For any $u_{(0)} \in V$, the sequence of iterates $\{u_{(i)}\}_{i=1}^{\infty}$ of the iteration
+	$$
+		\langle\genop{A}u_{(i+1)},w\rangle = \langle \genop{F}u_{(i)}, w\rangle\quad \forall w \in V,\ \quad i = 0,1,\ldots
+	$$
+	converges to the unique fixed point $u^*$ of the mapping $u\in V \mapsto \genop{A}^{-1}\genop{F}u \in V$. Moreover, 
+	$$
+		\norm{u_{(i)} - u^*} \leq \frac{\rho^{i}}{1-\rho} \norm{u_{(1)} - u_{(0)}},\quad
+		\norm{u_{(i)} - u^*} \leq \frac{\rho}{1-\rho} \norm{u_{(i)} - u_{(i-1)}}.
+	$$   
+\end{corollary}
+
+In our case, $V = \Hp[2](X)$, $\genop{A} \equiv T : \Hp[2](X) \to \Lp[2](X) \subset V'$ and the duality pairing
+$\langle \cdot,\cdot\rangle$ coincides with the $\Lp[2](X)$ inner product \eqref{eq:ipL2}.
+
+
+We are now ready to prove the existence and uniqueness result.
+\begin{theorem}
+	Let the assumptions (a-d) of Theorem \ref{thm1} be satisfied.
+	Then the fixed source, steady state neutron transport problem with vacuum boundary conditions 
+\begin{equation*}
+  \left\{
+  \begin{aligned}
+     &T\psi(\br,\bomega,E) = q(\br,\bomega,E),\\
+     &\Dom{T} = \{\psi\in \Hp[2](X),\ \psi\vert_{\pX[-]} = 0\},
+  \end{aligned}
+  \right.
+\end{equation*}
+has a unique weak solution $\psi(\br,\bomega,E)\in\Dom{T}\subset\Lp[2](X)$ for any $q\in \Lp[2](X)$.
+\end{theorem}
+\begin{proof}
+	It follows from \eqref{eq:c} and \eqref{eq:d} that under the assumptions of Thm. \ref{thm1} we can write the ``best''
+	constants $M_a$ and $M_b$ as 
+	$$
+	\begin{aligned}
+		M_a &= \esssup_{\VV\times[\Emin,\Emax]} c(\br,E)\sigma_t(\br,E), \\
+		M_b &= \esssup_{\VV\times[\Emin,\Emax]}	d(\br,E)\sigma_t(\br,E). 
+	\end{aligned}
+	$$
+\end{proof}
+
+Using $\genop{A} = L$,
+$\genop{F}u = q + Ku$
+
+Note that \eqref{eq:SIhilbert} is actually a fixed-point iteration for the equation $T\psi = q$ obtained from the
+splitting $T = L + K$.
 
 \subsection{Criticality problem}\label{sec:criticality}
 
@@ -618,7 +727,8 @@ Proving existence and uniqueness of solution of \eqref{eq:critical} can proceed 
 		$$
 		Results of the previous section can be used here if we consider the collision kernel $\kappa$ without the fission
 		part, e.g. if instead of the average number of all emitted neutrons in \eqref{eq:c} we consider only the number
-		emitted from scattering collisions: 
+		emitted from scattering collisions (the \textit{scattering ratio}\index{scattering
+		ratio}\index{$\tilde{c}$|see{scattering ratio}}):
 		\begin{equation}\label{eq:tildec}
 		\tilde c(\br,E) := \frac{1}{\sigma_t(\br,E)}\int_{\Emin}^{\Emax}\int_{\Sphere}
 		\sigma_s(\br,\bomega\cdot\bomega', E'\sla E)\,\d{E'}\d{\bomega'}.
@@ -642,15 +752,6 @@ so that
 $\keff < 1$, $\keff > 1$ and $\keff = 1$, respectively, correspond to \textit{subcritical},
 \textit{supercritical} and \textit{critical} system. Notice that $\keff < 1 \Rightarrow c < 1$, but not the other way
 round because the possibility of neutron loss due to out of core leakage is not included in \eqref{eq:c}. 
-\end{remark}
-\begin{remark}
-As in footnote \ref{ftn:c}, using definition \eqref{eq:ddifxs} and further absorbing $\eta$ into
-$\sigma_s$, we can rewrite \eqref{eq:tildec} as a ratio 
-\begin{equation}\label{eq:scattering_ratio}
-\tilde{c}(\br,E) = \frac{\sigma_s(\br,E)}{\sigma_t(\br,E)},
-\end{equation}
-which is commonly called \textit{scattering ratio} in nuclear engineering and transport theory texts (e.g.,
-\cite{Adams}).
 \end{remark}
 
 Because of the first step, we can expect similiar assumptions as in Thm. \ref{thm1} (or in the discussion below the
@@ -678,8 +779,6 @@ section. The result is the following theorem:
 	\lim_{n\to\infty}\Vert S-S_n\Vert_{\mathcal{L}(\Lp[1]_{\sigma},\Lp[1])} = 
 	\lim_{n\to\infty}\Vert F-F_n\Vert_{\mathcal{L}(\Lp[1]_{\sigma},\Lp[1])} = 0
 \end{equation}
-(where $\mathcal{L}(V,W)$ \index{$\mathcal{L}(V,W)$} denotes the Banach space of bounded linear operators mapping $V$ to
-$W$).
 Then the equation
 \begin{equation*}
 \left\{
@@ -690,20 +789,19 @@ Then the equation
 \right.
 \end{equation*}
 where $\beta : \Lp[1]_{\sigma}(\pX[+]) \to \Lp[1]_{\sigma}(\pX[-])$ is the albedo operator of
-\eqref{eq:albedo-general}, has a countable number of eigenvalues $\{\lambda_k\}$ and associated eigenfunctions which
-belong to $\Hp[1]_{\sigma}(X)$.
+\eqref{eq:albedo-general}, has a countable number of eigenvalues $\{\lambda_k\}$ and associated (weak) eigenfunctions
+which belong to $\Hp[1]_{\sigma}(X)$.
 There exists the eigenvalue $\lambda = \min \{\lambda_k\} = \rho(B^{-1}F)$ (the spectral radius of $B^{-1}F$), which is
 algebraically simple and its associated eigenfunction is the only one that does not change sign in $X$.
 \end{theorem}
 \begin{proof}
 See \cite{Sanchez3}.
 \end{proof}
-The condition $\tilde{c} < 1$ is satisfied if $\eta < 1$, (compare \eqref{eq:tildec}, \eqref{eq:c} and footnote
-\ref{ftn:c}) i.e. in case of negligible neutron yield from non-elastic scattering (which is a reasonable assumption at
-least in thermal reactor calculations). The second condition is needed for uniqueness -- the notion of trajectory
-connectivity is so far rather heuristic and basically means that particles produced in $X_F$ may reach any other point 
-by direct streaming or through collisions. Essentially similar conditions are often used to circumvent the
-unphysical restriction of almost everywhere strictly positive fission cross-sections 
+The condition $\tilde{c} < 1$ is satisfied if $\eta < 1$, i.e. in case of negligible neutron yield from non-elastic 
+scattering (which is a reasonable assumption at least in thermal reactor calculations). The second condition is needed 
+for uniqueness -- the notion of trajectory connectivity is so far rather heuristic and basically means that particles 
+produced in $X_F$ may reach any other point by direct streaming or through collisions. Essentially similar conditions 
+are often used to circumvent the unphysical restriction of almost everywhere strictly positive fission cross-sections 
 (\cite{MokhtarKharroubi,AllaireHomogenization}). Assumption \eqref{eq:iops} is needed for proving power compactness of
 $B^{-1}F$ and is physically non-restrictive as it requires only uniform continuity of functions that
 characterize probability of transfer from $(\bomega, E) \sla (\bomega',E')$ (for $\sigma_f$, this is actually the
@@ -722,7 +820,7 @@ operator equation
 \begin{equation}\label{eq:op1} 
 \genop{A}u = f
 \end{equation}
-is rotationally invariant, if $\genop{A}u = f$ implies $ARu = Rf$ for any operator
+is rotationally invariant, if $\genop{A}u = f$ implies $\genop{A}Ru = Rf$ for any operator
 $\op{R}$ corresponding to a rotation $\mat{R}\in\R[3\times3]$ of coordinate system around origin:
 \begin{equation}\label{eq:def_rot}
 \begin{gathered}
@@ -737,14 +835,14 @@ consider the operator itself to be an element of that group, i.e.
 $\op{R} \in \mathrm{SO}(3)$. The following lemma shows that equation \eqref{eq:op1} is rotationally invariant if and
 only if its operator commutes with rotations.
 \begin{lemma}\label{lemma1}
-	$\genop{A}u = f \ \Rightarrow ARu = Rf\,\ \forall R\in \mathrm{SO}(3)$ if and only if $AR = RA$.
+	$\genop{A}u = f \ \Rightarrow \genop{A}Ru = Rf\,\ \forall R\in \mathrm{SO}(3)$ if and only if $\genop{A}R = R\genop{A}$.
 \end{lemma}
 \begin{proof}
 	Sufficiency is obvious by operating with $R$ on both sides of eq. \eqref{eq:op1}.
-	We will show neccessity indirectly, i.e. we suppose that there exists $R\in\mathrm{SO}(3)$ such that $AR \neq RA$
-	and show that then we can have $\genop{A}u = f$ but $ARu \neq Rf$. Indeed, assuming $\genop{A}u = f$ and operating by $R$, we get  
+	We will show neccessity indirectly, i.e. we suppose that there exists $R\in\mathrm{SO}(3)$ such that $\genop{A}R \neq R\genop{A}$
+	and show that then we can have $\genop{A}u = f$ but $\genop{A}Ru \neq Rf$. Indeed, assuming $\genop{A}u = f$ and operating by $R$, we get  
 	$$
-		Rf = RAu \neq ARu,
+		Rf = R\genop{A}u \neq \genop{A}Ru,
 	$$
 	which concludes the proof.
 \end{proof}

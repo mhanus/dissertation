@@ -7,6 +7,14 @@
 	\end{cases}
 }
 
+\newenvironment{myitemize}
+{ \begin{itemize}[label={}]
+    \setlength{\itemsep}{0em}
+    \setlength{\parskip}{-.5em}
+    \setlength{\parindent}{-.5em}
+    \setlength{\parsep}{0em}     }
+{ \end{itemize}                  }
+
 \newcommand{\cref}[1]{Chap.~\ref{#1}}
 \newcommand{\Cref}[1]{Chapter~\ref{#1}}
 \newcommand{\sref}[1]{Sec.~\ref{#1}}
@@ -35,11 +43,13 @@
 \newcommand{\mat}[1]{\mathbf{#1}}
 \newcommand{\op}[1]{#1}
 \newcommand{\src}{q}
-\newcommand{\PiSN}{\Pi_{S_N}}
-\newcommand{\PihSN}{\widehat\Pi_{S_N}}
-\newcommand{\PiPN}{\Pi_{P_N}}
-\newcommand{\PihPN}{\widehat\Pi_{P_N}}
-\newcommand{\idxset}[1]{\mathcal{I}_{#1}}
+\newcommand{\PiG}{\mathcal{\mathcal{I}}_{G}}
+\newcommand{\PihG}{\widehat{{\mathcal{I}}}_{G}}
+\newcommand{\PiSN}{{\mathcal{I}}_{S_N}}
+\newcommand{\PihSN}{\widehat{{\mathcal{I}}}_{S_N}}
+\newcommand{\PiPN}{{\mathcal{I}}_{P_N}}
+\newcommand{\PihPN}{\widehat{{\mathcal{I}}}_{P_N}}
+\newcommand{\idxset}[1]{#1}
 \newcommand{\ips}[2]{(#1, #2)_{\Lp[2](\Sphere)}}
 \newcommand{\ip}[2]{(#2)_{#1}}
 \newcommand{\sla}{\ensuremath{\shortleftarrow}}
@@ -80,6 +90,7 @@
 
 \newcommand{\pX}[1][]{\partial X^{#1}}
 \newcommand{\XE}[1][]{X_{\mid E}^{#1}}
+\newcommand{\pXE}[1][]{\partial \XE[{#1}]}
 \newcommand{\pV}[1][]{\partial \VV}
 \newcommand{\VV}{\mathcal{D}}
 
@@ -148,7 +159,7 @@
 \DeclareMathOperator{\spectrum}{sp\,}
 \newcommand{\colset}[2]{\col\left\{#1\right\}_{#2}}
 \DeclareMathOperator{\trace}{tr\,}
-\DeclareMathOperator{\Proj}{Proj}
+\newcommand{\Proj}{\Pi}
 \newcommand{\Projop}[1][P_N]{\Proj_{#1}}
 \DeclareMathOperator{\Rng}{Range}
 \DeclareMathOperator{\Ker}{Ker}
