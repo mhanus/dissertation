@@ -287,7 +287,7 @@ consequence of the assumption of isotropic medium (and eq. \eqref{eq:invint}).},
 \end{aligned}
 \end{equation}
 where $\eta$ and $\nu$, respectively, are the expected number of neutrons coming out of the scattering event ($=1$ in
-case of elastic scattering, might be $> 1$ when elastic scattering takes place) and the fission event, respectively. 
+case of elastic scattering, might be $> 1$ when inelastic scattering takes place) and the fission event, respectively. 
 
 The \textit{total macroscopic cross-section}, $\sigma_t$, characterizing the probability that neutron with energy $E$
 undergoes a collision of any type with nuclei at $\br$, can now be decomposed as 
@@ -387,6 +387,7 @@ $X$\nomrefeq}
 \end{equation}
 Note that for the total volumetric scalar flux to be finite  (as is physically expected), the solution should belong to
 $\Lp[1](X)$.
+\index{$\Lp(X)$}\index{$\Lp[\infty](X)$}\index{\Lp(\pX[\pm])}\index{\Lp[\infty](\pX[\pm])}
 
 We formulate the fixed source problem using the following operators:
 \begin{equation*}
@@ -402,36 +403,74 @@ We shall call $A$, $\Sigma_t$, $K$ and $T = A + \Sigma_t - K$ the \textit{advect
 \textit{collision} and \textit{transport} operator, respectively. All these operators are continuous; the reaction
 operator $\Sigma_t : \Lp(X) \to \Lp(X)$ is a simple multiplication operator in $\Lp(X)$, self-adjoint and bounded,
 while the operator $K: \Lp(X) \to \Lp(X)$ is bounded under additional (physically justifiable) conditions
-(e.g. conditions (c) and/or (d) of the following theorem, depending on the chosen $p$; cf. also Lemma
-\ref{lem:Kbounded} below), but is self-adjoint if and only if the kernel $\kappa$ of $K$ is symmetric in $E$ and $E'$. 
-With the exception of the mono-energetic case, this is generally not true (a fact to which we return again in \sref{sec:MG}). 
-
+(e.g. conditions (c) and/or (d) of the following theorem, depending on the chosen $p$), but is self-adjoint if and only 
+if the kernel $\kappa$ of $K$ is symmetric in $E$ and $E'$. With the exception of the mono-energetic case, this is
+generally not true (a fact to which we return again in \sref{sec:MG}). To further simplify notation, let us also define 
+$$
+	\op{L} := A + \Sigma_t.
+$$
+\index{$\op{L}$}\index{$A$}\index{$\Sigma_t$}\index{$K (operator)$}%
 For piecewise smooth
-$\pV$ and $1\leq p < \infty$, the traces $\gamma\psi \equiv \psi\vert_{\pX[\pm]}\in\Lp(\pX[\pm])$ are well defined for
-functions $\psi\in \widehat H^p(X)$, where
+$\pV$ and $1\leq p < \infty$, the traces $\gamma_{\pm}\psi \equiv \psi\vert_{\pX[\pm]}\in\Lp(\pX[\pm])$ are well defined
+for functions $\psi\in \widehat H^p(X)$, where
 $$
 \widehat H^p(X) = \{\psi\mid \psi\in\Lp(X), \bomega\cdot\nabla\psi\in\Lp(X)\}, \quad 1 \leq p \leq \infty
 $$
-and a continuous lifting operator $\mathcal{G}: \psi_{\text{in}}\in\Lp(\pX) \mapsto \widetilde\psi \in \widehat H^p(X)$
-exists (\cite[Thm. 1, Appendix of \S 2, Chap. XXI]{DautrayLions}, \cite{Boulanouar1} for the case $p = \infty$). Let us 
-then define the Sobolev space of functions with bounded boundary traces
+and a continuous lifting operator 
+$$
+	\mathcal{G}: \psi_{\pm}\in\Lp(\pX[\pm]) \mapsto \widehat\psi \in \widehat H^p(X)
+$$
+such that $\widehat\psi\vert_{\pX[\pm]} = \psi_{\pm}$ exists (\cite[Thm. 1, Appendix of \S 2, Chap.
+XXI]{DautrayLions}, \cite{Boulanouar1} for the case $p = \infty$).
+Let us then define the Sobolev space of functions with bounded boundary traces
 \begin{equation}\label{eq:Hp}
   \nomenclature[a]{$\Hp{p}(X)$}{Sobolev space of functions whose (generalized) partial derivatives up to order $k$ are
  in $\Lp{p}$.\nomrefeq} 
  \Hp(X) := \left\{\psi\in\Lp(X), \bomega\cdot\nabla\psi\in\Lp(X), \Vert\gamma\psi\Vert_{\Lp(\pX)} < \infty\right\}. 
 \end{equation}
-Note that the lifting operator allows us to convert a problem $T\psi = q$ with non-homogeneous boundary conditions 
-\eqref{eq:nte2}\footnote{Results for the reflective or more general boundary conditions require special trace theorems, see 
-\cite[Chap. XXI, Appendix of \S2]{DautrayLions} or \cite[Chap. 2]{Agoshkov}.} to a problem 
+\index{\Hp(X)}%
+We note that $\Hp[2](X)$ is a Hilbert space when equipped with the inner product
+\begin{equation*}\label{eq:ip}
+	\ip{\Hp[2](X)}{\psi,\varphi} := \ip{\Lp[2](X)}{\bomega\cdot\nabla \psi, \bomega\cdot\nabla \varphi} +
+	\ip{\Lp[2](X)}{\psi,\varphi} +
+	\ip{\Lp[2](\pX)}{\psi,\varphi} 	
+\end{equation*}
+where
+\begin{equation}\label{eq:ipL2}
+	\ip{\Lp[2](X)}{\psi,\varphi} = \int_X \psi \varphi \,\d{x},\quad
+	\ip{\Lp[2](\pX)}{\psi,\varphi} = \int_{\pX} \psi \varphi \,\d{\xi}.
+\end{equation}
+\index{$\ip{\Hp[2](X)}{\cdot,\cdot}$}\index{$\ip{\Lp[2](X)}{\cdot,\cdot}$}
+
+\begin{remark}\label{rem:lifting}
+The lifting operator allows us to pick a function $\widehat \psi = \mathcal{G}\psi_{\text{in}} \in \Hp(X)$ and convert a
+problem $T\psi = q$ with non-homogeneous boundary conditions \eqref{eq:nte2} to a problem 
 $$
-	T(\psi - \widetilde\psi) = q - T\widetilde\psi
+	T(\psi - \widehat\psi) = q - T\widehat\psi \equiv \widehat q
 $$ 
-where trace of the new unknown function $u = \psi - \widetilde\psi$ on $\pX[-]$ vanishes. Therefore, we can focus on the
-case with homogeneous conditions. 
+where trace of the new unknown function $u = \psi - \widehat\psi$ on $\pX[-]$ vanishes. Final solution is then recovered
+as $\psi = u + \widehat{q}$. Therefore, we can focus on the case with homogeneous conditions. Results for the reflective or more general
+boundary conditions require special trace theorems, see \cite[Chap. XXI, Appendix of \S2]{DautrayLions} or \cite[Chap. 2]{Agoshkov} 
+\end{remark}
 
+The fixed source, steady state neutron transport problem with vacuum boundary conditions that we are going to study in
+this section is posed as follows
 
+\begin{problem}\label{prb:1}
+For given $q\in \Lp(X)$ find $\psi \in \Dom{T} \subset \Lp(X)$ such that
+$$
+  \left\{
+  \begin{aligned}
+     &T\psi(\br,\bomega,E) = q(\br,\bomega,E),\\
+     &\Dom{T} = \{\psi\in \Hp(X),\ \psi\vert_{\pX[-]} = 0\},
+  \end{aligned}
+  \right.
+$$
+\end{problem}
 
 We will first consider the physically most natural $\Lp[1](X)$ setting.
+
+\subsubsection{$\Lp[1](X)$ setting}
 \begin{theorem}\label{thm1}
 Assume that
 \begin{enumerate}[label=(\alph*)]
@@ -443,16 +482,8 @@ Assume that
 	    E'\sla E)\,\d{E'}\d{\bomega'}.
 	  \end{equation}
 \end{enumerate}
-Then the fixed source, steady state neutron transport problem with vacuum boundary conditions 
-\begin{equation*}
-  \left\{
-  \begin{aligned}
-     &T\psi(\br,\bomega,E) = q(\br,\bomega,E),\\
-     &\Dom{T} = \{\psi\in \Hp[1](X),\ \psi\vert_{\pX[-]} = 0\},
-  \end{aligned}
-  \right.
-\end{equation*}
-has a unique weak solution $\psi(\br,\bomega,E)\in\Dom{T}\subset\Lp[1](X)$ for any $q\in \Lp[1](X)$.
+Then Problem \ref{prb:1} with $p = 1$ has for any $q\in \Lp[1](X)$ a unique weak solution 
+$\psi(\br,\bomega,E)\in\Dom{T}\subset\Lp[1](X)$.
 \end{theorem}
 \begin{proof}
 \cite[Chap. XXI, \S 2, Proposition 5]{DautrayLions}
@@ -471,9 +502,19 @@ Notice that (using \eqref{eq:ddifxs})
 and is usually called \textit{collision ratio} \index{c|see{collision ratio}}\index{collision ratio} (or
 \textit{scattering ratio} in non-fissioning domains)\index{scattering ratio}.
 
-In Proposition 6, Dautray and Lions also 
-show the existence of unique solution in $\Lp[\infty](X)$ for $q\in \Lp[\infty](X)$; the proof in this case is based on
- the inversion of the transport operator along characteristics (see \ref{sec:advection} above) and requires instead of
+ In \cite{Sanchez3}, Sanchez uses the inversion of the transport operator along characteristics (see \ref{sec:advection}
+ above) to prove existence and uniqueness of a solution to the fixed source neutron transport problem in
+ the cross-section weighted space $\Hp[1]_{\sigma}(X)$ for right hand sides in $\Lp[1]_{\sigma}(X)$.
+ This appears to be an alternative physically natural functional setting due to the definition of the reaction rate, eq. 
+ \eqref{eq:rr}; moreover, assumption (a) may be relaxed by allowing $\sigma_t = 0$ in arbitrarily large regions 
+  (the \textit{void regions}). Note that if we assume (a) of Thm. \ref{thm1}, the norms of $\Lp[1]$ and
+  $\Lp[1]_{\sigma}$ are equivalent and the measure $\d{\tau} = \sigma_t(x) \d{x}$ associated with the space
+  $\Lp[1]_{\sigma}$ represents a differential optical path length (see eq. \eqref{eq:tau}).
+
+\subsubsection{$\Lp[\infty](X)$ setting}
+In \cite[Chap. XXI, \S 2, Proposition 6]{DautrayLions}, Dautray and Lions also 
+show the existence of unique solution in $\Lp[\infty](X)$ for $q\in \Lp[\infty](X)$; the proof in this case is again
+based on the inversion of the transport operator along characteristics and requires instead of
  (c) the condition
 \begin{enumerate}
   \item[(d)] $d \leq \bar d < 1$ a.e. in $\VV\times[\Emin,\Emax]$
@@ -489,21 +530,49 @@ collisions induced by all possible neutrons impinging on the nucleus at $\br$ (a
 in the subcritical state). Notice that because angular dependence of $\kappa$ is only through the cosine of the
 collision angle ($\bomega\cdot\bomega'$), assumptions (c) and (d) really represent different assumptions about just the energy
 transfer in collisions. 
- The approach based on the characteristic form of the NTE has also been used by Sanchez in \cite{Sanchez3}, who proved  
- existence and uniqueness of solution in the cross-section weighted space $\Lp[1]_{\sigma}(X)$.
- This appears to be an alternative physically natural functional setting due to the definition of the reaction rate, eq. 
- \eqref{eq:rr}; moreover, assumption (a) may be relaxed by allowing $\sigma_t = 0$ in arbitrarily large regions 
-  (the \textit{void regions}). Note that if we assume (a) of Thm. \ref{thm1}, the norms of $\Lp[1]$ and
-  $\Lp[1]_{\sigma}$ are equivalent and the measure $\d{\tau} = \sigma_t(x) \d{x}$ associated with the space
-  $\Lp[1]_{\sigma}$ represents a differential optical path length (see eq. \eqref{eq:tau}).
 
-In general $\Lp(X)$ spaces with $1 < p < \infty$, Dautray and Lions in 
-\cite[\S2, Chap. XXI]{DautrayLions} also outline the proof based on the same ideas as those used in the proof of Theorem
-\ref{thm1} (theory of monotone operators), utilizing assumptions (a-d) of Thm. \ref{thm1}. The case $p = 2$ is
-particularly important\footnote{even though it does not lead to a direct physical interpretation as the $\Lp[1](X)$ setting} as the Hilbert space structure of 
-$\Lp[2](X)$ allows to use richer set of mathematical tools to formulate practical solution methods  (like those based on
-Fourier transform or the finite element methods). Agoshkov provides in \cite[Chap. 3]{Agoshkov} an
-extensive study of this case using variational methods. We will now take yet another approach and prove the
+\subsubsection{$\Lp(X)$ setting}\label{sec:L2}
+In general $\Lp(X)$ spaces with $1 < p < \infty$, Dautray and Lions outline the proof based on the same ideas as those 
+used in the $\Lp[1](X)$ case (theory of monotone operators), utilizing assumptions (a-d) of Thm. \ref{thm1}.  The case
+$p = 2$ is particularly important\footnote{even though it does not lead to a direct physical interpretation as  the
+$\Lp[1](X)$ setting} as the Hilbert space structure of $\Lp[2](X)$ allows to use richer set of mathematical tools to 
+formulate practical solution methods. It also allows to formulate variational principles for the NTE, in the spirit of 
+the seminal work of Vladimirov \cite{Vladimirov}. This approach allows to find the weak solution of the neutron 
+transport problem $$
+\begin{aligned}
+     &T\psi(\br,\bomega,E) = q(\br,\bomega,E),\\
+     &\Dom{T} = \{\psi\in \Hp[2](X),\ \psi\vert_{\pX[-]} = 0\},
+  \end{aligned}
+$$
+by solving an equivalent weak problem of finding $\psi\in\Hp[2](X)$ such that
+\begin{equation}\label{eq:weakform}
+	\langle \tilde{T}\psi, \varphi \rangle = \langle \tilde{q}, \varphi \rangle  \quad \forall \varphi\in \Hp[2](X),
+\end{equation}
+with $\tilde{T}$ being a bounded and coercive operator on $\Hp[2](X)$ ($\langle \cdot,\cdot\rangle$ denotes the
+duality pairing between $\Hp[2](X)$ and the dual space of bounded linear functionals on $\Hp[2](X)$; if we consider
+$\tilde{T} : \Hp[2](X) \to \Lp[2](X)$ and $q\in \Lp[2](X)$, this pairing coincides with the standard $\Lp[2](X)$ inner
+product \eqref{eq:ipL2}). Well-posedness of this problem is then an immediate consequence of the Lax-Milgram lemma. 
+
+Bourhrara formulates in \cite{Bourhrara2} three such principles for the fixed source problem (and one for the
+criticality problem investigated in the following section) and shows that some of these formulations could be obtained
+also as weak forms of the traditional second-order forms of the transport equation -- the even parity equation (obtained
+by writing eq.
+\eqref{eq1} for $\bomega$ and $-\bomega$, adding and subtracting the two resulting equations and eliminating the
+unknowns of odd parity) and the self-adjoint angular flux equation (obtained by
+expressing $\psi$ from the $\sigma_t\psi$ term of \eqref{eq1} in terms of the remaining terms and substituting back into
+the advection term). He also provides a comparison with other formulations based on the least-squares approach
+(minimizing the appropriately scaled residual \mbox{$\norm[{\Lp[2](X)}]{\mathcal{P}(\tilde T \psi - q)}^2 +
+\varpi\norm[{\Lp[2](\pX[-])}]{\psi_{\text{in}} - \psi}^2$}) studied e.g. in \cite{Manteuffel} or
+\cite{Agoshkov}. 
+
+Approximations of eq. \eqref{eq:weakform} leading to numerical solution methods are naturally obtained by restricting
+the formulation to finite-dimensional subspaces of $\Hp[2](X)$. With bounded and coercive $\tilde T$, approximation
+error is then automatically provided by the C{\' e}a lemma. In the angular domain, this has
+been done using the subspace of spherical harmonics of finite degree in \cite{bourhrara3} of \cite{Manteuffel}, which
+is also known as the $\PN$ method. As we will see in \sref{sec:1-SN}, this can be done also with the other most widely 
+employed angular approximation methods, the $\SN$ method of discrete ordinates.
+
+\comment{ We will now take yet another approach and prove the
 existence and uniqueness in $\Lp[2](X)$ using the contraction principle (\cite[Thm. 2.3.1]{DrabekNFA}). As we will see
 in the following chapter, the results from next subsection will have direct consequences for the numerical solution methods for the NTE.
 
@@ -671,7 +740,7 @@ $\genop{F}u = q + Ku$
 
 Note that \eqref{eq:SIhilbert} is actually a fixed-point iteration for the equation $T\psi = q$ obtained from the
 splitting $T = L + K$.
-
+}
 \subsection{Criticality problem}\label{sec:criticality}
 
 The other important problem in neutron transport (particularly in nuclear reactor engineering) requires the
@@ -704,8 +773,9 @@ S\psi(\br,\bomega,E) &= \intE[']{\Emin}{\Emax}{\intA[']{\sigma_s(\br,\bomega\cdo
 E')\psi(\br,\bomega,E')}}
 \end{aligned}
 \end{equation}
-The criticality eigenvalue problem then reads:\\
-\textit{Find nontrivial, nonnegative $\psi(\br,\bomega,E)\in \Dom{B}$ and $\lambda > 0$, such that}
+The criticality eigenvalue problem then reads:
+\begin{problem}
+Find nontrivial, nonnegative $\psi(\br,\bomega,E)\in \Dom{B} \subset \Lp(X)$ and $\lambda > 0$, such that
 \begin{equation}\label{eq:critical}
 \left\{
   \begin{aligned}
@@ -714,8 +784,9 @@ The criticality eigenvalue problem then reads:\\
   \end{aligned}
 \right.
 \end{equation}
-\textit{where $\beta\psi$ is given by the right-hand side of \eqref{eq:nte3} (or, more generally, $\beta$ is the
-boundary operator of \eqref{eq:albedo-general})}.  
+where $\beta\psi$ is given by the right-hand side of \eqref{eq:nte3} (or, more generally, $\beta$ is the
+boundary operator of \eqref{eq:albedo-general}).
+\end{problem}  
 
 Proving existence and uniqueness of solution of \eqref{eq:critical} can proceed in the following sequence:
 \begin{enumerate}
@@ -809,10 +880,11 @@ function $\chi(E)$ of \eqref{eq:sf}) and not that of physical cross-sections $\s
 $\sigma_{fn}(\br,E')$ themselves (see \cite{Sanchez3}).
 
 \subsection{Rotational invariance of the NTE}\label{sec:rotinv}
-An important property of the neutron transport equation is its rotational invariance, which says that under certain
-circumstances, to obtain a solution of the NTE with source term rotated around origin it is sufficient to apply the same
-rotation the solution corresponding to the original source. We will use the following definition to make this
-statement precise.
+An important property of the neutron transport equation is its orthogonal invariance, which says that under certain
+circumstances, to obtain a solution of the NTE with source term rotated (or reflected) around origin it is sufficient to
+apply the same rotation (reflection) on the solution corresponding to the original source. We will henceforth consider
+only rotations but any argument below and in the following chapter holds also for reflections. We will use the
+following definition to make this statement precise.
  
 \begin{definition}
 We will say that an
@@ -820,29 +892,30 @@ operator equation
 \begin{equation}\label{eq:op1} 
 \genop{A}u = f
 \end{equation}
-is rotationally invariant, if $\genop{A}u = f$ implies $\genop{A}Ru = Rf$ for any operator
-$\op{R}$ corresponding to a rotation $\mat{R}\in\R[3\times3]$ of coordinate system around origin:
+is rotationally invariant, if $\genop{A}u = f$ implies $\genop{A}\genop{R}u = \genop{R}f$ for any operator
+$\op{\genop{R}}$ corresponding to a rotation $\mat{R}\in\R[3\times3]$ of coordinate system around origin:
 \begin{equation}\label{eq:def_rot}
 \begin{gathered}
-\op{R}: f(\br,\bomega) \mapsto f(\mat{R}^T\br,\mat{R}^T\bomega)\\
+\genop{R}: f(\br,\bomega) \mapsto f(\mat{R}^T\br,\mat{R}^T\bomega)\\
 \mat{R}^T\mat{R} = \mat{R}\mat{R}^T = \mat{I},\quad \det \mat{R} = 1.
 \end{gathered}
 \end{equation}
 \end{definition}
-Operator $\op{R}$ is defined by its associated rotation matrix $\mat{R}$, which is conventionally
-characterized as an element of the special orthogonal group in $\R[3]$. We will also
-consider the operator itself to be an element of that group, i.e.
-$\op{R} \in \mathrm{SO}(3)$. The following lemma shows that equation \eqref{eq:op1} is rotationally invariant if and
+Operator $\genop{R}$ is defined by its associated rotation matrix $\mat{R}$, which is conventionally
+characterized as an element of the special orthogonal group in $\R[3]$, the $\mathrm{SO}(3)$ \footnote{or just the
+ordinary orthogonal group $O(3)$ if reflections are taken into account}.
+We will also consider the operator itself to be an element of that group, i.e.
+$\genop{R} \in \mathrm{SO}(3)$. The following lemma shows that equation \eqref{eq:op1} is rotationally invariant if and
 only if its operator commutes with rotations.
 \begin{lemma}\label{lemma1}
-	$\genop{A}u = f \ \Rightarrow \genop{A}Ru = Rf\,\ \forall R\in \mathrm{SO}(3)$ if and only if $\genop{A}R = R\genop{A}$.
+	$\genop{A}u = f \ \Rightarrow \genop{A}\genop{R}u = \genop{R}f\,\ \forall \genop{R}\in \mathrm{SO}(3)$ if and only if $\genop{A}\genop{R} = \genop{R}\genop{A}$.
 \end{lemma}
 \begin{proof}
-	Sufficiency is obvious by operating with $R$ on both sides of eq. \eqref{eq:op1}.
-	We will show neccessity indirectly, i.e. we suppose that there exists $R\in\mathrm{SO}(3)$ such that $\genop{A}R \neq R\genop{A}$
-	and show that then we can have $\genop{A}u = f$ but $\genop{A}Ru \neq Rf$. Indeed, assuming $\genop{A}u = f$ and operating by $R$, we get  
+	Sufficiency is obvious by operating with $\genop{R}$ on both sides of eq. \eqref{eq:op1}.
+	We will show neccessity indirectly, i.e. we suppose that there exists $\genop{R}\in\mathrm{SO}(3)$ such that $\genop{A}\genop{R} \neq \genop{R}\genop{A}$
+	and show that then we can have $\genop{A}u = f$ but $\genop{A}\genop{R}u \neq \genop{R}f$. Indeed, assuming $\genop{A}u = f$ and operating by $\genop{R}$, we get  
 	$$
-		Rf = R\genop{A}u \neq \genop{A}Ru,
+		\genop{R}f = \genop{R}\genop{A}u \neq \genop{A}\genop{R}u,
 	$$
 	which concludes the proof.
 \end{proof}
@@ -854,19 +927,19 @@ Using definitions from the previous subsections, let us write eq. \eqref{eq1} in
 where we now suppose generally $\op{T}:V\to V$ for some suitable function space $V$ in which we have assured existence
 of unique solution of \eqref{eq1op} (see \sref{sec:fixed-source} for examples). Then it is not difficult to see that
 \begin{equation}\label{eq:commut_NTE}
-	\op{R}T = T\op{R}
+	\genop{R}T = T\genop{R}
 \end{equation}
-(if we also consider $R$ as an operator from $V$ to itself),
-provided that the coefficient functions $\sigma$ and $\kappa$ are also invariant under the action of $\op{R}$ \footnote{
+(if we also consider $\genop{R}$ as an operator from $V$ to itself),
+provided that the coefficient functions $\sigma$ and $\kappa$ are also invariant under the action of $\genop{R}$ \footnote{
 indeed, because $A$ is represented by a dot product of two vectors and $\Sigma_t$ is rotation invariant under these
-assumptions, $L$ is rotation invariant as well, and rotation invariance of $K$ follows from a substitution $R\bomega' = \bomega''$ in the
+assumptions, $L$ is rotation invariant as well, and rotation invariance of $K$ follows from a substitution $\genop{R}\bomega' = \bomega''$ in the
 angular integral (with unit Jacobian); this has already been proven as Theorem 3 in \cite{Zweifel}.}.
 This will be the case, e.g., in an isotropic homogeneous region where  $\sigma_t(\br) \equiv \sigma_t$ and invariance of
 $\kappa$ follows from \eqref{eq:iso}. If we also assume that the sources (and
-boundary conditions) are  rotationally invariant ($q = Rq$), the true solution of NTE is necessarily
+boundary conditions) are  rotationally invariant ($q = \genop{R}q$), the true solution of NTE is necessarily
 spherically symmetric or, in other words, the rotated solution satisfies the original equation: 
 $$
-T\psi = q \quad \Rightarrow \quad TR\psi = q.
+T\psi = q \quad \Rightarrow \quad T\genop{R}\psi = q.
 $$
 Numerical approximations should preserve this property in order to produce physically correct results, but as we will
 see in the following chapter, it is not always the case.

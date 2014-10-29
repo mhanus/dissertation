@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE ipe SYSTEM "ipe.dtd">
-<ipe version="70010" creator="Ipe 7.0.10">
-<info created="D:20110413140923" modified="D:20110413140923"/>
+<ipe version="70005" creator="Ipe 7.1.4">
+<info created="D:20110413140923" modified="D:20141028210531"/>
 <ipestyle name="basic">
 <symbol name="arrow/arc(spx)">
 <path stroke="sym-stroke" fill="sym-stroke" pen="sym-pen">
@@ -232,7 +232,7 @@ h
 <page>
 <layer name="alpha"/>
 <view layers="alpha" active="alpha"/>
-<path layer="alpha" stroke="black" pen="ultrafat">
+<path layer="alpha" matrix="1.06119 0 0 1.10758 -29.9805 -33.9667" stroke="black" pen="ultrafat">
 471.991 322.601
 489.978 401.132
 453.329 480.543
@@ -266,20 +266,20 @@ h
 284.007 239.76 m
 219.621 374.959 l
 </path>
-<text matrix="1 0 0 1 -6.82749 -126.991" transformations="translations" pos="323.227 433.988" stroke="black" type="label" width="7.91" height="7.651" depth="0" valign="baseline" size="LARGE">$\mathbf{r}$</text>
+<text matrix="1 0 0 1 -6.82749 -126.991" transformations="translations" pos="323.227 433.988" stroke="black" type="label" valign="baseline" size="LARGE">$\mathbf{r}$</text>
 <path matrix="0.133817 0 0 1.11711 246.002 -28.08" stroke="black" fill="white" pen="heavier" arrow="linear/normal">
 284.007 239.76 m
 219.621 374.959 l
 </path>
-<text matrix="1 0 0 1 -39.5995 -110.605" transformations="translations" pos="323.227 433.988" stroke="black" type="label" width="11.696" height="12.889" depth="0" valign="baseline" size="LARGE">$\mathbf{r}&apos;$</text>
-<text matrix="1 0 0 1 -91.4889 -126.991" transformations="translations" pos="323.227 433.988" stroke="black" type="label" width="14.261" height="7.654" depth="2.58" valign="baseline" size="LARGE">$\mathbf{r}_0$</text>
-<text transformations="translations" pos="203.974 443.547" stroke="black" type="label" width="11.965" height="11.764" depth="0" valign="baseline" size="LARGE">$\mathcal{V}$</text>
-<text matrix="1 0 0 1 -2.731 -9.55849" transformations="translations" pos="489.363 468.581" stroke="black" type="label" width="13.988" height="11.812" depth="0" valign="baseline" size="LARGE">$\mathbf{\Omega}$</text>
+<text matrix="1 0 0 1 -39.5995 -110.605" transformations="translations" pos="323.227 433.988" stroke="black" type="label" valign="baseline" size="LARGE">$\mathbf{r}&apos;$</text>
+<text matrix="1 0 0 1 -91.4889 -126.991" transformations="translations" pos="323.227 433.988" stroke="black" type="label" valign="baseline" size="LARGE">$\mathbf{r}_0$</text>
+<text matrix="1 0 0 1 240 -80" transformations="translations" pos="203.974 443.547" stroke="black" type="label" valign="baseline" size="LARGE">$\mathcal{D}$</text>
+<text matrix="1 0 0 1 -2.731 -9.55849" transformations="translations" pos="489.363 468.581" stroke="black" type="label" valign="baseline" size="LARGE">$\mathbf{\Omega}$</text>
 <path stroke="black" fill="darkgray" dash="dashed" pen="heavier">
 351.795 412.321 m
 341.494 447.738 l
 </path>
-<path matrix="1 0 0 1 -132.781 -37.2107" stroke="black" fill="darkgray" dash="dashed" pen="heavier">
+<path matrix="1.73703 0 0 1.73703 -392.066 -341.105" stroke="black" fill="darkgray" dash="dashed" pen="heavier">
 351.795 412.321 m
 341.494 447.738 l
 </path>
@@ -295,7 +295,16 @@ h
 346.869 429.256 m
 270.563 408.166 l
 </path>
-<text matrix="1 0 0 1 -15.331 -4.3507" transformations="translations" pos="283.275 437.181" stroke="black" type="label" width="12.096" height="6.179" depth="2.15" valign="baseline" size="Large">$s_0$</text>
-<text matrix="1 0 0 1 19.2676 -16.7809" transformations="translations" pos="283.275 437.181" stroke="black" type="label" width="9.855" height="10.741" depth="0" valign="baseline" size="Large">$s&apos;$</text>
+<text matrix="1 0 0 1 -15.331 -4.3507" transformations="translations" pos="283.275 437.181" stroke="black" type="label" valign="baseline" size="Large">$s_0$</text>
+<text matrix="1 0 0 1 19.2676 -16.7809" transformations="translations" pos="283.275 437.181" stroke="black" type="label" valign="baseline" size="Large">$s&apos;$</text>
+<path matrix="1.71966 0 0 1.71966 -207.021 -284.467" stroke="black" fill="darkgray" dash="dashed" pen="heavier">
+351.795 412.321 m
+341.494 447.738 l
+</path>
+<path matrix="1.34175 0 0 1.34175 -76.8266 -117.641" stroke="black" pen="heavier" arrow="linear/normal" rarrow="linear/normal">
+209.697 407.142 m
+342.617 443.879 l
+</path>
+<text matrix="0.993414 -0.114582 0.114582 0.993414 -63.7758 59.8771" transformations="translations" pos="283.275 437.181" stroke="black" type="label" valign="baseline" size="large">$\ell(\mathbf{r},\mathbf{\Omega})$</text>
 </page>
 </ipe>

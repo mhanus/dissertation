@@ -6,16 +6,31 @@
 
 \chapter{The $\MCPN$ approximation}\label{chap:mcpn}
 
-In this chapter, we start constructing an approximation to the monoenergetic neutron transport equation $T\psi - q = 0$
-of the form
+In this chapter, we will construct an alternative to the $\PN$ approximation of angular dependence of the NTE. We will
+focus on the monoenergetic equation $T\psi - q = 0$ of the form
 \begin{equation}\label{eq:MC-bte}
     \bomega\cdot\nabla\psi(\br,\bomega) + \sigma_t(\br)\psi(\br,\bomega) - \intA[']{\left[\sigma_s(\br,\bomega\cdot\bomega') + 
     \frac{\nu\sigma_f(\br)}{4\pi}\right]\psi(\br,\bomega')} - q(\br,\bomega) = 0.
 \end{equation}
-We will focus on the angular approximation here and assume that \mbox{$\psi(\cdot,\bomega)\in\Lp[2](\Sphere)$}.
+As in the $\PN$ case, we assume that \mbox{$\psi(\cdot,\bomega)\in\Lp[2](\Sphere)$}.
 % in the discussion below (even though the final derivation in Sec. \ref{sec:mcpn} actually requires only 
 % $\Lp[1](\Sphere)$ integrability)
-. 
+
+\myparagraph{Notation conventions}
+We introduce some new notation in this chapter. The new rules added to the notation conventions of
+\cref{chap:nte-methods} are summarized in the following list.
+
+\begin{itemize}
+    \item Greek subscripts (as in $\AAA[]{\alpha})$ $\ldots$ indices of the Cartesian axes (with the
+    correspondence $\alpha = 1,2,3 \leftrightarrow x,y,z$)
+    \item $\AA$ $\ldots$ Cartesian tensor of rank $n$ (Def. \ref{def:tensor})
+  	\item $\AAA{\alpha_1\cdot\alpha_n}$ $\ldots$ Cartesian tensor $\AA$ in an indexed notation
+    \item $\underset{m}{\cdot}$ $\ldots$ $m$-fold contraction (generalizeation of inner product, see Def.
+    \ref{def:contraction})
+    \item $\Sym{\AA}$ $\ldots$ symetrization of tensor $\AA$ (Def. \ref{def:symmetrization})
+    \item $\trace \AA$ $\ldots$ trace of tensor $\AA$ (Def. \ref{def:trace}).
+\end{itemize}
+
 Let us start by recalling the well established spherical harmonics method.
 
 \section{$\PN$ approximation}\label{sec:SPH}
@@ -107,14 +122,14 @@ research directions outlined in the paper's conclusion not pursued.
 
 \subsection{Cartesian tensors}\label{sec:tensors}
 In order to develop a conceptually simpler and arguably also more useful approach, we need to recall some basic facts
-about Cartesian tensors. We will use the convention that Greek subscripts represent axes of a Cartesian coordinate
-system with unit vectors $\be_x$, $\be_y$, $\be_z$. We will also use the usual Einstein's summation convention which
+about Cartesian tensors. We will use the convention that Greek subscripts (ranging from 1 to 3) represent axes of a
+Cartesian coordinate system with unit vectors $\be_x$, $\be_y$, $\be_z$. We will also use the usual Einstein's summation convention which
 implies summation over any index which appears twice in an indexed expression, for instance $$
-  \AAA{\alpha\beta\gamma}\BBB{\beta\gamma} =
+  \AAA[3]{\alpha\beta\gamma}\BBB[2]{\beta\gamma} =
   \suma[\beta]{1}{3}\suma[\gamma]{1}{3}\AAA{\alpha\beta\gamma}\BBB{\beta\gamma} = \CCC{\alpha}.
 $$
 
-\begin{definition}
+\begin{definition}\label{def:tensor}
   An $n$-dimensional array $\AA$ of $3^n$ components $\AAA{\alpha_1\ldots\alpha_n}$ is called \textit{Cartesian tensor 
   of rank $n$} if it transforms as
   \begin{equation}\label{eq:tenstran}
@@ -125,9 +140,10 @@ $$
     \be_\alpha' = g_{\alpha\beta}\be_\beta.
   $$
 \end{definition}
-As we will only use the Cartesian tensors, we will henceforth omit the word Cartesian. Word ``tensor'' will also be used
- for a general \textit{tensor field}, components of which are functions -- like $\AA(\br)$. The transformation has then 
- the following form:
+A special case of the matrix $\mathbf{G}$ was the rotation matrix $\mat{R}$ introduced in \sref{sec:rotinv}; here we
+include also the reflections about origin to make the definition general. As we will only use the Cartesian tensors, we
+will henceforth omit the word Cartesian. Word ``tensor'' will also be used for a general \textit{tensor field},
+components of which are functions -- like $\AA(\br)$. The transformation has then the following form:
 $$
   A^{(n)'}_{\alpha_1\ldots\alpha_n}(\br) = \AAA{\alpha_1\ldots\alpha_n}(\mathbf{G}^{-1}\br) = g_{\alpha_1\beta_1}\cdots g_{\alpha_n\beta_n}\AAA{\beta_1\ldots\beta_n}(\br).
 $$
@@ -154,7 +170,7 @@ $$
 $$
 (hence $\Delta = \lap = \nabla\otimes\nabla$). Also, to keep usual notation, $\nabla\AA \equiv \nabla\otimes\AA$.
 
-\begin{definition}
+\begin{definition}\label{def:contraction}
   For $1\leq m \leq n$, the $m$-fold contraction of tensors $\AA$ and $\BB$ is a rank-($2n-2m$) tensor 
   $\CC[2n-2m] = \AA\underset{m}{\cdot}\BB$ with components
   $$
@@ -162,10 +178,10 @@ $$
     \AAA{\alpha_1\ldots\alpha_{n-m}\gamma_{n-m+1}\ldots\gamma_n}\BBB{\gamma_n\ldots\gamma_{n-m+1}\beta_{n-m}\ldots\beta_1}.
   $$
 \end{definition}
-Specially for $m = 1$, we get the standard inner product. 
-In the case when $n = m$, we obtain the scalar $\AAA{\gamma_1\ldots\gamma_n}\BBB{\gamma_n\ldots\gamma_1}$ and 
-suppress the index under the $\cdot$ sign to simplify the writing (it should be clear from the two operands and their 
-rank that a total contraction over all their indices is intended). 
+Specially for $m = 1$, we get the standard inner product, while for $m = 2$ we get the double inner product $:$ used in
+\sref{sec:}. Generally when $n = m$, we obtain the scalar $\AAA{\gamma_1\ldots\gamma_n}\BBB{\gamma_n\ldots\gamma_1}$
+and suppress the index under the $\cdot$ sign to simplify the writing (it should be clear from the two operands and their 
+rank that a total contraction over all their indices is intended).
 
 \begin{definition}
   For $m \leq \lfloor n/2 \rfloor$ (the integer part of $n/2$), the $m$-fold contraction of tensor $\AA$ (contraction 
@@ -176,7 +192,7 @@ rank that a total contraction over all their indices is intended).
 \end{definition}
 When contracting in only 1 index pair, the $1$-fold contraction is simply called a contraction. The result has a special 
 name:
-\begin{definition}
+\begin{definition}\label{def:trace}
   Contraction of tensor $\AA$ in one index pair is called \textit{trace} of $\AA$ in that pair:
   $$
     \trace \AA = \AAA[n-2]{\alpha_1\alpha_1\alpha_3\ldots\alpha_n}.
@@ -198,7 +214,7 @@ the tensor does not depend on the order of indices, it is traceless in all index
 \end{definition}
 
 We can make any tensor of rank $n$ totally symmetric by applying the symmetrization operator $\Sym{\cdot}$:
-\begin{definition}
+\begin{definition}\label{def:symmetrization}
   $\widetilde{\mathbb{A}}^{(n)} = \Sym\AA$ is a totally symmetric tensor with components
   $$
     \widetilde A^{(n)}_{\alpha_1\ldots\alpha_n} = \frac{1}{n!}\ \; \sum_{\mathclap{\perm{\alpha_1\ldots\alpha_n}}}\ \;\AAA{\alpha_1\ldots\alpha_n}.

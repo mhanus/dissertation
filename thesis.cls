@@ -93,6 +93,9 @@
 
 
 \usepackage{textcomp}
+%\usepackage[parfill]{parskip}
+%\setlength{\parindent}{15pt}
+
 
 
 %:-------------------------- Theorems ---------------------------------------
@@ -102,6 +105,7 @@
 \newtheorem{lemma}{Lemma}
 \newtheorem*{corollary*}{Corollary}
 \newtheorem{corollary}{Corollary}
+\newtheorem{problem}{Problem}
 
 \theoremstyle{definition}
 \newtheorem{definition}{Definition}
