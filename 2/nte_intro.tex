@@ -531,7 +531,7 @@ in the subcritical state). Notice that because angular dependence of $\kappa$ is
 collision angle ($\bomega\cdot\bomega'$), assumptions (c) and (d) really represent different assumptions about just the energy
 transfer in collisions. 
 
-\subsubsection{$\Lp(X)$ setting}\label{sec:L2}
+\subsubsection{$\Lp[2](X)$ setting and second-order forms of NTE}\label{sec:L2}
 In general $\Lp(X)$ spaces with $1 < p < \infty$, Dautray and Lions outline the proof based on the same ideas as those 
 used in the $\Lp[1](X)$ case (theory of monotone operators), utilizing assumptions (a-d) of Thm. \ref{thm1}.  The case
 $p = 2$ is particularly important\footnote{even though it does not lead to a direct physical interpretation as  the
@@ -886,7 +886,7 @@ apply the same rotation (reflection) on the solution corresponding to the origin
 only rotations but any argument below and in the following chapter holds also for reflections. We will use the
 following definition to make this statement precise.
  
-\begin{definition}
+\begin{definition}\label{def:rotinv}
 We will say that an
 operator equation
 \begin{equation}\label{eq:op1} 
@@ -925,19 +925,28 @@ Using definitions from the previous subsections, let us write eq. \eqref{eq1} in
 	T\psi \equiv (\op{L} - \op{K})\psi = \op{q},
 \end{equation} 
 where we now suppose generally $\op{T}:V\to V$ for some suitable function space $V$ in which we have assured existence
-of unique solution of \eqref{eq1op} (see \sref{sec:fixed-source} for examples). Then it is not difficult to see that
-\begin{equation}\label{eq:commut_NTE}
-	\genop{R}T = T\genop{R}
-\end{equation}
-(if we also consider $\genop{R}$ as an operator from $V$ to itself),
-provided that the coefficient functions $\sigma$ and $\kappa$ are also invariant under the action of $\genop{R}$ \footnote{
-indeed, because $A$ is represented by a dot product of two vectors and $\Sigma_t$ is rotation invariant under these
-assumptions, $L$ is rotation invariant as well, and rotation invariance of $K$ follows from a substitution $\genop{R}\bomega' = \bomega''$ in the
-angular integral (with unit Jacobian); this has already been proven as Theorem 3 in \cite{Zweifel}.}.
-This will be the case, e.g., in an isotropic homogeneous region where  $\sigma_t(\br) \equiv \sigma_t$ and invariance of
-$\kappa$ follows from \eqref{eq:iso}. If we also assume that the sources (and
-boundary conditions) are  rotationally invariant ($q = \genop{R}q$), the true solution of NTE is necessarily
-spherically symmetric or, in other words, the rotated solution satisfies the original equation: 
+of unique solution of \eqref{eq1op} for $q \in V$ (see \sref{sec:fixed-source} for examples). Let us also consider 
+$\genop{R}$ as an operator from $V$ into itself. Then the following claim (by Zweifel and Case, \cite[Theorem
+3]{Zweifel}) is valid.
+\begin{theorem}\label{thm:rotinv}
+	If the coefficient functions $\sigma$ and $\kappa$ are invariant under the action of $\genop{R}$, then also
+	\begin{equation}\label{eq:commut_NTE}
+		\genop{R}T = T\genop{R}.
+	\end{equation}
+\end{theorem}
+\begin{proof}
+Because $A$ is represented by a dot product of two vectors and $\Sigma_t$ is rotation invariant by
+assumption, $L$ is rotation invariant as well. Commutativity of $K$ and $\genop{R}$ follows again from rotational
+invariance of dot product (i.e., \linebreak$\mat{R}^T\bomega\cdot\bomega' = \bomega\cdot\mat{R}\bomega'$),
+substitution $\mat{R}\bomega' = \bomega''$ in the angular integral and the fact that Jacobian determinant of this
+orthogonal transformation is unity.
+\end{proof}
+
+Assumptions of the theorem will be satisfied, e.g., in an isotropic homogeneous region where  $\sigma_t(\br,E) \equiv
+\sigma_t(E))$ and invariance of $\kappa$ follows from \eqref{eq:iso}. If we also assume that the sources (and
+boundary conditions) are  rotationally invariant ($q = \genop{R}q$), then the true solution of NTE is (by Lemma
+\ref{lemma1}) necessarily spherically symmetric or, in other words, the rotated solution satisfies the original
+equation:
 $$
 T\psi = q \quad \Rightarrow \quad T\genop{R}\psi = q.
 $$

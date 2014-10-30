@@ -25,16 +25,19 @@ system Mathematica 9.0).
 It is more convenient for this analysis to consider the steady-state $\PN$ equations \eqref{eq:PN_ss_app} as a limit
 of the time-dependent equations
 \begin{equation}\label{eq:PN_ss_app}
-	\PihPN \left(\pd{}{t} + A + C\right) \PiPN\Phi = \PihPN q,
+	\PihPN \left(\pd{}{t} + A + \Sigma_t - K\right) \PiPN\Phi = \PihPN q,
 \end{equation}
 in which $\pd{\psi}{t} \to 0$, for time-independent boundary conditions and sources
 \linebreak[4]\mbox{$q(\cdot,\cdot,t) = \text{const}$}.
 Then, the advection matrices describe advection of neutrons introduced into the system by the boundary and internal
-sources, which is in the steady-state limit perfectly balanced by their capture.
+sources, which is in the steady-state limit perfectly balanced by their attenuation due to net effect of collisions of
+all types.
+
 $$
 \scriptsize
 \hspace*{-2cm}
-\mat{A}_{P_N}^x =
+\begin{aligned}
+\mat{A}_{P_N}^x &=
 \left[
 \begin{array}{cccccccccccccccc}
  0 & 0 & 0 & \frac{1}{\sqrt{3}} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
@@ -54,13 +57,7 @@ $$
  0 & 0 & 0 & 0 & 0 & 0 & 0 & \frac{1}{\sqrt{7}} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
  0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \sqrt{\frac{3}{14}} & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
 \end{array}
-\right]
-$$
-
-$$
-\scriptsize
-\hspace*{-2cm}
-\begin{aligned}
+\right]\\[5em]
 \mat{A}_{P_N}^y &=
 \left[
 \begin{array}{cccccccccccccccc}
@@ -81,8 +78,14 @@ $$
  0 & 0 & 0 & 0 & 0 & -\frac{1}{\sqrt{7}} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
  0 & 0 & 0 & 0 & -\sqrt{\frac{3}{14}} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
 \end{array}
-\right]\\[.3em]
-\mat{A}_{P_N}^z &=
+\right]
+\end{aligned}
+$$
+\newpage
+$$
+\scriptsize
+\hspace*{-2cm}
+\mat{A}_{P_N}^z =
 \left[
 \begin{array}{cccccccccccccccc}
  0 & 0 & \frac{1}{\sqrt{3}} & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
@@ -103,7 +106,6 @@ $$
  0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
 \end{array}
 \right]
-\end{aligned}
 $$
 
 By computing the norms of matrices
@@ -157,7 +159,7 @@ $$
 $$
 and $\PN[3]$ advection matrix $\mat{A}_{P_3}^{\bn}$:
 $$
-\hspace*{-3.5cm}
+\hspace*{-2.5cm}
 \scriptsize
 \left[
 \begin{array}{cccc}

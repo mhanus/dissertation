@@ -6,13 +6,16 @@
 
 \chapter{The $\MCPN$ approximation}\label{chap:mcpn}
 
-In this chapter, we will construct an alternative to the $\PN$ approximation of angular dependence of the NTE. We will
-focus on the monoenergetic equation $T\psi - q = 0$ of the form
+In this chapter, we are going to construct an alternative form of the $\PN$ approximation that provides additional
+insight into the structure of the $\PN$ approximation. In particular, we will rigorously derive from this form
+the $\SPN[3]$ equations (by using a general approach that could be extended to higher order $\SPN$ equations). As in
+the exposition of the original $\PN$ method, we will focus on the monoenergetic equation $T\psi - q = 0$ of the form
 \begin{equation}\label{eq:MC-bte}
     \bomega\cdot\nabla\psi(\br,\bomega) + \sigma_t(\br)\psi(\br,\bomega) - \intA[']{\left[\sigma_s(\br,\bomega\cdot\bomega') + 
-    \frac{\nu\sigma_f(\br)}{4\pi}\right]\psi(\br,\bomega')} - q(\br,\bomega) = 0.
+    \frac{\nu\sigma_f(\br)}{4\pi}\right]\psi(\br,\bomega')} - q(\br,\bomega) = 0
 \end{equation}
-As in the $\PN$ case, we assume that \mbox{$\psi(\cdot,\bomega)\in\Lp[2](\Sphere)$}.
+and assume that \mbox{$\psi(\cdot,\bomega)\in\Lp[2](\Sphere)$} (we have split the collision kernel $\kappa$ into the
+scattering and fission part so that we can show how non-isotropic and isotropic terms are handled).
 % in the discussion below (even though the final derivation in Sec. \ref{sec:mcpn} actually requires only 
 % $\Lp[1](\Sphere)$ integrability)
 
@@ -21,13 +24,13 @@ We introduce some new notation in this chapter. The new rules added to the notat
 \cref{chap:nte-methods} are summarized in the following list.
 
 \begin{itemize}
-    \item Greek subscripts (as in $\AAA[]{\alpha})$ $\ldots$ indices of the Cartesian axes (with the
-    correspondence $\alpha = 1,2,3 \leftrightarrow x,y,z$)
-    \item $\AA$ $\ldots$ Cartesian tensor of rank $n$ (Def. \ref{def:tensor})
-  	\item $\AAA{\alpha_1\cdot\alpha_n}$ $\ldots$ Cartesian tensor $\AA$ in an indexed notation
-    \item $\underset{m}{\cdot}$ $\ldots$ $m$-fold contraction (generalizeation of inner product, see Def.
-    \ref{def:contraction})
-    \item $\Sym{\AA}$ $\ldots$ symetrization of tensor $\AA$ (Def. \ref{def:symmetrization})
+    \item Greek subscripts (as in $\AAA[1]{\alpha})$ $\ldots$ indices of the Cartesian axes (with the
+    correspondence $\alpha = 1,2,3 \leftrightarrow x,y,z$),
+    \item $\AA$ $\ldots$ Cartesian tensor of rank $n$ (Def. \ref{def:tensor} below),
+  	\item $\AAA{\alpha_1\cdots\alpha_n}$ $\ldots$ Cartesian tensor $\AA$ in an indexed notation,
+    \item $\underset{m}{\cdot}$ $\ldots$ $m$-fold contraction (generalization of inner product, Def.
+    \ref{def:contraction}),
+    \item $\Sym{\AA}$ $\ldots$ symmetrization of tensor $\AA$ (Def. \ref{def:symmetrization}),
     \item $\trace \AA$ $\ldots$ trace of tensor $\AA$ (Def. \ref{def:trace}).
 \end{itemize}
 

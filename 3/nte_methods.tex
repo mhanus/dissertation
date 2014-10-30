@@ -226,13 +226,17 @@ appendices).
 We will also interpret both methods as restrictions of the same continuous NTE onto appropriate 
 finite-dimensional subspaces of $\Hp[2](X)$. This is automatic in the case of the $\PN$ approximation (which is
 basically a Galerkin method in angular domain with globally supported continuous basis functions), but has (as far as
-the author knows) not been explicitely done for the $\SN$ approximation. Apart from showing both methods in the same light, this approach also allows to use properties
-of the continuous transport operators to analyze the behavior of the approximate methods. We will illustrate it by demonstrating that the $\SN$ approximation doesn't 
+the author knows) not been explicitly done for the $\SN$ approximation. Apart from showing both methods in the same light, this approach also allows to use properties
+of the continuous transport operators to analyze the behavior of the approximate methods, as we will illustrate in
+\sref{sec:SI}.
+\comment{
+We will illustrate it by demonstrating that the $\SN$ approximation doesn't 
 preserve the rotational invariance property of the NTE characterized in \sref{sec:rotinv} while the $\PN$ approximation 
 does. We will work in the context of the original first-order form of NTE, but this approach applies also when the
 $\SN$ (or $\PN$) methods are used to approximate angular dependence in the second-order forms recalled in
 \sref{sec:L2} (leading to coercive and bounded operator equations in the approximation subspaces). \comment{has also a
 more useful consequence -- it allows to use properties of the continuous transport operators to analyze the behavior of the approximate methods. We will demonstrate it on the convergence analysis of the \textit{scattering source iteration}, a simple yet important method for practical use of the $\SN$ method\footnote{and remark that the same approach could be performed for the general multigroup source iteration described in previous section}. As a possible direction for future research, this approach could also be used to design new preconditioners, as outlined in a recent paper \cite{Kirby}.
+}
 }
 \subsection{The $\SN$ method}\label{sec:1-SN}
 The standard derivation of the $\SN$ method uses the collocation approach in which a set of directions
@@ -285,7 +289,7 @@ $$
 $$
 and
 \begin{equation}\label{eq:SNK}
-	\left[\mathbf{K}_{S_N}\right]_{m,n} = w_m \kappa(\cdot,\bomega_m\cdot\bomega_n),\quad
+	\left[\mathbf{K}_{S_N}\right]_{m,n} = w_n \kappa(\cdot,\bomega_m\cdot\bomega_n),\quad
 	\bomega_n,\bomega_m\in \omega,\ w_m\in \mathcal{W},\ 1 \leq m,n \leq M.
 \end{equation}
 Boundary conditions \eqref{eq:nte2} are easily taken into account as long as the ordinates set $\omega$ contains
@@ -315,12 +319,14 @@ Equation \eqref{eq:sn1} represents a system of advection-reaction equations, eac
 the matrices $\mat{A}_{S_N}^x, \mat{A}_{S_N}^y, \mat{A}_{S_N}^z$. We can see that it has a form of a decoupled
 hyperbolic system, having $M$ unique plane-wave solutions propagating in directions $\{\bomega_m\}_{\idxset{M}}$. A
 plane-wave propagating in direction $\mat{R}^T\bomega_m$, where $\mat{R}$ is the matrix representation of rotation
-$\mathcal{R}\in \mathrm{SO}(3)$, will be a solution to the $\SN$ equations only if $\mat{R}^T\bomega_m \in \omega$. From
-this observation, we can already see that the fundamental property of rotational invariance (in case of rotationally
-invariant input data, see \sref{sec:rotinv}) is lost when approximating the continuous NTE by a finite $\SN$ system.
+$\mathcal{R}\in \mathrm{SO}(3)$, will be a solution to the $\SN$ equations only if $\mat{R}^T\bomega_m \in \omega$. We
+can therefore see that the fundamental property of rotational invariance (in case of rotationally invariant input data,
+see \sref{sec:rotinv}) is lost when approximating the continuous NTE by a finite $\SN$ system.
+\comment{
 After interpreting the $\SN$ approximation as a projection of the continuous NTE onto an $\SN$ subspace, we will see
 that this is a consequence of the form of the projection operator itself (and thus cannot be removed, for instance, by
 considering the second-order forms of the NTE as a basis for the $\SN$ approximation).
+}
 
 In practice, this undesirable property manifests itself in the form of so-called ``ray effects''. As a consequence of
 radiation propagating in a finite set of distinct directions, there will remain under-treated regions of the phase
@@ -350,18 +356,19 @@ gives the iteration
 for given initial approximation $\Psi_{(0)}$. We will return to the convergence properties of this iteration in
 \sref{sec:SI}
 
-\subsubsection{Projection form of the $\SN$ approximation}
-To provide a direct comparison with the $\PN$ approximation presented in the
-following section and a link to the continuous NTE, we will now formulate the $\SN$ method as a projection
-onto an appropriate approximation subspace.%
+\subsubsection{Operator form of the $\SN$ approximation}
+To study the relation of the $\SN$ approximation to the original continuous NTE, let us now express the $\SN$ system
+\eqref{eq:sn1} in terms of the operators $L$ and $K$ from \cref{chap:nte-review} and functions $\psi\in V$, $q\in V$,
+where $V$ can in general be some function space ensuring existence of
+unique solution of the NTE (see \sref{sec:fixed-source} for examples).
+%
 \comment{
 As motivated in \cref{chap:nte-review}, we would like to continue with approximating generalized solutions of the NTE, for which the
 classical view of the $\SN$ approximation relying on extracting pointwise values on the sphere is not appropriate. We
 can overcome this problem by formulating the $\SN$ method using a finite-volume approach on the sphere. 
 }
-To this end, let us consider an arbitrary $\SN$ approximation of a fixed source problem with homogeneous inflow boundary
-conditions, specified by the given set of ordinates $\omega = \{\bomega_m\}_{\idxset{M}}$ and a corresponding set of
-quadrature weights \mbox{$\mathcal{W} = \{w_m\}_{\idxset{M}}$}. 
+To this end, let us consider an arbitrary $\SN$ approximation of Problem \ref{prb:1}, specified by the given set of
+ordinates $\omega = \{\bomega_m\}_{\idxset{M}}$ and a corresponding set of quadrature weights \mbox{$\mathcal{W} = \{w_m\}_{\idxset{M}}$}. 
 For each $\bomega_m\in\omega$, we define a patch $\Delta\bomega_m$ on the sphere with (spherical) area $w_m$ (see
 \fref{fig:element} where the patch would correspond to the shaded area and $\Delta\bomega_m = \abs{\d{\bomega}}$). This
 construction requires 
@@ -370,9 +377,7 @@ $$
 $$
 which is satisfied by most discrete ordinates quadrature sets in use\comment{\footnote{although we note that one of the
 first and most widely used quadrature sets, Carlson's \textit{level-symmetric} set, allows negative weights when $N > 20$  (e.g.
-\cite[Sec. 8.5.1]{Cacuci1})}}. Let $f\in V$, where $V$ can in general be some function space ensuring existence of
-unique solution of the NTE (see \sref{sec:fixed-source} for examples). To facilitate the comparison with the $\PN$ method, we
-will specifically consider the Hilbert space $V = \Lp[2](X)$. 
+\cite[Sec. 8.5.1]{Cacuci1})}}. 
 \comment{
 and denote by $V_0$ the definition domain of the transport operator with
 vanishing inflow boundary conditions:
@@ -381,9 +386,10 @@ $$
 $$
 }  
 Taking into account the definition of the $\SN$ unknowns by \eqref{eq:sn_vars}, let us define a mapping that
-transforms the function $f$ to a spatial vector function $\mathrm{F}$ as:
+transforms a function $u\in V$ to a spatial vector function $\mathrm{F}$ as:
  \begin{equation}\label{eq:map_SN_inv}
-	\PihSN f = \col\left\{f(\cdot,\bomega_m)\right\}_{\idxset{M}}. %\equiv \col\left\{f_m(\cdot) \right\}_{\idxset{M}}.
+	\mathrm{F}(\br) = \bigl(\PihSN u)(\br) = \col\left\{u(\br,\bomega_m)\right\}_{\idxset{M}}. %\equiv
+	% \col\left\{f_m \right\}_{\idxset{M}}.
 	\footnote{We implicitly include in this mapping the orthogonal projection onto a dense subspace of $V$
 comprising functions that are (as functions of $\bomega$) continuous at $\bomega_m\in\omega$ (this is a neccessary
 technical step circumventing the problem of pointwise evaluation of functions $f(\cdot,\bomega) \in \Lp(\Sphere)$).} 
@@ -395,9 +401,9 @@ subspace $D\in \Lp[\Sphere]$ such that for each equivalence class $[f]\in D$, th
 Corresponding to it is the mapping which produces a function in $V$ from a vector function 
 \mbox{$\mathrm{F}(\br) = \colset{f_m(\br)}{\idxset{M}}$}:
 \begin{equation}\label{eq:map_SN}
-\PiSN: \mathrm{F} \mapsto f\in V_{S_N},\quad
-\bigl(\PiSN \mathrm{F}\bigr)(\br,\bomega) = \sum_{m=1}^M f_m(\br)\imath_m(\bomega),\quad
-\left.\bigl(\PiSN\mathrm{F}\bigr)\right\vert_{\pX[-]} = 0
+\PiSN: \mathrm{F} \mapsto u\in V_{S_N},\quad
+u(\br,\bomega) = \sum_{m=1}^M f_m(\br)\imath_m(\bomega),\quad
+udc\0vert_{\pX[-]} = 0
 \end{equation}
 where $\imath$ is the indicator function of the patch $\Delta\bomega_n$:
 \begin{equation}\label{eq:indicator}
@@ -405,9 +411,9 @@ where $\imath$ is the indicator function of the patch $\Delta\bomega_n$:
 \end{equation}
 Here we introduced $V_{S_N}\subset\Dom{L-K} \subset V$ as a subspace of a space of functions that are (as functions of
 $\bomega$) piecewise constant on $\Sphere$ and satisfy the homogeneous inflow boundary condition\footnote{Note that an
-analogous mapping could be defined for non-homogeneous boundary conditions and used in a lifting argument of type \eqref{eq:lifting} to convert
-a nonhomogeneous boundary value problem to the one analyzed here.}. With these two
-mappings, we can now rewrite the $\SN$ system \eqref{eq:sn1} in terms of the transport operators from eq.
+analogous mapping could be defined for non-homogeneous boundary conditions and used in a lifting argument
+as in Remark \ref{rem:lifting} to convert a nonhomogeneous boundary value problem to the one analyzed here.}. With
+these two mappings, we can now rewrite the $\SN$ system \eqref{eq:sn1} in terms of the transport operators from eq.
 \eqref{eq1op}:
 \begin{equation}\label{eq:sn_op}
 	\PihSN (\op{L} - \op{K}) \PiSN \Psi = \mathrm{Q}_{S_N},
@@ -418,10 +424,10 @@ or, incorporating the definition of the $\SN$ variables \eqref{eq:sn_vars} by op
 \end{equation} 
 with $\psi, q \in V$. Finally, we can see from \eqref{eq:map_SN_inv} and \eqref{eq:map_SN} that when $\PihSN$ is
 restricted to $V_{S_N}$, $\PiSN\PihSN = I_{S_N}$ (identity on $V_{S_N}$) and thus the linear operator
-$$
+\begin{equation}\label{eq:proj_sn}
 	\Projop[S_N] := \PiSN\PihSN,
-$$
-self-adjoint on $V$, is an orthogonal projection $V\to V_{S_N}$. The $\SN$ system \eqref{eq:sn1} can
+\end{equation}
+is a projection $V\to V_{S_N}$. The $\SN$ system \eqref{eq:sn1} can
 therefore be written as
 \begin{equation}\label{eq:sn_op3}
 	\Projop[S_N] (\op{L} - \op{K})\Projop[S_N] \psi = \Projop[S_N] q,
@@ -429,61 +435,92 @@ therefore be written as
 that is, as a restriction of the original continuous NTE onto $V_{S_N}$. \comment{(which, for the case $V = \Hp(X)$,
 we will write as $\Hp_{S_N}(X)$)}
 
+\myparagraph{Remarks}
 It is worth noticing that even though the systems \eqref{eq:sn_op}
-and \eqref{eq:sn1} (with \eqref{eq:sn_vars} and \eqref{eq:sn_vecs}) are equivalent, the interpretation of the
-solution of \eqref{eq:sn_op} is different from the point-wise approximation \eqref{eq:sn_approx}. The interpretation as
-a piecewise constant (w.r.t. to $\bomega$) function over the ordinate patches is more natural, however, as it for
-example directly leads to the scalar flux definition \eqref{eq:scalar_flux_sn}.
+and \eqref{eq:sn1} (with \eqref{eq:sn_vars} and \eqref{eq:sn_vecs}) are equivalent (in the sense that the solution
+vector $\Psi$ of one system satisfies also the other provided the same source term $q$ has been used), the
+interpretation of the solution of \eqref{eq:sn_op} is different from the point-wise approximation \eqref{eq:sn_approx}. The interpretation as a piecewise constant (w.r.t. to $\bomega$) function over the ordinate patches is more natural, however, as it for example directly leads to the scalar flux definition \eqref{eq:scalar_flux_sn}.
  
 The $\SN$ method is sometimes described as an ``discretization by by delta functions'' \cite[p.133]{Chang}.
 We remark that by using this kind of approximation to define the operators $\PihSN$ and $\PiSN$ (and supposing we
 could overcome all the technical issues associated with a rigorous use of Dirac delta distribution), we would not be able to
 put \eqref{eq:sn1} into an equivalent form involving only the original continuous operators as in \eqref{eq:sn_op}
-because of the collision integral. It is also illustrative to write the weak form of eq. \eqref{eq:sn_op3}.  
-Using symmetry of $\Projop[S_N]$, we obtain 
+because of the collision integral. 
+
+As a final remark, we would like to point out that $\PiSN$ is not an orthogonal projection in $V = \Lp[2](X)$ as it is
+not symmetric on whole $V = \Dom \PiSN$. Therefore, the standard $\SN$ approximation does not neccessarily produce the best possible
+approximation of $\psi$ by piecewise constant functions on $\Sphere$ spanned by $\{\imath_m\}_M$. In order to
+obtain an orthogonal projection, the mapping $\PihSN$ would have to be changed to 
+$$
+	\widehat{\widehat{\mathcal{I}}}_{S_N} f = \col\left\{\frac{1}{\Delta\bomega_m}\int_{\Delta\bomega_m}f(\cdot,\bomega)
+	\imath_m(\bomega)\,\d{\bomega}\right\}_{\idxset{M}}.
+$$
+System \eqref{eq:sn_op} with this operator instead of $\PihSN$ could be put into same form as the $\SN$ system
+\eqref{eq:sn1}, but it would not be equivalent. To see this, define 
+$$
+	\widehat\Proj_{S_N} = \PiSN\widehat{\widehat{\mathcal{I}}}_{S_N},\quad \psi_n =
+	\bigl[\widehat{\widehat{\mathcal{I}}}_{S_N}\psi\bigr]_n, 
+$$ 
+split $L = A + \Sigma_t$ and notice that
+$$
+\begin{aligned}
+	\widehat\Proj_{S_N} A \widehat\Proj_{S_N} \psi(\br,\bomega) &= \sum_{n=1}^M  
+	\left[\frac{1}{\Delta\bomega_n}\int_{\Delta\bomega_n}\bomega\cdot\nabla \sum_{m=1}^M
+	\psi_m(\br) \imath_m(\bomega)\imath_n(\bomega)\,\d{\bomega}\right] \imath_n(\bomega)\\
+	& = \sum_{n=1}^M  
+	\left[\frac{1}{\Delta\bomega_n}\int_{\Delta\bomega_n}\bomega\cdot\nabla 
+	\psi_n(\br) \imath_n(\bomega)\,\d{\bomega}\right] \imath_n(\bomega)\\
+	& = \sum_{n=1}^M \left(\widehat{\widehat{\mathcal{I}}}_{S_N}\bomega\right)  \cdot\nabla 
+	\psi_n(\br) \imath_n(\bomega);
+\end{aligned}
+$$
+that is, the directional derivative has to be considered with respect to the \textit{average ordinate vector}
+$\bomega_n = \widehat{\widehat{\mathcal{I}}}_{S_N}\bomega$. Nevertheless, such a construction corresponds to another
+widely used numerical approximation translated to angular domain.  Writing the weak form of \eqref{eq:sn_op3} with
+$\Projop[\SN]$ replaced by $\widehat\Proj_{S_N}$ and using symmetry of this modified projection operator, we get
 \begin{equation}\label{eq:SN_weak}
-	\langle (\op{L}  - \op{K})\Projop[S_N] \psi, \Projop[S_N] \varphi \rangle = \langle q, \Projop[S_N]
-	\varphi \rangle\quad \forall \varphi\in V. 
+	\left((\op{L}  - \op{K})\widehat\Proj_{S_N} \psi, \widehat\Proj_{S_N} \varphi \right)_{\Lp[2](X)} = \left( q,
+	\widehat\Proj_{S_N} \varphi \right)_{\Lp[2](X)}\quad \forall \varphi\in \Lp[2](X). 
 \end{equation}
-This is a system that we would obtain if we approximated the directional dependence of the NTE by the
-well-known discontinuous Galerkin (DG) method \index{DG|see{discontinuous Galerkin method}} with piecewise constant shape functions
-generating $V_{S_N} = \Rng \Projop[S_N]$ (and imposing boundary conditions in a strong sense, i.e. by restricting the
-approximation space). Note that in Cartesian coordinate system, there are no derivatives with respect to $\bomega$ in
-the NTE, so that no jump terms arise at patch boundaries.
+This is a system obtained by applying in angular domain the discontinuous Galerkin (DG) method
+\index{DG|see{discontinuous Galerkin method}} with piecewise constant shape functions generating \linebreak
+\mbox{$\Rng \widehat\Proj_{S_N}\ (= \Rng \Projop[S_N] = V_{S_N})$}.  %Note that in Cartesian coordinate system,
+% there are no derivatives with respect to $\bomega$ in the NTE, so that no jump terms arise at patch boundaries.
  
 \subsubsection{Convergence of source iteration} \label{sec:SI}
 Having established the connection between the fully continuous NTE in a Hilbert space $V$ and its $\SN$
 approximation in $V_{S_N} \subset V$, we can now use properties of operators $L$ and $K$ to
 investigate convergence of the source iteration in the discrete ordinates approximation. To this end, let us first write
-\eqref{eq:SI} as an iteration on $V$:
-$$ 
+\eqref{eq:SI} as an iteration on~$V$:
+\begin{equation}\label{eq:SISN}
 	\Projop[S_N] \op{L} \Projop[S_N] \psi_{(i+1)} = \Projop[S_N] \op{K} \Projop[S_N] \psi_{(i)} +  \Projop[S_N] q,\quad i =
 	0,1,\ldots 
-$$
-(assuming given $\psi_{(0)} \in V$). The corresponding weak form is 
+\end{equation}
+(assuming given $\psi_{(0)} \in V$).
+\comment{ The corresponding weak form is 
 \begin{equation}\label{eq:SISN}
 	\langle \op{L} \Projop[S_N] \psi_{(i+1)}, \Projop[S_N] \varphi \rangle = \langle \op{K}\Projop[S_N] \psi_{(i)} + q,
 	\Projop[S_N] \varphi \rangle\quad \forall \varphi\in V,\quad i = 0,1,\ldots. 
 \end{equation}
+}
 Again, this is just a restriction to $V_{S_N}$ of the following iteration in $V$:
 \begin{equation}\label{eq:SIhilbert}
-	\langle \op{L} \psi_{(i+1)}, \varphi \rangle = \langle \op{K} \psi_{(i)} + q, \varphi \rangle \quad \forall
-	\varphi\in V \quad i = 0,1,\ldots.
+	\op{L} \psi_{(i+1)} = \op{K} \psi_{(i)} + q  \quad i = 0,1,\ldots.
 \end{equation}
 
-Egger and Schlottbom \cite{Egger} used Banach fixed point theory to the iteration \eqref{eq:SIhilbert} to show that the 
+Egger and Schlottbom \cite{Egger} used Banach fixed point theory and the iteration \eqref{eq:SIhilbert} to show that the 
 mapping $$ \mathcal{T}_q : u \mapsto L^{-1}K u + \L^{-1} q, \quad q \in \Lp(X)$$ is contractive for all $1
 \leq p \leq \infty$ provided that conditions equivalent to those of Theorem \ref{thm1} (i.e., subcriticality
-conditions) hold. With this result, the authors show well-posedness of Problem \ref{prb:1} (existence of
+conditions) hold. With this result, the authors showed well-posedness of Problem \ref{prb:1} (existence of
 unique solution with continuous dependence on input data). 
-They also exhibit the contraction factor (in our notation where $c$ and $d$ have been
-defined in \eqref{eq:c} and \eqref{eq:d}, respectively) 
+They also exhibited the contraction factor, which in our notation with $c$ and $d$ from \eqref{eq:c} and
+\eqref{eq:d}, respectively, can be written as:
 \begin{equation}\label{eq:contraction_factor}
 	\rho_p = 1 - e^{-C_p}, \quad C_p = \frac{1}{p}\norm[{\Lp[\infty](X)}]{c\sigma_t\ell} +
 	\frac{p-1}{p}\norm[{\Lp[\infty](X)}]{d\sigma_t\ell}, \quad 1 \leq p \leq \infty
 \end{equation}
 where $\ell = \ell(\br,\bomega)$ is the length of the characteristic line segment passing through $\br$ in the
-direction $\bomega$, which we assume to be bounded and such that
+direction $\bomega$. We assume $\ell$ to be bounded a.e. in $X$ and such that
 $$
 	\forall \bomega \in \Sphere\ \exists s_0:\ \, 0 < s_0 < \ell(\br,\bomega)\ \mbox{ and }\ \br_0 = \br - s_0 \bomega \in
 	\pX[-]
@@ -493,11 +530,11 @@ As the contraction property
 $$
 \exists \rho \in [0, 1): \norm[V]{\mathcal{T}_q\, u_1 - \mathcal{T}_q\, u_2} \leq \rho \norm[V]{u_1 - u_2}\quad
 \forall u_1,u_2 \in V $$
-holds also for any $u_1,u_2\in V_{S_N} \subset V$, we immediately get the convergence result for the $\SN$ source
-iteration \eqref{eq:SISN}. 
+holds also for any $u_1,u_2\in V_{S_N} \subset V$, we immediately get from the contraction principle (e.g., \cite[Thm.
+2.3.1]{DrabekNFA}) the convergence result for the $\SN$ source iteration. 
 \begin{theorem}\label{thm:3}
 	For any $\psi_{(0)} \in V_{S_N}$, the sequence of iterates $\{\psi_{(i)}\}_{i=1}^{\infty}$ of the iteration
-	\eqref{eq:SISN} converges to the unique solution $\psi^*$ of equation \eqref{eq:SN_weak} with $q \in V(X)$. 
+	\eqref{eq:SISN} converges to the unique solution $\psi^*$ of equation \eqref{eq:sn_op3} with $q \in V(X)$. 
 	Moreover, 
 	$$
 		\norm{\psi_{(i)} - \psi^*} \leq \frac{\rho^{i}}{1-\rho} \norm{\psi_{(1)} - \psi_{(0)}},\quad
@@ -542,7 +579,9 @@ through the domain for a long time until they get absorbed (note that if we assu
 \eqref{eq:scattering_ratio} and \eqref{eq:st}). Such conditions
 are referred to as \textit{diffusive conditions}. By classical asymptotic analysis (see e.g.
 \cite{Larsen1} or the overview \cite{AdamsIdea} and references therein), the solution of the diffusion approximation (discussed
-later in \sref{sec:dif}) tends to the solution of the NTE under such conditions. More precisely, 
+later in \sref{sec:dif}) tends to the solution of the NTE under such conditions. 
+
+More precisely, 
 ``diffusivity'' of the medium is characterized by a small parameter $\varepsilon \ll 1$ such that $\varepsilon\to 0$ 
 reflects the properties described above. The parameter is also defined in such a way that when the terms of the NTE are 
 scaled by $\varepsilon$ and $\varepsilon \to 0$, the diffusion equation \eqref{eq:dif} is obtained up to terms of
@@ -551,7 +590,71 @@ order $\Oh(\varepsilon^3)$. Hence, in cases when the source iteration converges 
 acceleration of SI}. For more details, we refer to \cite[Chap. 1]{Azmy1} or \cite[Sec. III]{Adams} (where also
 convergence characteristics of the discrete ordinates source iteration similar to Thm. \ref{thm:3} were obtained for
 homogeneous infinite medium by means of Fourier analysis).
+\clearpage
+\comment{
+\subsubsection{}
+Using the operator form of the $\SN$ equations, we can also directly verify that $\SN$ equations are not rotationally
+invariant in the sense of Definition \ref{def:rotinv} in cases when the original NTE is.
 
+\begin{theorem*}\label{thm:commut_NTE}
+Let $T$ be the transport operator defined in \sref{sec:fixed-source} such that the assumptions of Theorem
+\ref{thm:rotinv} are satisfied.% $RL = LR$ for all $R\in\mathrm{SO}(3)$. 
+Then the corresponding $\SN$ operator
+\begin{equation}\label{eq:sn_op_app}
+	\Projop[S_N]\op{T}\Projop[S_N]
+\end{equation}
+(with $\Projop[S_N]$ defined by \eqref{eq:proj_sn}, \eqref{eq:map_SN}, \eqref{eq:map_SN_inv} and particular
+ordinates and quadrature sets \mbox{$\omega = \{\bomega_n\}_{\idxset{M}}$, $\mathcal{W} = \{w_n\}_{\idxset{M}}$}
+defining the patch structure $\{\Delta\bomega_m, \imath_m\}_M$) satisfies 
+$$
+\genop{R}\Projop[S_N]\op{T}\Projop[S_N] = \Projop[S_N]\op{T}\Projop[S_N]\genop{R}\quad \forall
+\genop{R}\in\mathrm{SO}(3) $$
+if and only if $M \to \infty$.
+\end{theorem*}
+\begin{proof}
+Because of the commutativity of $T$ and $\genop{R}$, it suffices to show that $\Projop[S_N]$ commutes
+with $\genop{R}$, that is 
+\begin{equation}\label{eq:thm1_point}
+	\genop{R} \PiSN \PihSN \psi = \PiSN \PihSN \genop{R} \psi\quad  \forall \psi \in V, 
+\end{equation}
+if and only if $M = \infty$.%\\[.2em] 
+
+As in \sref{sec:opsn}, we will suppress the spatial dependence as the $\SN$ approximation concerns only the angular
+dependence. For any $\psi\in V$, we have
+\begin{equation*}
+	\PihSN \genop{R}\psi(\bomega) = \PihSN \psi(\mat{R}^T\bomega) =
+	\colset{\psi(\mat{R}^T\bomega_m)}{\idxset{M}}.
+\end{equation*}
+Applying $\PiSN$ thus yields a function $f_\psi \in V_{S_N}$ such that
+\begin{equation}\label{eq:thm1_f}
+f_\psi(\bomega) = \PiSN\PihSN \genop{R}\psi(\bomega) = \sum_{m=1}^M 
+\psi(\mat{R}^T\bomega_m)\imath_m(\bomega).
+\end{equation}
+On the other hand, since 
+$$
+	\PiSN\PihSN\psi(\bomega) = \sum_{m=1}^M 
+\psi(\bomega_m)\imath_m(\bomega),
+$$
+the rotated function $g_\psi(\bomega) = \genop{R}\PiSN\PihSN\psi(\bomega)$ is given by
+\begin{equation}\label{eq:thm1_g}
+g_\psi(\bomega) = \PiSN\PihSN\psi(\mat{R}^T\bomega) = \sum_{m=1}^M \psi(\bomega_m)\imath_m(\mat{R}^T\bomega)
+\end{equation}
+In the limit $M = \infty$, there is for each ordinate $\bomega_m$ a corresponding ordinate $\bomega_n$ such that
+$$
+	\bomega_m = \mat{R}^T \bomega_n,\quad \mbox{and}\quad \imath_m(\mat{R}^T\bomega) = \imath_n(\bomega)
+$$ 
+for any rotation matrix $\mat{R}$, so that both sums in \eqref{eq:thm1_g} and \eqref{eq:thm1_f} are equal.
+
+On the contrary, if $M$ is finite, then also the patch areas are non-infinitesimal and there exists a rotation
+$\mat{R}$ such that 
+$$
+	\imath_m(\mat{R}^T\bomega) = \imath_m(\bomega)\quad \forall 1 \leq m \leq M.
+$$
+Hence the two sums will be equal only if $\psi = \psi(\bomega)$ is constant on each patch.
+
+In order for this equality to hold true for any $\psi \in V$ (and hence for \eqref{eq:thm1_point} to hold true), the
+condition \eqref{eq:thm1_f} is also necessary.
+\end{proof}
 
 \comment{
 Writing the iteration in the form
@@ -562,18 +665,21 @@ we can see that propert It can be shown by Fourier analysis that
 in an infinite homogeneous medium, the iteration \eqref{eq:SI} suppresses those Fourier modes with wavelengths  see also Remark \ref{rem:SI}).
 \cite[Chap. 1]{Azmy1}, or \cite[Sec. II.A]{Adams})
 }
+}
 
-
+\comment{
 To summarize this subsection, we have shown that the traditional $\SN$ method that the weak form
 of the $\SN$ approximation corresponds to the discontinuous Galerkin approximation in the angular domain. The $\PN$ method represents the continuous Galerkin approach.
-
+}
 \subsection{The $\PN$ method}\label{sec:PN}
 
-The system of $\PN$ equations has been originally derived using the weighted residuals method in the angular domain,
-whereby the angular flux is expanded into infinite series of functions of $\bomega$ that span a
-complete basis on the unit sphere, the continuous neutron transport equation \eqref{eq1} is multiplied by each member of
+Instead of the collocation approach, the system of $\PN$ equations have been originally derived using the weighted
+residuals method in the angular domain. That is, the angular flux is expanded into infinite series of functions of
+$\bomega$ that span a complete basis on the unit sphere, the continuous neutron transport equation \eqref{eq1} is multiplied by each member of
 the basis in turn and integrated over the sphere. The properties of the basis functions are then used to derive
-equations for the expansion coefficients. Only a finite number of expansion terms is considered to allow practical computation.
+equations for the expansion coefficients. 
+
+Only a finite number of expansion terms is considered to allow practical computation.
 Usually, the expansion is truncated to a finite length of $K = K(N)$ terms\footnote{The length of the expansion $K$
 should not be confused with the operator $K$ introduced in the previous section; it will be always clear from context 
 which meaning the letter $K$ currently has.} by setting all expansion coefficients with higher index to 0 (although there exist alternative closure methods that may have favorable properties in certain situations, see e.g.
@@ -589,19 +695,16 @@ square-integrable functions on the sphere $\Lp[2](\Sphere)$, equipped with the i
 We will therefore assume \mbox{$\psi(\cdot,\bomega)\in\Lp[2](\Sphere)$} (as is the case, e.g., when 
 $\psi\in\Hp[2](X)$).
 
-Note that \eqref{eq1.1} has the same form as the approximation 
+Note that if we set $K = M$ and $\{\varphi_k\}_K = \{\imath_k\}_K$, \eqref{eq1.1} has the same form as the approximation 
 $$
 	\psi \approx \PiSN\PihSN\psi = \Projop[S_N]{\psi},
 $$
-where $K = M$ and $\phi_k = \imath_k$, $1 \leq k \leq K$ have been used (as can be seen from relations
-\eqrefs{eq:map_SN_inv}{eq:indicator}). The system of spherical basis functions that were used in the original $\PN$
-method is the system of \textit{spherical harmonic functions} (shortly \textit{spherical harmonics}, App. \ref{app:SH}).
+used in the $\SN$ approximation (as can be seen from relations \eqrefs{eq:map_SN_inv}{eq:indicator}). On the
+contrary, the system of spherical basis functions $\{\varphi_k\}_K$ that were used in the original $\PN$ method is the
+system of \textit{spherical harmonic functions} (shortly \textit{spherical harmonics}, App. \ref{app:SH}).
 We will consider here the real system (whose elements are sometimes called \textit{tesseral spherical harmoncs}) as it is more convenient
 for practical purposes than the equivalent complex system (which appears to be more traditional in nuclear engineering 
-literature, e.g. \cite[Sec. 9.7]{Stacey1}, \cite[Sec. 14.4]{Reuss1}), \cite[Chap. V]{Stammler}). Spherical harmonics
-form a complete orthonormal system on $\Lp[2](\Sphere)$ with respect to the inner product \eqref{eq:s2_ip} (or its Hermitian 
-variant when complex spherical harmonics are used) and simplify the algebraic manipulations needed to arrive at the 
-conditions for coefficients $\phi_k$ (called \textit{angular moments}). 
+literature, e.g. \cite[Sec. 9.7]{Stacey1}, \cite[Sec. 14.4]{Reuss1}), \cite[Chap. V]{Stammler}). 
 
 In one dimension, spherical harmonics reduce to 
 Legendre polynomials and $ K(N) = N$.
@@ -617,8 +720,15 @@ The approximation \eqref{eq1.1} is usually rewritten as a double sum
 	\suma[n]{0}{N}\suma[m]{-n}{n}\angmom{n}{m}(\br)\Y{n}{m}(\bomega)
 \end{equation}
 where $\Y{n}{m}(\bomega)$ is the spherical harmonic function of degree $n$ and order $m$
-and in the first term on right, we consider the single index $k$ ($1 \leq k \leq  K$) that covers all the combinations of $n$ and $m$ ($0 \leq n \leq N$, $-n\leq m \leq n$) appearing in the second term. We finally arrive at a system of $ K$
-partial differential equations in spatial domain which is of comparable size as the system of $\SN$ equations and has the following form:
+and in the first term on right, we consider the single index $k$ ($1 \leq k \leq  K$) that covers all the comqbinations
+of $n$ and $m$ ($0 \leq n \leq N$, $-n\leq m \leq n$) appearing in the second term.
+
+Spherical harmonics form a complete orthonormal system on $\Lp[2](\Sphere)$ with respect to the inner product
+\eqref{eq:s2_ip} (or its Hermitian variant when complex spherical harmonics are used) and simplify the algebraic
+manipulations needed to arrive at the relations determining the coefficients $\phi_k$ (called \textit{angular moments}).
+These relations comprise a system of $ K$
+partial differential equations in spatial domain which is of comparable size as the system of $\SN$ equations and has 
+the following form:
 \begin{equation}\label{eq:pn1}
 	\mat{A}^x_{P_N}\,\pd{\Phi(\br)}{x} + \mat{A}^y_{P_N}\,\pd{\Phi(\br)}{y} + \mat{A}^z_{P_N}\,\pd{\Phi(\br)}{z} +
 	\bigl[\sigma_t(\br)\mat{I} - \mathbf{K}_{P_N}(\br)\bigr]\Phi(\br) = \mathrm{Q}_{P_N}(\br),
@@ -632,45 +742,57 @@ are, respectively, the vector functions of angular flux
 moments and angular source moments.
 The
 Galerkin procedure results in their special form
-\begin{equation}\label{eq:pn_angmom}
-	\phi_k = (\psi, \Y{k}{})_{\Lp[2](\Sphere)},\quad q_k = (q, \Y{k}{})_{\Lp[2](\Sphere)};
+\begin{equation}\label{eq:pn_vars}
+	\phi_k = \ipsl{\psi(\cdot,)}{\Y{k}{}},\quad q_k = \ipsl{q(\cdot,)}{\Y{k}{}},
 \end{equation}
-Using again the double index ($k = {}_n^m$) and the form of spherical harmonics with $n = 0,1$, we also obtain a direct
-correspondence of the first four moments and the physically important quantities defined in \sref{sec:qoi}:
+where the notation $(\cdot,)$ has the following meaning
+$$
+ 	\ipsl{\psi(\cdot,)}{\Y{k}{}} = \intA{\psi(\cdot,\bomega) \Y{k}{}(\bomega)},\ \, \mbox{so
+ 	that}\ \, \phi_k(\br) = \intA{\psi(\br,\bomega) \Y{k}{}(\bomega)}. 
+$$
+\begin{remark}
+In order to prevent proliferation of $\cdot$'s in the following subsections, we will henceforth until the end of this
+section \sref{sec:PN} suppress spatial dependence of all functions and only use it explicitly where neccessary (this
+concerns all functions except the spherical harmonics $\Y{k}{}$ and Legendre polynomials $\P{n}{}$ that are obviously not spatially
+dependent).
+\end{remark}
+
+Using again the double index
+($k = {}_n^m$) and the form of spherical harmonics with $n = 0,1$, we also obtain a direct correspondence of the first four moments and the physically important quantities defined in \sref{sec:qoi}:
 $$
 	\phi = \sqrt{4\pi}\angmom{0}{0},\quad \bJ = \sqrt{\frac{4\pi }{3}}\, [\angmom{1}{1}, \angmom{1}{-1}, \angmom{1}{0}]^T.
 $$
 
 
 In view of \eqref{eq:pn_approx} and the completeness and orthogonality properties of spherical harmonics,
-\eqref{eq:pn_angmom} also shows that the angular flux in the $\PN$ method is actually approximated by its orthogonal
-projection onto the finite-dimensional subspace $\Lp[2]_K(\Sphere)\subset\Lp[2](\Sphere)$:
+\eqref{eq:pn_vars} also shows that the angular flux (as a function of $\bomega$) in the $\PN$ method is actually
+approximated by its orthogonal projection onto the finite-dimensional subspace $\Lp[2]_K(\Sphere)\subset\Lp[2](\Sphere)$:
 \begin{equation}\label{eq:PN_proj}
-	\psi \approx \Projop\psi, \quad \Projop\psi(\cdot,\bomega) := \sum_{k=1}^{ K}\ips{\psi}{\Y{k}{}} \Y{k}{}(\bomega).
+	\psi \approx \Projop\psi, \quad \bigl(\Projop\psi\bigr)(\bomega) := \sum_{k=1}^{ K}\ipsl{\psi}{\Y{k}{}}
+	\Y{k}{}(\bomega).
 \end{equation}
 
 \subsubsection{Operator form} \label{sec:pn_op}
-It is illustrative to put the $\PN$ system \eqref{eq:pn1} into a form involving the transport operators from
-eq. \eqref{eq1op}.
-In order to do so, let us define mappings that take the vector function $\Phi(\cdot)$ to angular
-flux $\psi(\cdot,\bomega)\in\Lp[2]_K(\Sphere)$ and vice versa. The general operators realizing this operation for the
-case $\mathrm{F} = \Phi$ and $f(\bomega) = \psi(\cdot,\bomega)$, respectively, are
+Putting the $\PN$ system \eqref{eq:pn1} into a form involving the continuous transport operators
+from eq. \eqref{eq1op}, as we did for the $\SN$ approximation, is now particularly simple.
+The mappings that take the vector function $\mathrm{F} = \colset{f_k}{K}$ to function
+\linebreak[4]$u(\bomega)\in\Lp[2]_K(\Sphere)$ and vice versa are taken from \eqref{eq:PN_proj}:
 \begin{equation}\label{eq:pn_op_def}
-\bigl(\PiPN\mathrm{F}\bigr)(\cdot,\bomega) := \sum_{k=1}^{ K} f_k(\cdot)\Y{k}{}(\bomega), \quad
-\PihPN f = \col \left\{(f, \Y{k}{})_{\Lp[2](\Sphere)}\right\}_{\idxset{K}}.
+\bigl(\PiPN\mathrm{F}\bigr)(\bomega) := \sum_{k=1}^{ K} f_k\Y{k}{}(\bomega), \quad
+\PihPN u = \col \left\{\bigl(u, \Y{k}{}\bigr)_{\Lp[2](\Sphere)}\right\}_{\idxset{K}},
 \end{equation} 
-Using \eqref{eq:pn_angmom}, \eqref{eq:pn_vectors} and \eqref{eq:PN_proj}, we can see that 
+so that, using \eqref{eq:pn_vectors} and \eqref{eq:pn_vars},
 $$
 \PiPN\Phi = \PiPN\PihPN \psi = \Projop\psi.
 $$ 
-Notice that when restricted to the space of functions that (as functions of 
+\comment{Notice that when restricted to the space of functions that (as functions of 
 $\bomega$) can be expressed as linear combination of spherical harmonics up to degree $N$, $\PihPN = \PiPN^{-1}$  (which
-is equivalent to $\Projop[P_N]$ being a projection). 
+is equivalent to $\Projop[P_N]$ being a projection).} 
 The operator form of the $\PN$ system is thus
 \begin{equation}\label{eq:pn_op}
 	\PihPN (L-K) \PiPN\Phi = \mathrm{Q}_{P_N} = \PihPN q
 \end{equation}
-or
+or, in the angularly continuous domain,
 \begin{equation}\label{eq:pn_op2}
 	\Projop (L-K) \Projop\psi = \Projop q.
 \end{equation}
@@ -682,42 +804,35 @@ The system has the same form as that for the $\SN$ approximation, but the advect
 	\left[\mat{A}_{P_N}^s\right]_{k,l} = \intA{\Omega_s \Y{k}{}(\bomega)\Yc{l}{}(\bomega)},\quad s\in\{x,y,z\},\ 
 	1 \leq k,l \leq  K
 \end{equation}
-are no longer diagonal (although they couple no more than 6 angular flux moments, see \ref{app:C} for an example for $N
-= 3$ or \cite[App. A]{Sanchez8} for general treatment). Each of the advection matrices \eqref{eq:advmat_PN} 
+are no longer diagonal (although they couple in the sum no more than 7 angular flux moments, see \ref{app:C} for an
+example for $N = 3$ or \cite[App. A]{Sanchez8} for general treatment). Each of the advection matrices \eqref{eq:advmat_PN} 
 is symmetric and hence for any $\bn = [n_x,n_y,n_z]^T$, 
 $$
 	\mat{A}_{P_N}^{\bn} = n_x \mat{A}_{P_N}^x + n_y \mat{A}_{P_N}^y + n_z \mat{A}_{P_N}^z
 $$
 is symmetric and diagonalizable with real eigenvalues. The $\PN$ system is thus (strongly) hyperbolic in the sense of 
-\cite[Def. 18.1]{leveque}. The eigenvalues depend on 
-$\bn$ only through its length $\norm{\bn}$ (see \sref{app:C} for an example when $N = 3$,  though this property
-holds for general $N$), which shows that the $\PN$ system propagates radiation at the same speed in any
-direction. This is in a contrast to the $\SN$ advection \footnote{Here we consider the $\PN$ system as a steady-state
-limit of the time-dependent equation, as explained in \sref{app:C}.}.
-
-It is more convenient for this analysis to consider the steady-state $\PN$ equations \eqref{eq:PN_ss_app} as a limit of the 
-time-dependent equations
-\begin{equation}\label{eq:PN_ss_app}
-	\PihPN \left(\pd{}{t} + A + C\right) \PiPN\Phi = \PihPN q,
-\end{equation}
-in which $\pd{\psi}{t} \to 0$, for time-independent boundary conditions and sources
-\linebreak[4]\mbox{$q(\cdot,\cdot,t) = \text{const}$}.
-Then, the advection matrices describe advection of neutrons introduced into the system by the boundary and internal
-sources, which is in the steady-state limit perfectly balanced by their capture.
+\cite[Def. 18.1]{leveque}. The eigenvalues depend on the vector
+$\bn$ only through its length $\norm{\bn}$ (see \sref{app:C} for an example when $N = 3$), which shows that the $\PN$ 
+system propagates radiation at the same speed \footnote{Here we
+consider the $\PN$ system as a steady-state limit of the time-dependent equation, as explained in \sref{app:C}.} in any
+direction (unlike in the $\SN$ approximation).
 
 This hints that rotational invariance of the NTE is preserved by the $\PN$ system, as we will directly show in 
 \sref{sec:dirinvPN}. The eigenstructure of the advection matrices also provides a clue on how many boundary conditions
-should be prescribed for the $\PN$ system. Matrix $A_{P_N}^{\bn}$ for given $N$ has
-$N(N+1)/2$ positive eigenvalues, $N(N+1)/2$ negative eigenvalues and $K(N) - N(N+1) = N+1$ zero eigenvalues,
+should be prescribed for the $\PN$ system, which is not immediately clear as in the $\SN$ case because of the plane
+wave coupling.
+Matrix $A_{P_N}^{\bn}$ for given $N$ has $N(N+1)/2$ positive eigenvalues, $N(N+1)/2$ negative eigenvalues and $K(N) - N(N+1) = N+1$ zero eigenvalues,
 irrespective of $\bn$. If we take $\bn$ to be the unit outward normal to $\pV$, these eigenvalues correspond,
 respectively, to outgoing, incoming and tangential neutron radiation waves. In order for the hyperbolic system to be
 well-posed, we are allowed to prescribe only the incoming waves, hence we are allowed to specify $N(N+1)/2$ boundary
-conditions at any point of the boundary. It is more difficult to determine what the conditions actually look like as the
+conditions at any point of the boundary. 
+
+It is more difficult to determine what the conditions actually look like as the
 waves generally contain components of all moments $\angmom{n}{m}$. On the grounds of physical reasoning
-(e.g. \cite{Rumyantsev}), variational analysis (e.g. \cite{Davis}) or most recently the equivalence between hyperbolic
-and elliptic forms of the $\PN$ equations (\cite{Sanchez8}), the agreed upon form of $\PN$ boundary conditions
-consistent with the present Galerkin framework is obtained (e.g. for the incoming condition \eqref{eq:nte2})
-as\footnote{in a general form including energy dependence, to reduce clutter}:
+(e.g. \cite{Rumyantsev}), variational analysis (e.g. \cite{Davis}) or most recently (\cite{Sanchez8}) the equivalence
+between hyperbolic and elliptic forms of the $\PN$ equations (arising from the second-order forms of the NTE introduced
+in \ref{sec:L2}) , the agreed upon form of $\PN$ boundary conditions consistent with the present Galerkin framework is
+obtained (e.g. for the incoming condition \eqref{eq:nte2}) as\footnote{in a general form including energy dependence, to reduce clutter}:
 $$
 \begin{gathered}
 	\left(\psi_\text{in} - \left.\Projop[P_N]\!\psi\right\vert_{\pX[-]}, \Y{p}{m} \right)_{\Lp[2](\pX[-])} = 0,\\[.35em] 
@@ -739,7 +854,7 @@ $$
 conditions}.
 
 \myparagraph{Collision part}
-As we have discussed above, the increased coupling between the
+As we have discussed above, the increased coupling between the advected
 unknowns in the $\PN$ system may be seen as a price for rotational invariance
 that prevents ray effects appearing in $\SN$ solutions. On the other hand, the collision matrix $\mathbf{K}_{P_N}$ is
 diagonal, which can make the method computationally more attractive than the fully coupled $\SN$ method in cases when 
@@ -754,7 +869,8 @@ where
 $$
 	\kappa_n = 2\pi \muint[_0]{\P{n}{}(\mu_0)\kappa(\mu_0)},\quad \mu_0 = \bomega\cdot\bomega'
 $$
-is the $n$-th Legendre moment of the collision kernel $\kappa$.
+is the $n$-th Legendre moment of the collision kernel $\kappa$.\footnote{we keep in mind that
+spatial dependence of $\kappa$ and $\kappa_n$ is not explicitly shown}
 \end{lemma}  
 \begin{proof}
 	As we assume the collision kernel to be a square integrable function of the collision cosine  
@@ -768,7 +884,7 @@ is the $n$-th Legendre moment of the collision kernel $\kappa$.
 	Then for any $n = 0,1,\ldots,\quad -n \leq m \leq n$,
 	$$
 \begin{aligned}
-	K\Y{n}{m}(\bomega) &= \intA[']{\kappa(\bomega\cdot\bomega')\Y{n}{m}(\bomega')} \\
+	\bigl(K\Y{n}{m}\bigr)(\bomega) &= \intA[']{\kappa(\bomega\cdot\bomega')\Y{n}{m}(\bomega')} \\
 	&= \intA[']{\suma[r]{0}{\infty}\frac{2r+1}{4\pi}\kappa_r\P{r}{}(\bomega\cdot\bomega')\Y{n}{m}(\bomega')} \\
 	&= \suma[r]{0}{\infty}\kappa_r\suma[s]{-r}{r}\Y{r}{s}(\bomega)\intA[']{\Y{r}{s}(\bomega')\Y{n}{m}(\bomega')} \\
 	&= \kappa_n\Y{n}{m}(\bomega).
@@ -787,13 +903,13 @@ is the $n$-th Legendre moment of the collision kernel $\kappa$.
 		\mathbf{K}_{P_N}\mat{e}_j = \PihPN K \PiPN \mat{e}_j,
 	$$
 	where $\mat{e}_j$ is the $j$-th canonical basis vector in $\R[K]$. By definition, each index \mbox{$j = 0,1,\ldots K$}
-	corresponds to a unique double index ${}_n^m$ ($n = 0,1,\ldots N$, $-n \leq m \leq n$), so that $\Y{j}{} \equiv
-	\Y{n}{m}$.
+	corresponds to a unique double index ${}_n^m$ ($n = 0,1,\ldots N$, \linebreak$-n \leq m \leq n$), so that $\Y{j}{}
+	\equiv \Y{n}{m}$.
 	We can therefore write 
 	$$
 		\bigl(\PiPN \mat{e}_j\bigr)(\bomega) = \Y{j}{}(\bomega) = Y_n^m(\bomega).
 	$$
-	Using lemma \ref{lem:appC}, we have 
+	Using Lemma \ref{lem:appC}, we have 
 	$$
 		K \PiPN \mat{e}_j = \kappa_n \Y{n}{m}
 	$$
@@ -832,58 +948,133 @@ all types of neutron-nuclei interactions) is diagonal.
 \end{remark} 
 
 \subsubsection{Rotational invariance of the $\PN$ equations}\label{sec:dirinvPN}
-The increased coupling between the unknowns in the $\PN$ system is the price for rotational invariance of spherical
-harmonics that prevents ray effects appearing in $\SN$ solutions. To prove it, we will use some well known facts about
-spherical harmonics (see e.g, \cite[Chap.
-3]{Sansone}, \cite[Sec. 3.9]{Schreiner}). 
+To expose rotational invariance of the $\PN$ equations in the sense of Def. \ref{def:rotinv} (pg.~\pageref{def:rotinv}),
+we will need some generally known facts about spherical harmonics 
+%(see e.g, \cite[Chap. 3]{Sansone}, \cite[Sec. 3.9]{Schreiner}) 
+that will also be of use later in \cref{chap:mcpn}.
 
-\comment{
 \myparagraph{Orthogonal decomposition of $\Lp[2](\Sphere)$}
-Spherical harmonic functions of given degree $n$ generate a rotationally invariant subspace
-of $\Lp[2](\Sphere)$, which we denote by $\Lambda_n$:
+The $2n + 1$ mutually orthogonal spherical harmonics of given degree $n$ are the eigenfunctions of the Laplace
+operator on $\Sphere$ corresponding to $\lambda_n = -n(n+1)$: 
+$$
+	\lap_{\Sphere} \Y{n}{m}(\bomega) = -n(n+1)\Y{n}{m}(\bomega) \quad \forall -n \leq m \leq n
+$$
+and generate the eigenspace
 \begin{equation}
 	\label{eq:subspace}
-    	\Lambda_n = \text{Span}\bigl\{\Y{n}{m}; -n \leq m \leq n\bigr\},
+    	\Lambda_n = \text{Span}\bigl\{\Y{n}{m}; -n \leq m \leq n\bigr\}.
 \end{equation}
-This means that $\op{R}(\Lambda_n) \subset \Lambda_n$ for any rotation transformation $\op{R}\in\mathrm{SO}(3)$. 
-Moreover, there is no proper subspace $\Lambda_n' \subset \Lambda_n$ that is rotationally invariant by itself. For given $n$, $\Lambda_n$ is the eigenspace associated with
-the $n$-th eigenvalue of the Laplace operator on $\Sphere$:
-$$
-	\lap_{\Sphere} \Y{n}{m}(\bomega) = -n(n+1)\Y{n}{m}(\bomega) \quad \forall -n \leq m \leq n.
-$$
-
-Being finite-dimensional eigenspaces of a self-adjoint operator
-corresponding to different eigenvalues, $\Lambda_n$ for $n=0,1,\ldots$ are mutually orthogonal, closed subspaces of
-$\Lp[2](\Sphere)]$ and $\Lp[2](\Sphere) = \bigoplus_{n=0}^{\infty}\Lambda_n$\nomenclature[S]{$\bigoplus$}{direct sum of
-spaces}.
+For $n = 0,1,\ldots$, these finite-dimensional eigenspaces are closed, mutually orthogonal subspaces of
+$\Lp[2](\Sphere)$ and
+\begin{equation}\label{eq:direct_sum_L2}
+	\Lp[2](\Sphere) = \bigoplus_{n=0}^{\infty}\Lambda_n. \nomenclature[S]{$\bigoplus$}{direct sum of
+spaces}
+\end{equation}
 Restricting to a finite direct sum, we can hence write the $\PN$ projection \eqref{eq:PN_proj} as
 \begin{equation}\label{eq:pn_approx2}
-	\Projop\psi(\cdot,\bomega) = \suma[n]{0}{N}\Projop[\Lambda_n]\psi(\cdot,\bomega),
+	\Projop\psi = \suma[n]{0}{N}\Projop[\Lambda_n]\psi,
 \end{equation}
-where 
+where $\Projop[\Lambda_n] : \Lp[2](\Sphere) \to \Lambda_n$ defined by
 $$
-	\Projop[\Lambda_n]\psi(\br,\bomega) = \suma[m]{-n}{n}\angmom{n}{m}(\cdot)\Y{n}{m}(\bomega)
+	\bigl(\Projop[\Lambda_n]\psi\bigr)(\bomega) =
+	\suma[m]{-n}{n}\bigl(\psi,\Y{n}{m}\bigr)_{\Lp[2](\Sphere)}\Y{n}{m}(\bomega) 
 $$
-is the orthogonal projection onto $\Lambda_n$.  
-}
+is the orthogonal projection onto $\Lambda_n$. 
+
+Each $\Lambda_n$ is a Hilbert space possessing the following \textit{reproducing kernel property}:
+\begin{lemma}
+	For every $f \in \Lambda_n$, $n = 0,1,\ldots$, 
+	$$
+		f(\bomega) = \frac{2n+1}{4\pi} \intA[']{f(\bomega')\P{n}{}(\bomega\cdot\bomega')}.
+	$$
+\end{lemma}
+\begin{proof}
+	Follows from the addition theorem \eqref{eq:additionThm} and orthogonality of spherical harmonics. If $f \in
+	\Lambda_n$,
+	$$
+		\begin{aligned}
+			\frac{2n+1}{4\pi}&\intA{f(\bomega')\P{n}{}(\bomega\cdot\bomega')} = 
+			\intA{f(\bomega')\sum_{j=-n}^{n}\Y{n}{j}(\bomega)\Y{n}{j}(\bomega')} \\
+			&= \sum_{j=-n}^{n}\left(\intA{f(\bomega')\Y{n}{j}(\bomega')}\right)\Y{n}{j}(\bomega) =
+			\Projop[\Lambda_n]f(\bomega) = f(\bomega).
+		\end{aligned}
+	$$
+\end{proof}
+\noindent Using the decomposition \eqref{eq:pn_approx2}, we immediately obtain the following
+\begin{corollary}\label{cor:repker}
+	For every $f\in\Lp[2]_N(\Sphere)$,
+	\begin{equation}\label{eq:repker}
+		f(\bomega) = \sum_{n=0}^{N} \frac{2n+1}{4\pi} \intA[']{f(\bomega')\P{n}{}(\bomega\cdot\bomega')}.
+	\end{equation} 
+\end{corollary}
+%
+\noindent Now we are ready to show that the $\PN$ equations are rotationally
+invariant in cases when the original NTE is.
+
+\begin{theorem}\label{thm:commut_NTE}
+Let $T$ be the transport operator defined in \sref{sec:fixed-source} such that the assumptions of Theorem
+\ref{thm:rotinv} are satisfied. 
+Then the corresponding $\PN$ operator
+\begin{equation*}
+	\Projop\op{T}\Projop
+\end{equation*}
+satisfies 
+$$
+\genop{R}\Projop\op{T}\Projop = \Projop[S_N]\op{T}\Projop[S_N]\genop{R}\quad \forall
+\genop{R}\in\mathrm{SO}(3). 
+$$
+\end{theorem}
+\begin{proof}
+Because of the commutativity of $T$ and $\genop{R}$, it suffices to show that $\Projop$ commutes
+with $\genop{R}$, that is 
+\begin{equation}\label{eq:thm1_point}
+	\genop{R} \Projop \psi = \Projop \genop{R} \psi\quad  \forall \psi \in \Lp[2](\Sphere).
+\end{equation}
+
+\noindent Noticing that $\Projop\psi \in \Lp[2]_N(\Sphere)$ and using Corollary \ref{cor:repker}, we have
+$$
+\begin{aligned}
+	\genop{R} \Projop \psi &= 
+	\sum_{n=0}^{N} \frac{2n+1}{4\pi} \intA[']{\psi(\bomega')\P{n}{}(\mat{R}^T\bomega\cdot\bomega')}\\ 
+	&= \sum_{n=0}^{N} \frac{2n+1}{4\pi}
+	\intA[']{\psi(\bomega')\P{n}{}(\bomega\cdot\mat{R}\bomega')}.
+\end{aligned}
+$$
+Under substitution $\bomega'' = \mat{R}\bomega'$ with unit Jacobian determinant (since $\mat{R}$ is an orthogonal
+matrix), the expression becomes
+$$
+	\genop{R} \Projop \psi = \sum_{n=0}^{N} \frac{2n+1}{4\pi}
+	\intA['']{\psi(\mat{R}^T\bomega'')\P{n}{}(\bomega\cdot\bomega'')}.
+$$
+After changing double primes back to single primes, this expression is equal to
+$$
+	\Projop \genop{R}\psi = \sum_{n=0}^{N} \frac{2n+1}{4\pi}
+	\intA[']{\psi(\mat{R}^T\bomega')\P{n}{}(\bomega\cdot\bomega')}.
+$$
+\end{proof}
+
+
 
 
 \subsubsection{Drawbacks of the $\PN$ approximation}
-Using the results of the previous paragraph and well-known results from the theory of Hilbert spaces, we can see that
+Using the results of the previous subsection and well-known results from the theory of Hilbert spaces, we can see that
 the sum \eqref{eq:pn_approx2} (or \eqref{eq:pn_approx}) converges in the $\Lp[2](\Sphere)$ norm to the true solution of
 eq. \eqref{eq1} as $N\to\infty$. However, the convergence may be very slow if the true solution to the NTE is not
 sufficiently regular in the angular variable. In particular, pointwise convergence is hindered in the neighborhood of
-phase space points where the solution of the NTE has jump discontinuity in $\bomega$ (which may occur for example when a
-narrow beam of neutrons is freely streaming through a non-interacting medium, but, as we already mentioned at the
+phase space points where the exact solution has jump discontinuity in $\bomega$ (which may occur for example
+when a narrow beam of neutrons is freely streaming through a non-interacting medium, but, as we already mentioned at the
 beginning of \sref{sec:ntp}, also in a more typical case of domains with multiple regions with different materials,
 bounded by piecewise polygonal boundary) and spurious oscillations are introduced to the approximate solution at these points.
 These oscillations spread over the whole angular domain and slow down the norm-wise convergence. This is a well-known
-property of Fourier series (which the expansion \eqref{eq:pn_approx2} generalize) known as \textit{Gibbs phenomenon}.
-Moreover, these oscillations do not vanish as more terms in the series are retained. However, there are several ways of
-circumventing the Gibbs phenomenon. For example, when considering \eqref{eq:pn_approx2} as a means of deriving the $\PN$
-system, we may note that using a finite expansion obtained by truncating \eqref{eq:pn_approx2} at $n=N$ is not the only
-way of obtaining a closed system of equations -- different closures are possible as already discussed above. This fact
-has been utilized in \cite{McClarren3} where the expansion has been adjusted to mitigate the oscillations by controlling
+property of Fourier series known as \textit{Gibbs
+phenomenon}.
+Moreover, these oscillations do not vanish as more terms in the series are retained. 
+
+There are several ways of
+circumventing the Gibbs phenomenon. For example, when considering \eqref{eq:pn_approx} as a means of deriving the $\PN$
+system, we may note that using a finite expansion obtained by truncating \eqref{eq:pn_approx} at $n=N$ is not the only
+way of obtaining a closed system of equations -- different closures are possible as we have already mentioned before.
+This fact has been utilized in \cite{McClarren3} where the expansion has been adjusted to mitigate the oscillations by controlling
 angular gradients\footnote{Note that the expansion \eqref{eq:pn_approx2} represents the best $\Lp[2](\Sphere)$
 approximation of $\psi$ by spherical polynomials up to a given degree, but absence of angular gradients in the
 $\Lp[2](\Sphere)$ norm permits arbitrary oscillations.}. For other similar approaches in the context of general spectral
@@ -893,9 +1084,9 @@ As shown in \cite{McClarren4}, there is also another issue connected with time-d
 be kept in mind particularly when solving coupled problems. This issue is inherent in the structure of the $\PN$ system
 and cannot be completely removed without losing some of its attractive properties. Namely, the authors proved that
 without sources and reactions, the linear hyperbolic character of eq. \eqref{eq:pn1} (with an additional time derivative
-term) together with rotational invariance allows negative solutions for positive, isotropic data in two or three
-dimensions. To prevent negative solutions, one could either give-up linearity (e.g. by using a non-linear closure in a
-similar way as described above), rotational invariance (thus introducing ray-effects into the solutions) or
+term as in \eqref{eq:PN_ss_app}) together with rotational invariance allows negative solutions for positive, isotropic
+data in more than one dimension. To prevent negative solutions, one could either give-up linearity (e.g. by using a
+non-linear closure in a similar way as described above), rotational invariance (thus introducing ray-effects into the solutions) or
 hyperbolicity (thus changing the speed at which radiation propagates throughout the domain) -- none of which is a
 generally satisfactory remedy. The authors also demonstrated that negative solutions can appear even in heterogeneous
 domains containing regions with reactions or sources.
@@ -1073,7 +1264,7 @@ $$
 	a(\Psi,\Theta) := \left(\mat{T}_{S_N} \Psi, \Theta\right)_\mathbb{V}
 $$
   
-\footnote{obtained by applying a Riesz map $\tau : f(\cdot)\in V' \mapsto (\tau f,\cdot)_V \in V$ to both sides of the
+\footnote{obtained by applying a Riesz map $\tau : f\in V' \mapsto (\tau f,\cdot)_V \in V$ to both sides of the
 operator equation} In the case of the finite element method, for example, it is well known that the approximation of the
 solution of an advection-reaction PDE by piecewise continuous functions (i.e., the continuous Galerkin method) is not
 stable and allows arbitrarily large oscillations. Therefore, either the discontinuous Galerkin method or some version of
