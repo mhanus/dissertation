@@ -1,3 +1,19 @@
 \chapter{Neutronics modules for Hermes}\label{chap:hermes}
 
+As we have seen in previous chapter, the transport approximations lead to coupled systems of differential equations with
+finite element methods formulated on product spaces. In order to implement these models into a practical solution
+method, it is thus neccessary to appropriately deal with the coupling of variables. In standard finite element
+assembling procedures, we would need to use the same underlying mesh $\mesh$ and approximation space $\Space_{hp}$ for
+all components of the solution, or use some form of data interpolation to evaluate integrals of type
+$$
+	\int_{elem\in\mesh} \sigma_s^{gg'} u^g v^{g'}\,\d{\br}
+$$
+(as appearing for instance in the multigroup diffusion approximation) when $u^g$ and $v^{g'}$ does not live on the same
+mesh.
+
+To avoid this interpolation and errors associated with it, the C++ finite element library Hermes uses the
+\textit{multimesh assembling} approach. 
+
+Moreover, the Hermes library consists 
+
 \section{Discrete ordinates module}\label{sec:DO}

@@ -1,0 +1,594 @@
+\chapter{On the origin of smoothed aggregations}\label{app:multigrid}
+
+\section*{A short note dedicated to prof. Karel Segeth at the occasion of his 70th birthday.}
+
+\subsubsection*{Authors:}
+
+Pavla Fra\v{n}kov\'{a}, Milan Hanu\v{s},
+Hana Kopincov\'{a}, Roman Ku\v{z}el,
+Petr Van\v{e}k and Zbyn\v{e}k Vastl
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{Introduction}
+The smoothed aggregation method
+\cite{vanek-accel,FMS,amg-theory,Vanek_Mandel_Brezina_1995} proved
+to be a very efficient tool for solving various types
+of elliptic problems and their singular perturbations.
+In this short note, we turn
+to the very roots of smoothed aggregation method and derive its
+two-level variant on a systematic basis.
+
+The multilevel method consists in combination of a coarse-grid correction
+and smoothing.
+The coarse-grid correction of a standard
+two-level method is derived using the $A$-orthogonal projection of an
+error to the range of the prolongator.
+In other words, the coarse-grid correction
+vector
+is chosen to minimize the error {\em after coarse-grid correction procedure}.
+This means, the standard two-level method
+minimizes the error in an intermediate stage of the iteration, while
+we are, naturally, interested in
+minimizng  {\em the final error after accomplishing the entire iteration}.
+In other words, we strive to minimize the error after
+after coarse-grid correction and
+subsequent smoothing. The two-level smoothed aggregation method
+is obtained by solving this minimization problem. This, in the opinion
+of the authors, explains its remarkable robustness.
+
+We derive the two-level smoothed aggregation
+method from the variational objective to minimize the
+error after coarse-grid correction and subsequent post-smoothing.
+Then, by a trivial argument, we extend our result
+to the two-level method
+with pre-smoothing, coarse-grid correction and post-smoothing.
+
+The minimization of error after coarse-grid correction
+and subsequent smoothing leads to a method with smoothed prolongator.
+We can say that by smoothing the prolongator,
+we adapt the coarse-space (the range of the
+prolongator) to the post-smoother so that the resulting iteration is as
+efficient as possible. Our short explanation applies to any two-level method
+with smoothed prolongator. The particular case we have in mind is, however, a
+method with smoothed {\em tentative} prolongator given by generalized
+unknowns aggregations
+\cite{amg-theory}. The discrete basis functions of the coarse-space
+(the columns of the prolongator) given by
+unknowns aggregations have no overlap; the natural
+overlap of discrete
+basis functions (like it is in the case of
+finite element basis functions) is created by smoothing and, for
+additive point-wise smoothers, leads to sparse
+coarse-level
+matrix.
+
+Our argument is basically trivial. It, however, shows a fundamental
+property of the method with smoothed prolongator, that is essential.
+This argument is known to the authors for a long time,
+but has never been published.
+
+We conclude our paper by a numerical test. Namely, we demonstrate
+experimentally that smoothed aggregation method with powerful smoother
+and small coarse-space solves efficiently highly anisotropic problems
+without the need to perform semi-coarsening (the coarsening that follows
+only strong connections).
+
+
+\section{Two-level method}
+We solve a system of linear algebraic equations
+\eq{A}
+       A\vc{x} = \vc{f},
+\qe
+where $A$ is a symmetric positive definite matrix of order $n$ and
+$\vc{f} \in \Re^n$. We assume that an injective linear {\em prolongator}
+$p : \Re^m \rightarrow \Re^n,\; m < n$ is given.
+
+The two-level method consists in the combination of
+a {\em coarse-grid correction} and
+{\em smoothing}. The smoothing means using point-wise iterative methods 
+at the beginning and at the end of the iteration.
+The coarse-grid correction is derived by correcting an error
+$\vc{e}$ by a coarse-level vector $\vc{v}$ so that the resulting error
+$\vc{e}-p\vc{v}$ is minimal in $A$-norm. In other words, we solve
+the minimization problem
+\eq{standard}
+  \mbox{find} \; \vc{v} \in \Re^m \; \mbox{so that} \;
+  \| \vc{e}-p\vc{v}\|_A \; \mbox{is minimal}.
+\qe
+It is well-known that such vector $p\vc{v}$ is an $A$-orthogonal projection
+of the error $\vc{e}$ onto $\range(p)$, with the projection
+operator given by
+$$
+      Q = p(p^TAp)^{-1}p^TA.
+$$
+Thus, the error propagation opeartor of the coarse-grid correction is given by
+$I-Q=I-p(p^TAp)^{-1}p^TA$ and the error propagation operator of the two-level
+method by
+\eq{E}
+      E_{TGM}=S_{post}[I-p(p^TAp)^{-1}p^TA]S_{pre},
+\qe
+where $S_{pre}$ and $S_{post}$ are error propagation operators of
+pre- and post- smothing iterations, respectively.
+
+Clearly, for the error $\vc{e}(\vc{x})\equiv \vc{x}-A^{-1}\vc{f}$ we have
+$A\vc{e}(\vc{x})=A\vc{x}-\vc{f}$. Hence, the coarse-grid correction can be
+algorithmized  as
+$$
+     \vc{x} \leftarrow \vc{x} - p(p^TAp)^{-1}p^T(A\vc{x}-\vc{f})
+$$
+and the variational two-level algorithm with post-smoothing step
+proceeds as follows:
+\begin{algorithm}
+\label{TL}
+\quad
+\begin{enumerate}
+\item Pre-smooth: $\vc{x} \leftarrow {\mathcal S}_{pre}(\vc{x},\vc{f})$,
+\item evaluate the residual:
+   $\vc{d}=A\vc{x}-\vc{f}$,
+\item restrict the residual:
+   $\vc{d}_2 = p^T\vc{d}$,
+\item solve a coarse-level problem
+   $A_2 \vc{v} = \vc{d}_2,\quad A_2 = p^TAp$,
+\item correct the approximation
+   $\vc{x} = \vc{x} - p\vc{v}$,
+\item post-smooth
+   $\vc{x} = {\mathcal S}_{post}(\vc{x},\vc{f})$.
+\end{enumerate}
+\end{algorithm}
+Here, ${\mathcal S}_{pre}(.,.)$ and ${\mathcal S}_{post}(.,.)$, respectively,
+represent one or more iterations of
+point-wise iterative methods for solving \eqr{A}.
+
+
+The coarse-grid correction vector $\vc{v}$ is chosen to minimize the error
+after Step 5 of Algorithm \ref{TL}.
+Thus, we conclude that in the case of a standard variational multigrid,
+the coarse-grid correction procedure minimizes
+the error in an intermediate stage of the iteration,
+while we are in fact interested in minimizing the final
+error after accomplishing the entire iteration. This means to minimize
+the error after coarse-grid correction with subsequent smoothing.
+
+
+
+\section{The smoothed aggregation two-level method}
+In the smoothed aggregation method, we construct the coarse-grid
+correction to minimize
+the error {\em after coarse-grid correction with subsequent smoothing},
+which means the final error on the exit of the iteration procedure.
+The minimization of the error after pre-smoothing, coarse-grid correction
+and post-smoothing then follows immediately by a trivial argument.
+
+Let $S$ be the error propagation operator of the post-smoother
+${\mathcal S}(.,.)={\mathcal S}_{post}(.,.)$.
+Throughout this section we assume that $S$
+is sparse. This is due to the fact that
+the above minimization problem leads to smoothed prolongator
+$P=Sp$
+and we need a sparse coarse-level matrix $A_2=P^TAP$.
+The additive point-wise smoothing methods have, in general, sparse
+error propagation operator; this is the case of
+Jacobi method or Richardson's iteration.
+
+For a multilevel method with post-smoothing only, the
+error after coarse-grid correction and subsequent smoothing is
+given by
+\eq{final-error}
+       S(\vc{e}-p\vc{v}),
+\qe
+where $\vc{v}$ is a correction vector and $\vc{e}$ the error on the entry
+of the iteration  procedure. We choose $\vc{v}$ so that
+the error in \eqr{final-error} is minimal in $A$-norm,
+that is, we solve the minimization
+problem
+\eq{var-object}
+   \mbox{find}\;\vc{v} \in \Re^m\;\mbox{such that} \;
+   \|S(\vc{e}-p\vc{v})\|_A \;\mbox{is minimal}.
+\qe
+Since $\|S(\vc{e}-p\vc{v})\|_A=\|\vc{e}-p\vc{v}\|_{S^TAS}$,
+the minimum is attained for $\vc{v}$ satisfying
+$$
+ \langle S^TAS(\vc{e}-p\vc{v}),p\vc{w} \rangle = 0\;
+ \forall \vc{w} \in \Re^m.
+$$
+We have $\langle S^TAS(\vc{e}-p\vc{v}),p\vc{w} \rangle =
+ \langle p^TS^TAS(\vc{e}-p\vc{v}),\vc{w}\rangle$,
+hence the above identity is equivalent to $p^TS^TASp\vc{v} = p^TS^TAS\vc{e}$
+and setting $P=Sp$, it becomes
+\eq{cgc}
+  P^TAP \vc{v} =P^TAS\vc{e}.
+\qe
+Here, $\vc{e}$ is the error on the entry of the iteration procedure.
+Assume for now that $P$ is injective.
+Then by \eqr{cgc}, we have
+$\vc{v}=(P^TAP)^{-1}P^TAS\vc{e}$ and the error after coarse-grid correction
+and subsequent smoothing is given by
+\eq{derive}
+     S(\vc{e}-p\vc{v})=S\left[\vc{e} - p(P^TAP)^{-1}P^TAS\vc{e} \right] =
+     \left[I - P(P^TAP)^{-1}P^TA \right] S\vc{e}.
+\qe
+By comparing the operator
+\eq{E-result}
+    E=\left[I - P(P^TAP)^{-1}P^TA \right] S
+\qe
+on the right-hand side
+of \eqr{derive} with \eqr{E}, we identify $E$ as the error propagation
+operator
+of the variational multigrid with smoothed
+prolongator $P=Sp$ and pre-smoothing
+step given by $\vc{x} \leftarrow {\mathcal S}(\vc{x},\vc{f})$.
+The algorithm is as follows:
+\begin{algorithm}
+\label{alg-SMA}
+\quad
+\begin{enumerate}
+\item Pre-smooth: $\vc{x} \leftarrow {\mathcal S}(\vc{x},\vc{f})$,
+\item evaluate the residual: $\vc{d}=A\vc{x}-\vc{f}$,
+\item restrict the residual: $\vc{d}_2 = P^T\vc{d}$,
+\item solve the coarse-level problem:
+      $A_2 \vc{v} = \vc{d}_2,\quad A_2 = P^TAP$,
+\item correct the approximation:
+      $\vc{x}\leftarrow \vc{x} - P\vc{v}$.
+\end{enumerate}
+\end{algorithm}
+
+\begin{note}
+Note that in the process of the deriving the algorithm in \eqr{derive},
+our post-smoother have become a pre-smoother. Nothing was lost in that
+process; the algorithm minimizes the final error and takes into account
+the pre-smoother.
+\end{note}
+\begin{note}
+The smoothed prolongator $P=Sp$ is potentially non-injective, hence the
+coarse-level matrix $A_2=P^TAP$ is potentially singular. In this case,
+we need to replace the inverse of $P^TAP$ in \eqr{derive} by a
+pseudo-inverse.
+\end{note}
+
+We summarize our considerations in the form of a theorem.
+\begin{theorem}
+The error propagation operator $E$ in \eqr{E-result} (the error
+propagation operator of Algorithm~\ref{alg-SMA})
+satisfies the identity
+$$
+      \|E\vc{e}\|_A = \inf_{\vc{v} \in \Re^m} \|S(\vc{e}-p\vc{v})\|_A
+$$
+for all $\vc{e} \in \Re^n$.
+\end{theorem}
+\begin{proof}
+The proof follows directly from the fact that Algorithm~\ref{alg-SMA}
+was derived from variational objective \eqr{var-object}.
+\end{proof}
+
+\begin{note}
+\label{note-pre}
+One may also start with the variational objective to minimize the final error
+after performing the pre-smoothing, the coarse-grid correction and the
+post-smoothing.
+Such extension is trivial, the pre-smoother has no influence on the
+coarse-grid correction operator $I - P(P^TAP)^{-1}P^TA$ and influences only
+its argument.
+Indeed, asuming the error propagation operator of the
+pre-smoother is $S^*$ (the $A$-adjoint operator),
+the final error is given by $S(S^*\vc{e}-p\vc{v})$
+and we solve the minimization problem
+\eq{objective1}
+\mbox{for}\;\vc{e} \in \Re^n\;
+\mbox{find} \; \vc{v} \in \Re^m\;:\; \|S(S^*\vc{e}-p\vc{v})\|_A \;
+\mbox{is minimal}.
+\qe
+Fundamentally, this is the same minimization problem as \eqr{var-object};
+to derive the corresponding algorithm, it is simply sufficient to follow
+our manipulations from \eqr{var-object} to \eqr{derive}
+with $\vc{e} \leftarrow S^*\vc{e}$. This way,
+we end up with a two-level method that has the error propagation
+operator
+\eq{epp1}
+   E=\left[I - P(P^TAP)^{-1}P^TA \right] SS^*,
+\qe
+(see \eqr{E}) that is, with the algorithm
+\begin{algorithm}
+\label{alg-SMA1-pre}
+\quad
+\begin{enumerate}
+\item Pre-smooth: $\vc{x} \leftarrow {\mathcal S_t}(\vc{x},\vc{f})$,
+where ${\mathcal S_t}$ is an iterative method with error propagation
+operator $S^*$.
+\item pre-smooth: $\vc{x} \leftarrow {\mathcal S}(\vc{x},\vc{f})$,
+where ${\mathcal S}$ is an iterative method with error propagation
+operator $S$.
+\item evaluate the residual: $\vc{d}=A\vc{x}-\vc{f}$,
+\item restrict the residual: $\vc{d}_2 = P^T\vc{d}$,
+\item solve the coarse-level problem:
+      $A_2 \vc{v} = \vc{d}_2,\quad A_2 = P^TAP$,
+\item correct the approximation:
+      $\vc{x}\leftarrow \vc{x} - P\vc{v}$.
+\end{enumerate}
+\end{algorithm}
+\end{note}
+
+We summarize the content of Remark~\ref{note-pre} as a theorem.
+\begin{theorem}
+The error propagation operator \eqr{epp1} of Algorithm~\ref{alg-SMA1-pre}
+satisfies the identity
+$$
+      \|E\vc{e}\|_A = \inf_{\vc{v} \in \Re^m} \|S(S^*\vc{e}-p\vc{v})\|_A
+$$
+for all $\vc{e} \in \Re^n$.
+\end{theorem}
+\begin{proof}
+The proof follows directly from the fact that Algorithm~\ref{alg-SMA1-pre}
+was derived from variational objective \eqr{objective1}.
+\end{proof}
+
+\begin{note}
+Our manipulations hold equally for a general pre-smoother with error
+propagation operator $M \neq S^*$, simply by replacing $S^* \leftarrow M$.
+The error propagation operator $M$ has no influence on the coarse-space
+and thus it does not have to be sparse.
+\end{note}
+
+\section{Numerical example}
+To demonstrate the robustness of smoothed aggregation method,
+we consider the algorithm that is a modification of
+the method proposed and analyzed in \cite{VBT}.
+Its relationship to Algorithm~\ref{alg-SMA} is obvious.
+This method uses the smoothing iterative method ${\mathcal S}(\cdot,\cdot)$
+which is a sequence of Richardson's iterations with carefully chosen
+iteration parameters. The error propagation
+operator $S$ of the smoother ${\mathcal S}(\cdot,\cdot)$
+is therefore a polynomial in the matrix $A$.
+
+In this method, we use massive smoother $S$ and a small coarse-space
+resulting in sparse coarse-level matrix.
+
+Let ${\bar \lambda} \geq \varrho(A)$ and $d$ be the desired
+degree of the smoothing polynomial $S$. We set
+\eq{alpha_i}
+     \alpha_i = \left[\frac{{\bar \lambda}}{2}
+                     \left(1-\mbox{cos~}\frac{2i \pi}{2d+1} \right)
+                \right]^{-1},
+     \quad i=1, \ldots, d,
+\qe
+\eq{S}
+   S=\left(I-\alpha_1 A\right) \ldots
+     \left(I-\alpha_d A\right)
+\qe
+and
+$$
+   P=Sp.
+$$
+Here, $p$ is a {\em tentative prolongator} given by generalized
+unknowns aggregation.
+The simplest aggregation method is described in this section.
+
+The smoother $S$ is chosen to minimize $\varrho(S^2A)$. The reason for
+this comes from the fact that the convergence of the method of \cite{VBT}
+is guided by the constant $C$ in the weak approximation condition
+\eq{wac}
+     \forall \vc{e} \in \Re^n \; \exists \vc{v} \in \Re^m \;:\;
+     \|\vc{e} - p\vc{v}\| \leq \frac{C}{\sqrt{\varrho(S^2A)}}\|\vc{e}\|_A.
+\qe
+The smaller $\varrho(S^2A)$, the easier it becomes to satisfy \eqr{wac} with
+a reasonable (sufficiently small) constant.
+It holds that (\cite{VBT})
+\eq{lambda-S^2A}
+       {\bar \lambda}_{S^2A} \equiv \frac{{\bar \lambda}}{(1+2d)^2} \geq
+       \varrho(S^2A).
+\qe
+
+The aggregates $\{\mathcal{A}_{j}\}$ are sets of fine-level degrees of freedom
+that form a disjoint covering of the set of all fine-level degrees of freedom.
+For example, we can choose aggregates to form a decomposition of the set of
+degrees of freedom induced by a geometrically reasonable
+partitioning of the computational domain.
+For standard discretizations of scalar elliptic problems,
+the tentative prolongator matrix $p$ is the $n\times m$ matrix
+($m=$ the number of aggregates)
+\eq{aggr-prol}
+      p_{ij}=\left\{\begin{array}{ll}
+                                  1 & \mbox{if}\;\; i \in \mathcal{A}_j \\
+                                  0 & \mbox{otherwise}
+                    \end{array} \right.
+\qe
+that is, the $j$-th column is created by restricting a vector of ones onto
+the $j$-th aggregate, with zeroes elsewhere. Thus, the aggregation method
+can be viewed as a piece-wise constant coarsening in a discrete sense.
+The generalized aggregation
+method, suitable for non-scalar elliptic problems
+(like that of linear elasticity), is described in \cite{amg-theory}.
+
+\begin{algorithm}
+\label{alg-2L-final}
+Given the degree $d$ of the smoothing polynomial $S=pol(A)$,
+the smoothed prolongator $P=Sp$ where $p$ is the tentative prolongator and
+the prolongator smoother $S$ is given by \eqr{S},
+the upper bound
+${\bar \lambda} \geq \varrho(A)$ and a parameter $\omega\in (0,1)$,
+one iteration of the two-level
+algorithm
+$$
+    \vc{x} \leftarrow TG(\vc{x},\vc{f})
+$$
+proceeds as follows:
+\begin{enumerate}
+\item perform
+$$
+         \vc{x} \leftarrow \vc{x} -
+         \frac{\omega}{{\bar \lambda}_{S^2A}}S^2(A\vc{x}-\vc{f}),
+$$
+where $\bar{\lambda}_{S^2A}$ is given by \eqr{lambda-S^2A} and
+$S$ by \eqr{S},
+\item perform the iteration with symmetric error propagation operator $S$ 
+given by \eqr{S}, that is, \\
+for $i=1,\ldots,d$ do
+$$
+        \vc{x} \leftarrow \left(I-\alpha_i A\right)\vc{x} +
+        \alpha_i \vc{f},
+$$
+\item evaluate the residual $\vc{d}=A\vc{x}-\vc{f}$,
+\item restrict the residual $\vc{d}_2=P^T\vc{d}$,
+\item solve the coarse-level problem $A_2\vc{v}=\vc{d}_2$, $A_2=P^TAP$,
+\item correct the approximation $\vc{x} \leftarrow \vc{x}-P\vc{v}$,
+\item for $i=1,\ldots,d$ do
+$$
+        \vc{x} \leftarrow \left(I-\alpha_i A\right)\vc{x} +
+        \alpha_i \vc{f},
+$$
+\item perform
+$$
+         \vc{x} \leftarrow \vc{x} -
+         \frac{\omega}{{\bar \lambda}_{S^2A}}S^2(A\vc{x}-\vc{f}).
+$$
+\end{enumerate}
+\end{algorithm}
+Thus, Algorithm~\ref{alg-2L-final} is a symmetrized version of
+Algorithm~\ref{alg-SMA} with added smoothing in steps 1 and 8.
+
+
+It is generally believed that in order to solve efficiently an anisotropic
+problem, one has to perform coarsening only by following
+{\em strong connections}. This technique is called {\em semi-coarsening}.
+In our case, we form aggregates by coarsening by a factor of 10 in
+all 3 spatial directions, which means, we do not perform semi-coarsening.
+Despite of this fact, our method gives satisfactory results regardless
+of the anisotropy coefficient $\varepsilon$.  In this experiment,
+the symmetric Algorithm~\ref{alg-2L-final} is used as a
+conjugate
+gradient method preconditioner.
+
+{\bf Test problem}
+\begin{itemize}
+\item
+Problem:
+\eq{prob-2}
+  -\left(
+     \frac{\partial^2}{\partial x^2} +
+     \varepsilon \frac{\partial^2}{\partial y^2} +
+     \frac{\partial^2}{\partial z^2}
+   \right) u = f \; \mbox{on} \; \Omega = (0,1)^3, \; u=0 \;
+   \mbox{on} \; \partial \Omega.
+\qe
+\item Mesh: $82 \times 82 \times 82$ regular square mesh, 512 000 unconstrained
+      degrees of freedom.
+\item Aggregates: cubic groups of $10 \times 10 \times 10$
+      unconstrained vertices.
+\item Coarse-space size: 512 degrees of freedom.
+\item Degree of smoothing polynomial: 7.
+\item Stopping criterion: relative residual $<10^{-9}$.
+\end{itemize}	
+
+The results are summed up in Table~\ref{table-anis}. Note that here, the
+estimate of the rate of convergence after $N$ iterations is defined as
+$$
+  q_N=\left(\|A \vc{x}^{N} - \vc{f}\| / \|A \vc{x}^{0} - \vc{f}\|
+    \right)^{\frac{1}{N}}.
+$$
+Here, $\vc{x}^{i}$ denotes the $i$-th iteration.
+
+\begin{table}
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+\multicolumn{3}{|c|}
+{512 000 dofs, coarse space 512 dofs, $\mathrm{deg}(S)=7$, $H/h=9.$} \\
+\hline
+$\varepsilon $ &   rate of conv. $q_N$ & no. iter. $N$ \\ \hline \hline
+1000           &   0.321  & 19          \\ \hline
+100            &   0.241  & 15          \\ \hline
+10             &   0.137  & 11          \\ \hline
+1              &   0.131  & 11          \\ \hline
+0.1            &   0.221  & 14          \\ \hline
+0.01           &   0.317  & 19          \\ \hline
+0.001          &   0.300  & 18          \\ \hline
+\end{tabular}
+\caption{3D anisotropic problem}
+\label{table-anis}
+\end{center}
+\end{table}
+
+
+\section*{Acknowledgements}
+This work was sponsored by the
+TA\v{C}R (Technologick\'{a} Agentura \v{C}esk\'{e} Republiky)
+grant TA01020352, ITI (Institut Teoretick\'{e} Informatiky) grant 1R0545, Department of the Navy Grant N62909-11-1-7032.
+
+% With BibTeX, uncomment following two lines:
+% \bibliographystyle{am2013} % bibliographis style - name of *.bst file to use
+% \bibliography{sample}    % bibliographic database - name of *.bib file
+
+% Use these lines without BibTeX.
+% Bibliography created by BibTeX can be loaded from sample.bbl file.
+% \begin{thebibliography}{10}
+% \bibitem{BPWX}
+% {\sc J.~H. Bramble, J.~E. Pasciak, J.~Wang, and J.~Xu}, {\em Convergence
+%   estimates for multigrid algorithms without regularity assumptions}, Math.
+%   Comp., 57 (1991).
+% \bibitem{XZ:identity}
+% {\sc J.~Xu and L.~T. Zikatanov,}
+% {\it The method of alternating projections and the method of subspace corrections in Hilbert space,}
+% Journal of the American Mathematics Society {\bf 15}(2002).
+% \bibitem{MLBFP}
+% {\sc Panayot S. Vassilevski,} {\it Multilevel Block Factorization Preconditioners,}
+% Matrix-based Analysis and Algorithms for Solving Finite Element Equations, Springer, New York, 2008.
+% \bibitem{Achi}
+% {\sc A. Brandt},
+% {\em Algebraic Multigrid Theory: The symmetric Case},
+% Appl. Math. Comput., 19(1986).
+% \bibitem{ciarlet}
+% {\sc P.~G.~Ciarlet},
+% {\it The finite element method for elliptic problems,}
+% Series ``Studies in Mathematics and its Applications'', North-Holland,
+% Amsterdam,
+% 1978.
+% \bibitem{KV1}
+% {\sc J. K\v{r}\'{\i}\v{z}kov\'a and P. Van\v{e}k},
+% {\em Two-level preconditioner with small coarse grid appropriate
+% for unstructured meshes},
+% Numerical Linear Algebra with Applications, 3(1996), no 4.
+% 
+% \bibitem{V}
+% {\sc P. Van\v{e}k},
+% {\em Smoothed Prolongation Multigrid with Rapid Coarsening and Massive
+% Smoothing},
+% To appear in Appl. Math.
+% \bibitem{VBT}
+% {\sc P.~Van\v{e}k, M.~Brezina, and R.~Tezaur},
+% {\em Two-grid method for linear elasticity on unstructured meshes},
+% SIAM J. Sci Comput., 21(1999).
+% \bibitem{BHMV}
+% {\sc M. Brezina, C. Heberton, J. Mandel, P. Van\v{e}k},
+% {\em An iterative method with convergence rate chosen a priori},
+% UCD/CCR Report no. 140, 1999.
+% \bibitem{Vanek_Mandel_Brezina_1995}
+% {\sc P. Van\v{e}k, J. Mandel, M. Brezina},
+% {\em Algebraic Multigrid by Smoothed Aggregation for Second and Fourth Order
+% Elliptic Problems},
+% Computing 56(1996).
+% \bibitem{vanek-accel}
+% {\sc P. Van\v{e}k},
+% {\em Acceleration of Convergence of a Two-level Algorithm by Smoothing
+% Transfer Operator},
+% Appl. Math. 37(1992).
+% \bibitem{FMS}
+% {\sc P. Van\v{e}k},
+% {\em Fast multigrid solver},
+% Applications of Mathematics 40(1995), no. 1.
+% \bibitem{amg-theory}
+% {\sc P. Van\v{e}k, M. Brezina, J. Mandel},
+% {\em Convergence of Algebraic Multigrid Based on Smoothed Aggregations},
+% Numer. Math. 88(2001), no. 3.
+% \end{thebibliography}

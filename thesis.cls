@@ -356,7 +356,7 @@
 % bug: cover i + back side ii and then numbering restarts with i; should be iii
 \renewcommand{\thepage}{\roman{page}}
 
-\newcommand{\submittedtext}{{...}}
+\newcommand{\submittedtext}{{}}
 
 % DECLARATIONS
 % These macros are used to declare arguments needed for the
@@ -403,12 +403,12 @@
     {{\@collegeordept} \par}
 	\vspace*{1ex}
     {{\@university} \par}
-	\vspace*{25mm}
-    {\Large {\submittedtext} \par}
-  \vspace*{.5ex}
+	\vspace*{6ex}
+    %{\Large {\submittedtext} \par}
+  %\vspace*{.5ex}
     {\Large Supervisor: {\@supervisor} \par}
-%	\vspace*{1ex}
-%    {\it {\@degree} \par}
+	\vspace*{1ex}
+    {\it {\@degree} \par}
 	\null\vfill
     {Submitted: \@degreedate}
 }%end large

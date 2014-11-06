@@ -66,47 +66,39 @@ independent variables, which define the neutron phase space:
 
 \section{Neutron phase space} \label{sec:phase}
 Let us assume that $\VV$ is a domain bounded by a piecewise smooth boundary $\pV$, which may be oriented at almost every
-point $\br\in\pV$ (a.e. in $\pV$) by its unit outward normal field $\bn(\br)$. 
-Then we may formally define the neutron phase space 
+point $\br\in\pV$ (a.e. in $\pV$) by its unit outward normal field $\bn(\br)$.
+Then we may formally define the neutron phase space $$
+  X \coloneqq \{(\br,\bomega,E):\ \br\in \VV\subset\R[3], \bomega\in \Sphere, E \in [\Emin,\Emax]\}
+$$ together with its outflow and inflow boundary subsets, respectively:
 $$
-  X := \{(\br,\bomega,E):\ \br\in \VV\subset\R[3], \bomega\in \Sphere, E \in [\Emin,\Emax]\}
-$$
-together with its outflow and inflow boundary subsets, respectively:
-$$
-  \pX[\pm] := \bigl\{ (\br,\bomega,E) \in \pV \times \Sphere \times [E_m, E_M], \mbox{ s.t. } \bomega\cdot\bn(\br)
+  \pX[\pm] \coloneqq \bigl\{ (\br,\bomega,E) \in \pV \times \Sphere \times [E_m, E_M], \mbox{ s.t. } \bomega\cdot\bn(\br)
   \gtrless 0 \bigr\}.
-$$
-The whole boundary $\pX$ can be written as
-$$
-	\pX = \pX[+]\cup \pX[-] \cup \pX[0]
-$$
-where $\pX[0]$ (boundary subset tangential to the flow), so that $\overline X = X \cup \pX$.  
+$$ The whole boundary $\pX$ can be written as $$ \pX = \pX[+]\cup \pX[-] \cup \pX[0] $$ where $\pX[0]$ (boundary subset
+tangential to the flow), so that $\overline X = X \cup \pX$.
 \begin{figure}[!hbt]
-    \centering
-    \includegraphics[scale=1]{phase_space.eps}
-    \caption[Phase space of neutrons]{Phase space of neutrons}
+    \centering \includegraphics[scale=1]{phase_space.eps} \caption[Phase space of neutrons]{Phase space of neutrons}
     \label{fig:phase_space}
-\end{figure}%
-The product Lebesgue measure
+\end{figure}% The product Lebesgue measure
 \begin{equation}\label{eq:measure}
   \d{x} = \d{\mu(X)} = \d{\mu(V\times\Sphere\times [\Emin,\Emax])} = \d{\br}\d{\bomega}\d{E}
 \end{equation}
 is used when integrating over $X$, 
 while the boundary measure
 \begin{equation}\label{eq:measure2}
-\db = \abs{\bomega\cdot\bn}\d{\gamma}\d{\bomega}\d{E},\quad \d{\gamma} = \d{\mu(\pV)},
+\db = \abs{\bomega\cdot\bn}\d{S}\d{\bomega}\d{E},
 \end{equation}
-is used when integrating over $\pX[\pm]$. We note that because of the assumed regularity of the boundary, $\pX[0]$ is a
-closed subset of $\pX$ of $\db$-measure zero (\cite[Chap. XXI, Sec. 2.2]{DautrayLions}). This will allow us to decompose
-spaces of measurable functions defined on $\pX$ into a direct sum of subspaces of measurable functions defined on
-$\pX[+]$ and $\pX[-]$, respectively. When refering to physical units, we will consider the length scale of $\VV$ in
-centimeters.
+is used when integrating over $\pX[\pm]$, where $S = \mu(\pV)$.
+Note that
+because of the assumed regularity of the boundary, $\pX[0]$ is a closed subset of $\pX$ of $\db$-measure zero 
+(\cite[Chap. XXI, Sec. 2.2]{DautrayLions}). This will allow us to decompose spaces of measurable functions defined on 
+$\pX$ into a direct sum of subspaces of measurable functions defined on $\pX[+]$ and $\pX[-]$, respectively. When 
+refering to physical units, we will consider the length scale of $\VV$ in centimeters.
 
 \comment{
 When discussing various semi-discretizations of the NTE, we will also refer to the following subspaces  (``sections''
 through the phase space):
 \begin{equation}\label{eq:pssec}
-	X_E := \{(\br,\bomega,E):\ \br\in \VV\subset\R[3], \bomega\in \Sphere, E \in [\Emin,\Emax]\}
+	X_E \coloneqq \{(\br,\bomega,E):\ \br\in \VV\subset\R[3], \bomega\in \Sphere, E \in [\Emin,\Emax]\}
 \end{equation}
 }
 
@@ -142,7 +134,7 @@ $$
 \begin{figure}[!hbt]
     \centering
     \includegraphics[scale=1.275]{element}
-    \caption[Solid angle]{Schematic of the (scaled) solid angle of directions}
+    \caption[Solid angle]{Schematic view of the solid angle of directions}
     \label{fig:element}
 \end{figure}
 We will also need to integrate functions that depend on the cosine of the angle between two 
@@ -195,22 +187,22 @@ conditions are:
 	
 	\item albedo boundary reflection
 	\begin{equation}\label{eq:nte3}
-  	\psi(\br,\bomega,E) = \alpha(\br)\psi(\br, \bomega_R, E),\quad (\br,\bomega,E)\in \pX[-],\ \ \bomega_R = \bomega - 2
+  	\psi(\br,\bomega,E) = \albedo(\br)\psi(\br, \bomega_R, E),\quad (\br,\bomega,E)\in \pX[-],\ \ \bomega_R = \bomega - 2
   	\bn (\bomega \cdot \bn)
   \end{equation}
-  where $\bomega$ is the reflection of $\bomega_R$ about the boundary plane. For $\alpha \equiv 1$, this corresponds to
-  complete specular reflection and is used to model planes of symmetry, while for $\alpha =
+  where $\bomega$ is the reflection of $\bomega_R$ about the boundary plane. For $\albedo \equiv 1$, this corresponds to
+  complete specular reflection and is used to model planes of symmetry, while for $\albedo =
   0$, we recover the vacuum condition from above. Intermediate values mean that a fraction of neutrons leaving the
   domain in direction $\bomega_R$ are returned back in direction $\bomega$, which is commonly used to model reactor
-  reflectors. We thus assume $0 \leq \alpha \leq 1$. 
+  reflectors. We thus assume $0 \leq \albedo \leq 1$. 
 \end{itemize}
 \begin{remark}
-	The albedo coefficient $\alpha$ may in general vary with the reflector properties and should also capture 
+	The albedo coefficient $\albedo$ may in general vary with the reflector properties and should also capture 
 	redistribution of the reflected neutrons within the phase space due to their diffusion through the reflector. A general
 	treatment of albedo condition is given in \cite{Sanchez4} (see also \cite{Sanchez3}), where an integral albedo operator
-	$\beta$ is introduced, such that
+	$\albedoop$ is introduced, such that
 \begin{equation}\label{eq:albedo-general}
-	\angflux(x)\big\vert_{\pX[-]} = (\beta\angflux)(x) = \bndint[']{\pX[+]}\beta(x\sla x')\angflux(x'),
+	\angflux(x)\big\vert_{\pX[-]} = (\albedoop\angflux)(x) = \bndint[']{\pX[+]}\albedo(x\sla x')\angflux(x'),
 \end{equation}
 	where $x = (\br,\bomega,E)$ and $x' = (\br',\bomega',E')$. 
 \end{remark}
@@ -228,15 +220,15 @@ $$
 $$
 where $s\in I\subset \R$ parametrizes the path traveled by the neutron along the direction $\bomega$ (the
 \textit{characteristic}, see \fref{fig:cartesian2}).
-\begin{figure}[htp]
+\begin{figure}[btp]
 \begin{center}
   \includegraphics[scale=1.2]{cartesian_streaming2}
   \caption{Characteristic direction in the Cartesian coordinate system}
   \label{fig:cartesian2}
 \end{center}
 \end{figure}
-Assuming now for simplicity that the integral term on the right of \eqref{eq1} is absorbed in the source term $q$, we
-may invert the differential operator on the left of \eqref{eq1} by integration along these characteristics and obtain an
+Assuming now for simplicity that the integral term on the right of \eqref{eq1} is absorbed in the source term
+$q$, we may invert the differential operator on the left of \eqref{eq1} by integration along these characteristics and obtain an
 integral formulation of the neutron transport equation:
 \begin{equation}\label{eq:nte-integral}
 	\angflux(\br,\bomega) = \angflux(\br_0,\bomega)e^{-\tau(\br,\br_0)} + \int_0^{s_0}
@@ -248,7 +240,7 @@ where
 	\tau(\br,\br') &= \tau(\br,\br-s'\bomega) = \int_0^{s'} \sigma_t(\br - s''\bomega)\,\d{s''} \label{eq:tau}
 \end{align}
 In reference to \fref{fig:trepka}
-\begin{figure}[htp]
+\begin{figure}[tbp]
 \begin{center}
   \includegraphics[scale=.75]{trepka}
   \caption{Illustration for the solution on a characteristic}
@@ -263,31 +255,36 @@ probability of collision between $r'$ and $r$. This integral form is of both the
 see later in sections \ref{sec:fixed-source} and \ref{sec:lattice}.
 
 \subsection{Collision terms}
-The kernel of the integral operator on the right-hand side of \eqref{eq1} can be split into the so-called
-\textit{double-differential macroscopic cross-section} for scattering and fission, respectively:
-\begin{equation}\label{eq:splitting}
-  \kappa(\br,\bomega\cdot\bomega',E\sla E') = \sigma_s(\br,\bomega\cdot\bomega',E\sla E') +
-  \sigma_f(\br,\bomega\cdot\bomega',E\sla E').
-\end{equation}
-These cross-sections characterize the mean number of ($\bomega$, $E$)-neutrons coming out of a (possible) collision of 
-($\bomega'$, $E'$)-neutrons with nuclei at $\br$ (or more precisely in a
+The kernel of the integral operator on the right-hand side of \eqref{eq1} characterizes the mean number of 
+($\bomega$,~$E$)-neutrons coming out of a (possible) collision of 
+($\bomega'$,~$E'$)-neutrons with nuclei at $\br$ (or more precisely in a
 differential element around $\br$). Such collisions can either just change the direction and energy of the
 inducing neutrons (elastic scattering) or cause absorption of the neutrons followed by release of
-new ones in the considered direction and energy range (fission), or both (inelastic scattering).
-Ordinary macroscopic cross-sections $\sigma_s(\br,E)$, $\sigma_f(\br,E)$ are then introduced to characterize the total
-probability that $(\bomega,E)$ neutrons undergo collisions of the above type irrespective of the outgoing direction and
+new ones in the considered direction and energy range (fission), or both (inelastic scattering). This categorization
+motivates the splitting 
+\begin{equation}\label{eq:splitting}
+  \kappa(\br,\bomega\cdot\bomega',E\sla E') = \eta\sigma_s(\br,\bomega\cdot\bomega',E\sla E') +
+  \nu\sigma_f(\br,\bomega\cdot\bomega',E\sla E').
+\end{equation}
+where the two components are the so-called \textit{double-differential macroscopic
+cross-section} for scattering and fission, respectively. 
+The \textit{scattering} and \textit{fission yield} $\eta$ and $\nu$, respectively, have the meaning of expected
+number of neutrons coming out of the scattering event ($=1$ in case of elastic scattering, might be $> 1$ when 
+inelastic scattering takes place) and the fission event, respectively, per one inducing neutron.% As they will always
+%appear in the product with the appropriate cross-section, their dependence on $\br, E', \bomega'$ is omitted.
+
+Ordinary macroscopic cross-sections $\sigma_s(\br,E)$,
+$\sigma_f(\br,E)$ are then introduced to characterize the total probability that $(\bomega,E)$ neutrons undergo collisions of the above type irrespective of the outgoing direction and
 energy\footnote{Recall that the direction $\bomega$ of the incoming neutrons is irrelevant for the result as a
 consequence of the assumption of isotropic medium (and eq. \eqref{eq:invint}).}, i.e.
 \begin{equation}\label{eq:ddifxs}
 \begin{aligned}
 \eta\sigma_s(\br, E) &=
-\intE[']{\Emin}{\Emax}{\intA[']{\sigma_s(\br,\bomega'\cdot\bomega, E'\sla E)}},\\
-\nu\sigma_f(\br, E) &= \intE[']{\Emin}{\Emax}{\intA[']{\sigma_f(\br,\bomega'\cdot\bomega, 
-	E'\sla E)}}
+\intE[']{\Emin}{\Emax}{\intA[']{\eta\sigma_s(\br,\bomega'\cdot\bomega, E'\sla E)}},\\
+\nu\sigma_f(\br, E) &= \intE[']{\Emin}{\Emax}{\intA[']{\nu\sigma_f(\br,\bomega'\cdot\bomega, 
+	E'\sla E)}}.
 \end{aligned}
 \end{equation}
-where $\eta$ and $\nu$, respectively, are the expected number of neutrons coming out of the scattering event ($=1$ in
-case of elastic scattering, might be $> 1$ when inelastic scattering takes place) and the fission event, respectively. 
 
 The \textit{total macroscopic cross-section}, $\sigma_t$, characterizing the probability that neutron with energy $E$
 undergoes a collision of any type with nuclei at $\br$, can now be decomposed as 
@@ -315,7 +312,7 @@ the inducing neutron
 shows a typical shape of that function); using the second eq.
 \eqref{eq:ddifxs}, we can then write:
 \begin{equation}\label{eq:sf}
-\sigma_f(\br,\bomega\cdot\bomega',E\sla E') = \frac{\chi(E)\nu\sigma_f(\br,E')}{4\pi},\quad 
+\nu\sigma_f(\br,\bomega\cdot\bomega',E\sla E') = \frac{\chi(E)\nu\sigma_f(\br,E')}{4\pi},\quad 
 \intE{\Emin}{\Emax}{\chi(E)} = 1.
 \end{equation}
  
@@ -357,14 +354,14 @@ where $e$ is the energy conversion factor converting fission rate to watts.
 
 \subsection{Solvability of neutron transport problems}\label{sec:ntp}
 In this section, we will formulate the two basic problems of neutron transport in an operator form.
-We will consider the generalized statements in which the equation and boundary conditions are assumed to be
-satisfied a.e. in $X$ and $\bomega\cdot\nabla$ represents the generalized derivative in the usual Sobolev sense. This is motivated by the low
-regularity that can be expected from the exact solution of the NTE -- for example, even for piecewise smooth material data
-(cross-sections $\sigma_x$) and sources $q$, the solution of the NTE is known to possibly exhibit singularities in 
+We will be interested in \textit{generalized solutions} of these problems (which we call just solutions), which satisfy
+the equation and boundary conditions almost everywhere (a.e.) in $X$ (or $\pX$), and understand by $\bomega\cdot\nabla$
+the generalized directional derivative in the usual Sobolev sense. This is motivated by the low regularity that can be
+expected from the exact solution of the NTE -- for example, even for piecewise smooth material data (cross-sections $\sigma_x$) and sources $q$, the solution of the NTE is known to possibly exhibit singularities in 
 first partial derivatives (or be discontinuous as a function of $\bomega$) at surfaces of material discontinuities 
 coinciding with characteristic curves of the left-hand side of \eqref{eq1} (that is, straight lines; see \cite[Chap.
-1]{Agoshkov}, \cite[Sec. III]{Vladimirov}). We will call the solution of such a generalized problem a \textit{weak
-solution}.
+1]{Agoshkov}, \cite[Sec. III]{Vladimirov}).
+% We will call the solution of such a generalized problem a \textit{weak solution}.
 
 
 
@@ -376,12 +373,12 @@ resp. \eqref{eq:measure2})
 $X$\nomrefeq}
 \nomenclature[a]{$\Lp_\sigma(X)$}{space weighted with the total cross-section $\sigma_t$\nomrefeq}
 \begin{aligned}
-	\Lp(X) &= \left\{\psi\mid \norm[\Lp(X)]{\psi} := \left(\int_X\abs{\psi(x)}^p\,\d{x}\right)^{1/p} <
+	\Lp(X) &= \left\{\psi\mid \norm[\Lp(X)]{\psi} \coloneqq \left(\int_X\abs{\psi(x)}^p\,\d{x}\right)^{1/p} <
 	\infty\right\},\quad 1\leq p < \infty,\\
-	\Lp(\pX[\pm]) &= \left\{\psi\mid \Vert\psi\Vert_{\Lp(\pX[\pm])} :=
+	\Lp(\pX[\pm]) &= \left\{\psi\mid \Vert\psi\Vert_{\Lp(\pX[\pm])} \coloneqq
 	\left(\int_{\pX[\pm]}\abs{\psi(x)}^p\,\db\right)^{1/p} < \infty\right\},\quad 1\leq p < \infty,\\
-	\Lp[\infty](X) &= \{\psi\mid \norm[L^{\infty}(X)]{\psi} := \esssup_{X} \abs{\psi(x)} < \infty\}\\
-	\Lp[\infty](\pX[\pm]) &= \{\psi\mid \Vert\psi\Vert_{L^{\infty}(\pX[\pm])} := \esssup_{\pX[\pm]}
+	\Lp[\infty](X) &= \{\psi\mid \norm[L^{\infty}(X)]{\psi} \coloneqq \esssup_{X} \abs{\psi(x)} < \infty\}\\
+	\Lp[\infty](\pX[\pm]) &= \{\psi\mid \Vert\psi\Vert_{L^{\infty}(\pX[\pm])} \coloneqq \esssup_{\pX[\pm]}
 	\abs{(\bomega\cdot\bn)\psi(x)}< \infty\}
 \end{aligned}
 \end{equation}
@@ -403,15 +400,15 @@ We shall call $A$, $\Sigma_t$, $K$ and $T = A + \Sigma_t - K$ the \textit{advect
 \textit{collision} and \textit{transport} operator, respectively. All these operators are continuous; the reaction
 operator $\Sigma_t : \Lp(X) \to \Lp(X)$ is a simple multiplication operator in $\Lp(X)$, self-adjoint and bounded,
 while the operator $K: \Lp(X) \to \Lp(X)$ is bounded under additional (physically justifiable) conditions
-(e.g. conditions (c) and/or (d) of the following theorem, depending on the chosen $p$), but is self-adjoint if and only 
+(conditions (c) and/or (d) of the following theorem, depending on the chosen $p$), but is self-adjoint if and only 
 if the kernel $\kappa$ of $K$ is symmetric in $E$ and $E'$. With the exception of the mono-energetic case, this is
 generally not true (a fact to which we return again in \sref{sec:MG}). To further simplify notation, let us also define 
 $$
-	\op{L} := A + \Sigma_t.
+	\op{L} \coloneqq A + \Sigma_t.
 $$
 \index{$\op{L}$}\index{$A$}\index{$\Sigma_t$}\index{$K (operator)$}%
 For piecewise smooth
-$\pV$ and $1\leq p < \infty$, the traces $\gamma_{\pm}\psi \equiv \psi\vert_{\pX[\pm]}\in\Lp(\pX[\pm])$ are well defined
+$\pV$ and $1\leq p < \infty$, the traces $\Gamma_{\pm}\psi \equiv \psi\vert_{\pX[\pm]}\in\Lp(\pX[\pm])$ are well defined
 for functions $\psi\in \widehat H^p(X)$, where
 $$
 \widehat H^p(X) = \{\psi\mid \psi\in\Lp(X), \bomega\cdot\nabla\psi\in\Lp(X)\}, \quad 1 \leq p \leq \infty
@@ -422,16 +419,17 @@ $$
 $$
 such that $\widehat\psi\vert_{\pX[\pm]} = \psi_{\pm}$ exists (\cite[Thm. 1, Appendix of \S 2, Chap.
 XXI]{DautrayLions}, \cite{Boulanouar1} for the case $p = \infty$).
-Let us then define the Sobolev space of functions with bounded boundary traces
+The Sobolev space of functions with bounded boundary traces is then defined as
 \begin{equation}\label{eq:Hp}
   \nomenclature[a]{$\Hp{p}(X)$}{Sobolev space of functions whose (generalized) partial derivatives up to order $k$ are
  in $\Lp{p}$.\nomrefeq} 
- \Hp(X) := \left\{\psi\in\Lp(X), \bomega\cdot\nabla\psi\in\Lp(X), \Vert\gamma\psi\Vert_{\Lp(\pX)} < \infty\right\}. 
+ \Hp(X) \coloneqq \left\{\psi\in\Lp(X), \bomega\cdot\nabla\psi\in\Lp(X), \Vert\Gamma\psi\Vert_{\Lp(\pX)} < \infty\right\}. 
 \end{equation}
 \index{\Hp(X)}%
+and $A : \Hp(X) \to \Lp(X)$, thus the complete transport operator \linebreak\mbox{$T: \Hp(X) \to \Lp(X)$}.
 We note that $\Hp[2](X)$ is a Hilbert space when equipped with the inner product
 \begin{equation*}\label{eq:ip}
-	\ip{\Hp[2](X)}{\psi,\varphi} := \ip{\Lp[2](X)}{\bomega\cdot\nabla \psi, \bomega\cdot\nabla \varphi} +
+	\ip{\Hp[2](X)}{\psi,\varphi} \coloneqq \ip{\Lp[2](X)}{\bomega\cdot\nabla \psi, \bomega\cdot\nabla \varphi} +
 	\ip{\Lp[2](X)}{\psi,\varphi} +
 	\ip{\Lp[2](\pX)}{\psi,\varphi} 	
 \end{equation*}
@@ -442,31 +440,31 @@ where
 \end{equation}
 \index{$\ip{\Hp[2](X)}{\cdot,\cdot}$}\index{$\ip{\Lp[2](X)}{\cdot,\cdot}$}
 
-\begin{remark}\label{rem:lifting}
+
 The lifting operator allows us to pick a function $\widehat \psi = \mathcal{G}\psi_{\text{in}} \in \Hp(X)$ and convert a
 problem $T\psi = q$ with non-homogeneous boundary conditions \eqref{eq:nte2} to a problem 
 $$
 	T(\psi - \widehat\psi) = q - T\widehat\psi \equiv \widehat q
 $$ 
 where trace of the new unknown function $u = \psi - \widehat\psi$ on $\pX[-]$ vanishes. Final solution is then recovered
-as $\psi = u + \widehat{q}$. Therefore, we can focus on the case with homogeneous conditions. Results for the reflective or more general
-boundary conditions require special trace theorems, see \cite[Chap. XXI, Appendix of \S2]{DautrayLions} or \cite[Chap. 2]{Agoshkov} 
-\end{remark}
+as $\psi = u + \widehat{q}$. Therefore, we can focus on the case with homogeneous conditions and put $\Dom{T} =
+\Hpnot(X)$ where
+$$
+	\Hpnot(X) \coloneqq \{\psi\in \Hp(X),\ \psi\vert_{\pX[-]} = 0\}.
+$$
+Similar treatment of reflective or more general boundary conditions requires special trace theorems, see
+\cite[Chap. XXI, Appendix of \S2]{DautrayLions} or \cite[Chap. 2]{Agoshkov}.
 
 The fixed source, steady state neutron transport problem with vacuum boundary conditions that we are going to study in
 this section is posed as follows
 
 \begin{problem}\label{prb:1}
-For given $q\in \Lp(X)$ find $\psi \in \Dom{T} \subset \Lp(X)$ such that
-$$
-  \left\{
-  \begin{aligned}
-     &T\psi(\br,\bomega,E) = q(\br,\bomega,E),\\
-     &\Dom{T} = \{\psi\in \Hp(X),\ \psi\vert_{\pX[-]} = 0\},
-  \end{aligned}
-  \right.
-$$
+For given $q\in \Lp(X)$ find $\psi \in \Hpnot(X) \subset \Lp(X)$ such that
+$
+     T\psi = q.
+$
 \end{problem}
+
 
 We will first consider the physically most natural $\Lp[1](X)$ setting.
 
@@ -478,12 +476,11 @@ Assume that
 	\item $\kappa \geq 0$ a.e. in $\VV\times\Sphere^2\times[\Emin,\Emax]^2$,
 	\item $\displaystyle c \leq \bar c < 1$ a.e. in $\VV\times[\Emin,\Emax]$ where
 	  \begin{equation}\label{eq:c}
-	    c(\br,E) := \frac{1}{\sigma_t(\br,E)}\int_{\Emin}^{\Emax}\int_{\Sphere} \kappa(\br,\bomega'\cdot\bomega,
+	    c(\br,E) \coloneqq \frac{1}{\sigma_t(\br,E)}\int_{\Emin}^{\Emax}\int_{\Sphere} \kappa(\br,\bomega'\cdot\bomega,
 	    E'\sla E)\,\d{E'}\d{\bomega'}.
 	  \end{equation}
 \end{enumerate}
-Then Problem \ref{prb:1} with $p = 1$ has for any $q\in \Lp[1](X)$ a unique weak solution 
-$\psi(\br,\bomega,E)\in\Dom{T}\subset\Lp[1](X)$.
+Then Problem \ref{prb:1} with $p = 1$ has a unique solution $\psi\in\Hpnot[1](X)$.
 \end{theorem}
 \begin{proof}
 \cite[Chap. XXI, \S 2, Proposition 5]{DautrayLions}
@@ -491,7 +488,7 @@ $\psi(\br,\bomega,E)\in\Dom{T}\subset\Lp[1](X)$.
 
 The value $c$ in Thm. \ref{thm1} has the physical meaning of the mean (net) number of neutrons emitted (in all possible
 directions and energies) per a neutron with energy $E$ (coming from any direction) colliding with a nucleus at point
-$\br\in V$. 
+\mbox{$\br\in V$}. 
 Condition (c) thus expresses the requirement that the system be \textit{subcritical} in order for a
 steady solution in presence of external sources to be achieved (the notion of criticality will be formally introduced in the following
 subsection).
@@ -504,7 +501,8 @@ and is usually called \textit{collision ratio} \index{c|see{collision ratio}}\in
 
  In \cite{Sanchez3}, Sanchez uses the inversion of the transport operator along characteristics (see \ref{sec:advection}
  above) to prove existence and uniqueness of a solution to the fixed source neutron transport problem in
- the cross-section weighted space $\Hp[1]_{\sigma}(X)$ for right hand sides in $\Lp[1]_{\sigma}(X)$.
+ the cross-section weighted space $\Hp[1]_{\sigma}(X)$ for right hand sides in $\Lp[1]_{\sigma}(X)$ (and albedo
+ boundary conditions of general type \eqref{eq:albedo-general}).
  This appears to be an alternative physically natural functional setting due to the definition of the reaction rate, eq. 
  \eqref{eq:rr}; moreover, assumption (a) may be relaxed by allowing $\sigma_t = 0$ in arbitrarily large regions 
   (the \textit{void regions}). Note that if we assume (a) of Thm. \ref{thm1}, the norms of $\Lp[1]$ and
@@ -517,11 +515,11 @@ show the existence of unique solution in $\Lp[\infty](X)$ for $q\in \Lp[\infty](
 based on the inversion of the transport operator along characteristics and requires instead of
  (c) the condition
 \begin{enumerate}
-  \item[(d)] $d \leq \bar d < 1$ a.e. in $\VV\times[\Emin,\Emax]$
+  \item[(d)] $d \leq \overline d < 1$ a.e. in $\VV\times[\Emin,\Emax]$
 \end{enumerate}
 where
 \begin{equation}\label{eq:d} 
-d(\br,E) := 
+d(\br,E) \coloneqq 
   \frac{1}{\sigma_t(\br,E)}\int_{\Emin}^{\Emax}\int_{\Sphere} \kappa(\br,\bomega\cdot\bomega',
 	    E\sla E')\,\d{E'}\d{\bomega'}
 \end{equation}
@@ -532,45 +530,126 @@ collision angle ($\bomega\cdot\bomega'$), assumptions (c) and (d) really represe
 transfer in collisions. 
 
 \subsubsection{$\Lp[2](X)$ setting and second-order forms of NTE}\label{sec:L2}
-In general $\Lp(X)$ spaces with $1 < p < \infty$, Dautray and Lions outline the proof based on the same ideas as those 
+In general $\Lp(X)$ spaces with $1 < p < \infty$, Dautray and Lions outline the proof based on the same ideas as those
 used in the $\Lp[1](X)$ case (theory of monotone operators), utilizing assumptions (a-d) of Thm. \ref{thm1}.  The case
 $p = 2$ is particularly important\footnote{even though it does not lead to a direct physical interpretation as  the
-$\Lp[1](X)$ setting} as the Hilbert space structure of $\Lp[2](X)$ allows to use richer set of mathematical tools to 
-formulate practical solution methods. It also allows to formulate variational principles for the NTE, in the spirit of 
-the seminal work of Vladimirov \cite{Vladimirov}. This approach allows to find the weak solution of the neutron 
-transport problem $$
-\begin{aligned}
-     &T\psi(\br,\bomega,E) = q(\br,\bomega,E),\\
-     &\Dom{T} = \{\psi\in \Hp[2](X),\ \psi\vert_{\pX[-]} = 0\},
-  \end{aligned}
-$$
-by solving an equivalent weak problem of finding $\psi\in\Hp[2](X)$ such that
-\begin{equation}\label{eq:weakform}
-	\langle \tilde{T}\psi, \varphi \rangle = \langle \tilde{q}, \varphi \rangle  \quad \forall \varphi\in \Hp[2](X),
+$\Lp[1](X)$ setting} as the Hilbert space structure of $\Lp[2](X)$ allows to use richer set of mathematical tools to
+formulate practical solution methods. In particular, it allows to formulate variational principles for the NTE, which
+are of both theoretical and practical importance. 
+
+Let us set $V = \Hpnot[2](X)$ and let $V'$
+denote the dual space, i.e.
+the space of bounded linear functionals on $V$.  For $T : V \to V'$, we may view the problem of
+finding $\psi \in V$ such that $T\psi = q$
+as a problem posed in $V'$ and write it in the variational (or \textit{weak}) form: Find $\psi \in V$ such that 
+\begin{equation}\label{eq:weakform0}
+	\langle T\psi, \varphi \rangle = \langle q, \varphi \rangle  \quad \forall \varphi\in V,
 \end{equation}
-with $\tilde{T}$ being a bounded and coercive operator on $\Hp[2](X)$ ($\langle \cdot,\cdot\rangle$ denotes the
-duality pairing between $\Hp[2](X)$ and the dual space of bounded linear functionals on $\Hp[2](X)$; if we consider
-$\tilde{T} : \Hp[2](X) \to \Lp[2](X)$ and $q\in \Lp[2](X)$, this pairing coincides with the standard $\Lp[2](X)$ inner
-product \eqref{eq:ipL2}). Well-posedness of this problem is then an immediate consequence of the Lax-Milgram lemma. 
+where $\langle \cdot,\cdot\rangle$ denotes the duality pairing between $V'$ and $V$. As usual, we will refer to the
+arbitrarily varying functions $\varphi\in V$ in \eqref{eq:weakform0} as to \textit{test functions}. 
 
-Bourhrara formulates in \cite{Bourhrara2} three such principles for the fixed source problem (and one for the
-criticality problem investigated in the following section) and shows that some of these formulations could be obtained
-also as weak forms of the traditional second-order forms of the transport equation -- the even parity equation (obtained
-by writing eq.
-\eqref{eq1} for $\bomega$ and $-\bomega$, adding and subtracting the two resulting equations and eliminating the
-unknowns of odd parity) and the self-adjoint angular flux equation (obtained by
-expressing $\psi$ from the $\sigma_t\psi$ term of \eqref{eq1} in terms of the remaining terms and substituting back into
-the advection term). He also provides a comparison with other formulations based on the least-squares approach
-(minimizing the appropriately scaled residual \mbox{$\norm[{\Lp[2](X)}]{\mathcal{P}(\tilde T \psi - q)}^2 +
-\varpi\norm[{\Lp[2](\pX[-])}]{\psi_{\text{in}} - \psi}^2$}) studied e.g. in \cite{Manteuffel} or
-\cite{Agoshkov}. 
+This formulation
+allows considering more general right hand sides \linebreak\mbox{$q \in V' \supset \Lp[2](X)$}, but we will restrict our
+attention to the case represented by Problem \ref{prb:1} with $p = 2$, i.e. $T : V \to \Lp[2](X)$ with $q \in
+\Lp[2](X)$.  Since for $\Lp[2](X)$ the duality pairing coincides with the ordinary $\Lp[2](X)$ inner product
+\eqref{eq:ipL2} and the Riesz representation theorem lets us identify $\Lp[2](X)$ with its dual, we also identify the
+linear functionals $Tu,q \in [\Lp[2](X)]'$ with their Riesz representants $Tu,q \in \Lp[2](X)$. If we now define
+the bilinear and linear form $$ a(u,v) = \ip{\Lp[2](X)}{Tu,v}, \quad f(v) = \ip{\Lp[2](X)}{q,v}, $$
+we can write the weak formulation \eqref{eq:weakform0} as
+\begin{problem}\label{prb:2}
+For given $q\in \Lp[2](X)$ find $\psi \in V$ such that
+$$
+	a(\psi, \varphi) = f(\varphi) \quad \forall \varphi\in\Lp[2](X).
+$$
+\end{problem}
+Moreover, for a sufficiently smooth boundary, the incoming boundary conditions can be imposed weakly by incorporating
+them into the bilinear form $a(u,v)$ via Green's theorem \cite[Thm. 2.24]{Agoshkov}:
+for $\psi,\phi\in \Hp[2](X)$,
+$$\ip{\Lp[2](X)}{\bomega\cdot\nabla\psi, \varphi} = \ip{\Lp[2](\pX)}{\psi, \varphi} -
+\ip{\Lp[2](X)}{\psi, \bomega\cdot\nabla\varphi},
+$$
+in which case we look in Problem \ref{prb:2} for $\psi \in \Hp[2](X)$ and consider test functions also from $\Hp[2](X)$.
 
-Approximations of eq. \eqref{eq:weakform} leading to numerical solution methods are naturally obtained by restricting
-the formulation to finite-dimensional subspaces of $\Hp[2](X)$. With bounded and coercive $\tilde T$, approximation
-error is then automatically provided by the C{\' e}a lemma. In the angular domain, this has
+\myparagraph{Coercive weak formulations}
+Under the assumptions that $\kappa$ is an even function of $\bomega\cdot\bomega'$ and $q$ an even function of $\bomega$,
+Vladimirov \cite{Vladimirov} has shown how to obtain the generalized solution of Problem \ref{prb:1} from the solution
+of
+\begin{equation}\label{eq:weakform_coercive}
+	\tilde{a}(\tilde{\psi}, \varphi) = \tilde{f}(\varphi) \quad \forall \varphi\in \Hp(X)
+\end{equation} 
+with \textit{bounded and coercive} bilinear form $\tilde{a}$ corresponding to (bounded and coercive) transport operator
+$\tilde{T}$ and source term $\tilde{q}$ of the even parity form of the NTE\footnote{This well-known and widely utilized
+form of the transport equation is obtained by writing eq. \eqref{eq1} for $\bomega$ and $-\bomega$, adding and
+subtracting the two resulting equations and eliminating the unknowns of odd parity; see e.g. \cite[Chap.
+II]{Azmy1}, \cite[Sec. 9.11]{Stacey1} or \cite[Chap. XX]{DautrayLions}).} That is, there exist $C_b > 0, \alpha > 0$
+such that $\forall u,v \in V$:
+$$
+	\tilde{a}(u,v) \leq C_b \norm[{V}]{u}\norm[{V}]{v},
+	\quad \tilde{a}(u, u) \geq \alpha \norm[{V}]{u}^2
+$$
+and the well-known Lax-Milgram lemma can be used to prove well-posedness of \eqref{eq:weakform_coercive} and
+consequently of Problem \ref{prb:1}. For the sake of completeness and future reference, we state the lemma below in
+its general form.
+\begin{lemma}[Lax-Milgram]\label{lem:lax-milgram}
+	Let $V$ be a Hilbert space and $a : V\times V \to \R$ a bounded and coercive bilinear form with constants $C_b$ and
+	$\alpha$, respectively.
+	Then for any $f \in V'$, there exists a unique $u\in V$ such that
+	\begin{equation}\label{eq:laxmilgram}
+		a(u,v) = f(v) \quad \forall v\in V,
+	\end{equation}
+	and
+	$$
+		\norm[V]{u} \leq \frac{1}{\alpha}\norm[V']{f}.
+	$$
+\end{lemma}
+
+
+\comment{\footnote{In general, we will denote by $\mathcal{L}(V,W)$ \index{$\mathcal{L}(V,W)$} the Banach space of bounded linear operators mapping
+Banach space $V$ to a Banach space $W$} with norm $\norm[\mathcal{L}(V,W)]{\genop{A}} = \sup_{\norm[V]{v}=1} \norm[W]{\genop{A}v}$.}
+
+Bourhrara presents in \cite{Bourhrara2} three coercive weak formulations of the fixed source problem (and
+one for the criticality problem investigated in the following section) and shows that one of them could be obtained
+also as weak forms of another by now traditional second-order representation of the transport equation --  the
+self-adjoint angular flux equation (obtained by expressing $\psi$ from the $\sigma_t\psi$ term of \eqref{eq1} in terms 
+of the remaining terms and substituting back into the advection term). He also provides a comparison with other 
+formulations based on the least-squares approach (minimizing the appropriately scaled residual 
+\mbox{$\norm[{\Lp[2](X)}]{\mathcal{P}(T \psi - q)}^2 + \varpi\norm[{\Lp[2](\pX[-])}]{\psi_{\text{in}} - \psi}^2$}) 
+studied e.g. in \cite{Manteuffel} or \cite{Agoshkov}. 
+
+Approximations of Problem \ref{prb:2} leading to practical numerical solution methods are naturally obtained by
+restricting the formulation to finite-dimensional subspaces of $\Hp[2](X)$. With bounded and coercive bilinear form $a$,
+approximation error is then automatically provided by the C{\' e}a lemma. In the angular domain, this has
 been done using the subspace of spherical harmonics of finite degree in \cite{bourhrara3} of \cite{Manteuffel}, which
-is also known as the $\PN$ method. As we will see in \sref{sec:1-SN}, this can be done also with the other most widely 
-employed angular approximation methods, the $\SN$ method of discrete ordinates.
+is also known as the $\PN$ method (the finite-dimensional restriction can then be obtained for instance by using the
+finite-element discretization of the spatial dependence). As we will see in \sref{sec:1-SN}, this can be done also with
+the other most widely employed angular approximation methods, the $\SN$ method of discrete ordinates.
+
+\subsubsection{Subcriticality conditions}
+For future reference, we collect the assumptions of Theorem \ref{thm1} into the following definition.
+\begin{definition}[Subcriticality conditions]\label{def:subcriticality}
+	Let 
+	\begin{enumerate}[label=(\alph*)]
+	\item $\sigma_t \in \Lp[\infty](X)$, $\sigma_t \geq \mst > 0$ a.e. in $\VV\times[\Emin,\Emax]$,
+	\item $\kappa \geq 0$ a.e. in $\VV\times\Sphere^2\times[\Emin,\Emax]^2$,
+	\item $\displaystyle c \leq \bar c < 1$ a.e. in $\VV\times[\Emin,\Emax]$ where
+	  \begin{equation*}
+	    c(\br,E) = \frac{1}{\sigma_t(\br,E)}\int_{\Emin}^{\Emax}\int_{\Sphere} \kappa(\br,\bomega'\cdot\bomega,
+	    E'\sla E)\,\d{E'}\d{\bomega'},
+	  \end{equation*}
+	 \item $d \leq \overline d < 1$ a.e. in $\VV\times[\Emin,\Emax]$ where
+	 $$
+	 d(\br,E) = 
+  		\frac{1}{\sigma_t(\br,E)}\int_{\Emin}^{\Emax}\int_{\Sphere} \kappa(\br,\bomega\cdot\bomega',
+	    E\sla E')\,\d{E'}\d{\bomega'},
+	 $$
+	\end{enumerate}
+	Then we call
+	\begin{itemize}
+  \item conditions (a,b,c) the subcriticality conditions in $\Lp[1](X)$,
+  \item conditions (a,b,d) the subcriticality conditions in $\Lp[\infty](X)$,
+  \item conditions (a-d) the subcriticality conditions in $\Lp(X)$, $2\leq p < \infty$.
+\end{itemize}
+\end{definition}
 
 \comment{ We will now take yet another approach and prove the
 existence and uniqueness in $\Lp[2](X)$ using the contraction principle (\cite[Thm. 2.3.1]{DrabekNFA}). As we will see
@@ -581,7 +660,7 @@ in the following chapter, the results from next subsection will have direct cons
 Let us start by stating some well-known results that hold in the $\Hp[2](X)$.
 This is a Hilbert space when equipped with the inner product
 $$
-	\ip{\Hp[2](X)}{\psi,\varphi} := \ip{\Lp[2](X)}{\bomega\cdot\nabla \psi, \bomega\cdot\nabla \varphi} +
+	\ip{\Hp[2](X)}{\psi,\varphi} \coloneqq \ip{\Lp[2](X)}{\bomega\cdot\nabla \psi, \bomega\cdot\nabla \varphi} +
 	\ip{\Lp[2](X)}{\psi,\varphi} +
 	\ip{\Lp[2](\pX)}{\psi,\varphi} 
 $$
@@ -592,7 +671,7 @@ where
 \end{equation}
 Let us denote 
 \begin{equation}\label{eq:opL}
-	\op{L} := A + \Sigma_t.
+	\op{L} \coloneqq A + \Sigma_t.
 \end{equation}
 Using the Poincar{\' e}-Friedrichs inequality and integration by parts (see e.g. \cite[Chap.
 2]{Agoshkov}), one can show the following:
@@ -641,14 +720,14 @@ $V$; this should not cause confusion, as $v$ with its other meaning of neutron's
 context.
 
 \begin{lemma}[Lax-Milgram]\label{lem:lax-milgram}
-	Let $\genop{A}\in\mathcal{L}(V,V')$ be a bounded and coercive operator with constants $C_b$ and $C_c$, respectively.
+	Let $\genop{A}\in\mathcal{L}(V,V')$ be a bounded and coercive operator with constants $C_b$ and $\alpha$, respectively.
 	Then for any $f\in V'$, there exists a unique $u\in V$ such that
 	\begin{equation}\label{eq:laxmilgram}
 		\langle \genop{A}u, v \rangle = \langle f, v \rangle  \quad \forall v\in V,
 	\end{equation}
 	and
 	$$
-		\norm[V]{u} \leq \frac{1}{C_c}\norm[V']{f}.
+		\norm[V]{u} \leq \frac{1}{\alpha}\norm[V']{f}.
 	$$
 \end{lemma}
 As usual, we will call eq. \eqref{eq:laxmilgram} a weak form of the operator equation $\genop{A}u = f$.
@@ -656,14 +735,14 @@ As usual, we will call eq. \eqref{eq:laxmilgram} a weak form of the operator equ
 
 Lax-Milgram lemma allows us to prove the following lemma.
 \begin{lemma}
-	Let $\genop{A}\in\mathcal{L}(V,V')$ be bounded and coercive with constant $C_c$
+	Let $\genop{A}\in\mathcal{L}(V,V')$ be bounded and coercive with constant $\alpha$
 	and let $\genop{F}:V\to V'$ be Lipschitz with constant $C_L$, i.e. 
 	$$
 		\exists C_L > 0: \norm[V']{\mathcal{F}v_1 - \mathcal{F}v_2} \leq C_L \norm[V]{v_1 - v_2}\quad \forall v_1,v_2 \in V. 
 	$$
 	If
 	$$
-		\frac{C_L}{C_c} < 1
+		\frac{C_L}{\alpha} < 1
 	$$
 	then the mapping $\mathcal{T} : v\in V \mapsto \mathcal{T}v\in V$ defined by solving
 	$$
@@ -676,7 +755,7 @@ Lax-Milgram lemma allows us to prove the following lemma.
 	linearity of $\genop{A}$, definition of $\genop{T}$ and Lipschitz property of $\genop{F}$ yields 
 	$$
 	\begin{aligned}
-		C_c \norm[V]{\mathcal{T}v_1 - \mathcal{T}v_2}^2 &\leq 
+		\alpha \norm[V]{\mathcal{T}v_1 - \mathcal{T}v_2}^2 &\leq 
 		\langle \genop{A}\mathcal{T}v_1 - \genop{A}\mathcal{T}v_2, \mathcal{T}v_1 - \mathcal{T}v_2 \rangle \\
 		& = \langle \genop{F}v_1 - \genop{F}v_2,  \mathcal{T}v_1 - \mathcal{T}v_2 \rangle \\
 		& \leq \norm[V']{\mathcal{F}v_1 - \mathcal{F}v_2} \norm[V]{\mathcal{T}v_1 - \mathcal{T}v_2}\\
@@ -685,7 +764,7 @@ Lax-Milgram lemma allows us to prove the following lemma.
 	$$
 	Therefore
 	$$
-		\norm[V]{\mathcal{T}v_1 - \mathcal{T}v_2}^2 \leq \frac{C_L}{C_c}\norm[V]{v_1 - v_2} 
+		\norm[V]{\mathcal{T}v_1 - \mathcal{T}v_2}^2 \leq \frac{C_L}{\alpha}\norm[V]{v_1 - v_2} 
 	$$ 
 	for arbitrary $v_1, v_2\in V$, proving the claim.
 \end{proof}
@@ -693,7 +772,7 @@ As an immediate corollary, we obtain from the contraction principle
 \begin{corollary}
 	Let 
 	$$
-		\rho := \frac{C_L}{C_c} < 1.
+		\rho \coloneqq \frac{C_L}{\alpha} < 1.
 	$$
 	For any $u_{(0)} \in V$, the sequence of iterates $\{u_{(i)}\}_{i=1}^{\infty}$ of the iteration
 	$$
@@ -749,9 +828,9 @@ which ensures a steady neutron distribution (that means -- steady power generati
 than the fission. This is called a ``criticality problem'' -- the system is said to be \textit{subcritical},
 \textit{supercritical} and \textit{critical}, respectively, if without an additional neutron source the number of
 neutrons in the core will, respectively, continuously diminish, increase or be maintained through the
-balance between actual out of core leakage, absorption and fission. In reactor core reloading optimization, we assume
-the core geometry fixed and try to find such a material composition that (besides other optimization criteria) would
-ensure the critical state. 
+balance between actual out of core leakage, absorption and fission. This characterization motivates the name of the
+conditions in Def. \ref{def:subcriticality}. In reactor core reloading optimization, we assume the core geometry fixed
+and try to find such a material composition that (besides other optimization criteria) would ensure the critical state. 
 
 Mathematically, we are looking for a non-trivial non-negative solution of the homogeneous
 version of eq. \eqref{eq1} (i.e. with $q\equiv 0$ and b.c. \eqref{eq:nte3}), which means solving an eigenvalue
@@ -762,29 +841,29 @@ In order to formulate
 the eigenvalue problem, we split the kernel of the collision operator according to \eqref{eq:splitting} into the 
 scattering and fission part, thus
 $$
-K\psi(\br,\bomega,E)
-  			= S\psi(\br,\bomega,E) + F\psi(\br,\bomega,E)
+K\psi
+  			= S\psi + F\psi
 $$
 where, using further eq. \eqref{eq:sf},
 \begin{equation}\label{eq:FScrit}
 \begin{aligned}
 F\psi(\br,\bomega,E) &= \frac{\chi(E)}{4\pi}\intE[']{\Emin}{\Emax}{\nu\sigma_f(\br,E')\intA{\psi(\br,\bomega,E')}}\\
-S\psi(\br,\bomega,E) &= \intE[']{\Emin}{\Emax}{\intA[']{\sigma_s(\br,\bomega\cdot\bomega',E\sla
+S\psi(\br,\bomega,E) &= \intE[']{\Emin}{\Emax}{\intA[']{\eta\sigma_s(\br,\bomega\cdot\bomega',E\sla
 E')\psi(\br,\bomega,E')}}
 \end{aligned}
 \end{equation}
 The criticality eigenvalue problem then reads:
-\begin{problem}
-Find nontrivial, nonnegative $\psi(\br,\bomega,E)\in \Dom{B} \subset \Lp(X)$ and $\lambda > 0$, such that
+\begin{problem}\label{prb:3}
+Find nontrivial, nonnegative $\psi\in \Dom{B} \subset \Lp(X)$ and $\lambda > 0$, such that
 \begin{equation}\label{eq:critical}
 \left\{
   \begin{aligned}
-     &B\psi(\br,\bomega,E) \equiv \bigl[A + \Sigma_t - S]\psi(\br,\bomega,E) = \frac{1}{\lambda} F\psi(\br,\bomega,E),\\
-     &\Dom{B} = \{\psi\in \Hp(X),\ \psi\vert_{\pX[-]} = \beta\psi\},
+     &B\psi \equiv \bigl[A + \Sigma_t - S]\psi = \frac{1}{\lambda} F\psi,\\
+     &\Dom{B} = \{\psi\in \Hp(X),\ \psi\vert_{\pX[-]} = \albedoop\psi\},
   \end{aligned}
 \right.
 \end{equation}
-where $\beta\psi$ is given by the right-hand side of \eqref{eq:nte3} (or, more generally, $\beta$ is the
+where $\albedoop\psi$ is given by the right-hand side of \eqref{eq:nte3} (or, more generally, $\albedoop$ is the
 boundary operator of \eqref{eq:albedo-general}).
 \end{problem}  
 
@@ -801,7 +880,7 @@ Proving existence and uniqueness of solution of \eqref{eq:critical} can proceed 
 		emitted from scattering collisions (the \textit{scattering ratio}\index{scattering
 		ratio}\index{$\tilde{c}$|see{scattering ratio}}):
 		\begin{equation}\label{eq:tildec}
-		\tilde c(\br,E) := \frac{1}{\sigma_t(\br,E)}\int_{\Emin}^{\Emax}\int_{\Sphere}
+		\tilde c(\br,E) \coloneqq \frac{1}{\sigma_t(\br,E)}\int_{\Emin}^{\Emax}\int_{\Sphere}
 		\sigma_s(\br,\bomega\cdot\bomega', E'\sla E)\,\d{E'}\d{\bomega'}.
 	    \end{equation}
 	\item
@@ -813,7 +892,7 @@ Proving existence and uniqueness of solution of \eqref{eq:critical} can proceed 
 		Invoke the Krein-Rutmann theorem for positive linear compact operators (e.g., \cite[Thm. 5.4.33]{DrabekNFA}) to prove
 		that the spectral radius of $B^{-1}F$ is a simple eigenvalue associated with the unique positive eigenfunction.
 \end{enumerate}
-\begin{remark}\label{rem:keff}
+\begin{remark}[\textsc{Criticality}]\label{rem:keff}
 In nuclear engineering, spectral radius of $B^{-1}F$ is often denoted $\keff$
 and called \textit{effective multiplication factor}. Physically,
 $$
@@ -821,8 +900,8 @@ $$
 $$
 so that 
 $\keff < 1$, $\keff > 1$ and $\keff = 1$, respectively, correspond to \textit{subcritical},
-\textit{supercritical} and \textit{critical} system. Notice that $\keff < 1 \Rightarrow c < 1$, but not the other way
-round because the possibility of neutron loss due to out of core leakage is not included in \eqref{eq:c}. 
+\textit{supercritical} and \textit{critical} system. Notice that $c < 1 \Rightarrow \keff < 1$, but not the other way
+round because the possibility of neutron loss due to out of core leakage is not accounted for in \eqref{eq:c}. 
 \end{remark}
 
 Because of the first step, we can expect similiar assumptions as in Thm. \ref{thm1} (or in the discussion below the
@@ -850,27 +929,24 @@ section. The result is the following theorem:
 	\lim_{n\to\infty}\Vert S-S_n\Vert_{\mathcal{L}(\Lp[1]_{\sigma},\Lp[1])} = 
 	\lim_{n\to\infty}\Vert F-F_n\Vert_{\mathcal{L}(\Lp[1]_{\sigma},\Lp[1])} = 0
 \end{equation}
-Then the equation
+Then the problem
 \begin{equation*}
-\left\{
-  \begin{aligned}
-     &B\psi(\br,\bomega,E) = \frac{1}{\lambda} F\psi(\br,\bomega,E),\\
-     &\Dom{B} = \{\psi\in \Hp[1]_{\sigma}(X),\ \psi\vert_{\pX[-]} = \beta\psi\},
-  \end{aligned}
-\right.
+     B\psi = \frac{1}{\lambda} F\psi,\quad
+     \Dom{B} = \{\psi\in \Hp[1]_{\sigma}(X),\ \psi\vert_{\pX[-]} = \albedoop\psi\},
 \end{equation*}
-where $\beta : \Lp[1]_{\sigma}(\pX[+]) \to \Lp[1]_{\sigma}(\pX[-])$ is the albedo operator of
-\eqref{eq:albedo-general}, has a countable number of eigenvalues $\{\lambda_k\}$ and associated (weak) eigenfunctions
-which belong to $\Hp[1]_{\sigma}(X)$.
+where $\albedoop : \Lp[1]_{\sigma}(\pX[+]) \to \Lp[1]_{\sigma}(\pX[-])$ is the albedo operator of
+\eqref{eq:albedo-general}, has a countable number of eigenvalues $\{\lambda_k\}$ and associated (generalized)
+eigenfunctions which belong to $\Hp[1]_{\sigma}(X)$.
 There exists the eigenvalue $\lambda = \min \{\lambda_k\} = \rho(B^{-1}F)$ (the spectral radius of $B^{-1}F$), which is
 algebraically simple and its associated eigenfunction is the only one that does not change sign in $X$.
 \end{theorem}
 \begin{proof}
 See \cite{Sanchez3}.
 \end{proof}
-The condition $\tilde{c} < 1$ is satisfied if $\eta < 1$, i.e. in case of negligible neutron yield from non-elastic 
-scattering (which is a reasonable assumption at least in thermal reactor calculations). The second condition is needed 
-for uniqueness -- the notion of trajectory connectivity is so far rather heuristic and basically means that particles 
+The condition $\tilde{c} < 1$ may be violated if $\eta$ is considerably larger than $1$, i.e. in case of high
+neutron yield from non-elastic scattering; this case is however reasonably excluded by physical reasons (at least in thermal
+reactor calculations).
+The second condition is needed for uniqueness -- the notion of trajectory connectivity is so far rather heuristic and basically means that particles 
 produced in $X_F$ may reach any other point by direct streaming or through collisions. Essentially similar conditions 
 are often used to circumvent the unphysical restriction of almost everywhere strictly positive fission cross-sections 
 (\cite{MokhtarKharroubi,AllaireHomogenization}). Assumption \eqref{eq:iops} is needed for proving power compactness of

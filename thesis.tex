@@ -29,7 +29,7 @@
 % ----------------------------------------------------------------------
 % below is to generate the title page with crest and author name
 
-\title{Mathematical Modeling\\ of Neutron Transport}
+\title{Mathematical Modeling of Neutron Transport}
 
 
 
@@ -39,7 +39,7 @@
 \ifpdf
   \author{\href{mailto:mhanus@kma.zcu.cz}{Milan Hanu{\v s}}}
 %  \cityofbirth{born in XYZ} % uncomment this if your university requires this
-%  % If city of birth is required, also uncomment 2 sections in PhDthesisPSnPDF
+%  % If city of birth is required, also uncomment 2 sections in PhDthesisPSnPDF 
 %  % Just search for the "city" and you'll find them.
   \collegeordept{\href{http://www.kma.zcu.cz}{Department of Mathematics}}
   \university{\href{http://www.zcu.cz}{University of West Bohemia, Pilsen}}
@@ -56,10 +56,10 @@
   \crest{\includegraphics[width=4cm]{logo}}
 \fi
 
-\renewcommand{\submittedtext}{Thesis}
+%\renewcommand{\submittedtext}{Ph.D. Thesis}
 \supervisor{Doc. Ing. Marek Brandner, Ph.D.}
 \degree{Doctor of Philosophy (Ph.D.)}
-\degreedate{07/2012}
+\degreedate{11/2014}
 
 
 % ----------------------------------------------------------------------
@@ -112,7 +112,7 @@
 
 % Your institution may have specific regulations if you need an abstract and where it is to be placed in the document. The default here is just after title.
 
-\include{0/abstract}
+%\include{0/abstract}
 
 % The original template provides and abstractseparate environment, if your institution requires them to be separate. I think it's easier to print the abstract from the complete thesis by restricting printing to the relevant page.
 % \begin{abstractseparate}
@@ -137,7 +137,7 @@
 %: ----------------------- list of figures/tables/todos ------------------------
 
 \listoffigures	% print list of figures
-\listoftables  % print list of tables
+%\listoftables  % print list of tables
 
 %\todototoc
 %\listoftodos
@@ -176,12 +176,13 @@
   %\include{1_introduction/aims}		
   \include{2/nte_intro}
   \include{3/nte_methods}
+  \include{3/spn}
   \include{4/mcpn}
-  \include{5/hermes}
+  %\include{5/hermes}
   %\include{6/coupled}
   %\include{7/evc}
 
-\chapter{Conclusions}
+%\chapter{Conclusions}
 
 %: ----------------------- bibliography ------------------------
 
@@ -213,9 +214,18 @@
 \setcounter{remark}{0}
 \setcounter{corollary}{0}
 
+\ifpdf
+	\graphicspath{{appendices/pic/PNG/}{appendices/pic/PDF/}{appendices/pic/}}
+\else
+	\graphicspath{{appendices/pic/EPS/}{appendices/pic/}}
+\fi
+
 \include{appendices/appendixA}
 %\include{appendices/appendixB}
 \include{appendices/appendixC}
+\include{appendices/appendixD}
+\include{appendices/appendixE}
+\include{appendices/multigrid}
 %: Declaration of originality
 %\include{7_backmatter/declaration}
 \printindex

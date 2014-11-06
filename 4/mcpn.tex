@@ -24,8 +24,6 @@ We introduce some new notation in this chapter. The new rules added to the notat
 \cref{chap:nte-methods} are summarized in the following list.
 
 \begin{itemize}
-    \item Greek subscripts (as in $\AAA[1]{\alpha})$ $\ldots$ indices of the Cartesian axes (with the
-    correspondence $\alpha = 1,2,3 \leftrightarrow x,y,z$),
     \item $\AA$ $\ldots$ Cartesian tensor of rank $n$ (Def. \ref{def:tensor} below),
   	\item $\AAA{\alpha_1\cdots\alpha_n}$ $\ldots$ Cartesian tensor $\AA$ in an indexed notation,
     \item $\underset{m}{\cdot}$ $\ldots$ $m$-fold contraction (generalization of inner product, Def.
@@ -390,7 +388,7 @@ addition theorem:
 \end{equation}
 If we now define the \textit{$n$-th angular flux moment tensor} by
 \begin{equation}\label{eq:flux-moment}
-  \fmom(\br) := \frac{2n+1}{4\pi C_n}\intA{\psi(\br,\bomega)\PP(\bomega)}
+  \fmom(\br) \coloneqq \frac{2n+1}{4\pi C_n}\intA{\psi(\br,\bomega)\PP(\bomega)}
 \end{equation}
 equation \eqref{eq:MC-exp2} becomes
 \begin{equation}\label{eq:MC-exp3}
@@ -411,7 +409,7 @@ We analogously expand also the volumetric source term, leading to
 \end{equation}
 with
 \begin{equation*}
-  \qmom(\br) := \frac{2n+1}{4\pi C_n}\intA{q(\br,\bomega)\PP(\bomega)}.
+  \qmom(\br) \coloneqq \frac{2n+1}{4\pi C_n}\intA{q(\br,\bomega)\PP(\bomega)}.
 \end{equation*}
 
 To find the relations that must be satisfied by the angular expansion moments $\fmom(\br)$ in order for

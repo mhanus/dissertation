@@ -1,0 +1,343 @@
+\chapter{The simplified $\PN$ approximation}\label{chap:SPN}
+
+The simplified $\PN$ ($\SPN$) approximation was proposed in the early 1960's by E. Gelbard \cite{Gelbard1,Gelbard2}) to
+circumvent the problem of increasing complexity of the $\PN$ approximation in multiple dimensions. Its derivation was
+completely formal at the beginning -- amounting to a simple replacement of differential operators $\textstyle\der{}{z}$
+in the 1D $\PN$ system by their multidimensional counterparts $\nabla$ and $\nabla\cdot$ and recasting those scalar
+unknowns operated upon by the latter as vector quantities.
+Despite this mathematically weak derivation, the $\SPN$ solution has been found to be equivalent to the solution of the
+multidimensional $\PN$ equations in the case of a homogeneous medium and, comparing to either diffusion or $\PN$ models,
+provided encouraging results both in terms of accuracy and efficiency even in more realistic cases. This is a rather
+remarkable fact -- as we will see below, the $\SPN$ approximation for odd $N$ consists of $2N-1$ coupled elliptic
+partial differential equations (and reduces to the diffusion approximation for $N = 1$), which is significantly lower
+than the $(N+1)^2$ equations of the full $\PN$ model (and also than the $N(N+1)/2$ strongly coupled elliptic equations
+to which the full $\PN$ model can be reduced). The method has thus become particularly attractive as its implementation
+required only modification of existing multigroup diffusion codes.
+
+After some time, however, special transport problems for which the simple diffusion
+approximation actually provided better results have been contrived (see, e.g., \cite[p. 247]{Coppa1}). Validity of
+Gelbard's formal derivation therefore became questioned and the $\SPN$ equations have not been seriously considered as 
+a robust enough improvement of the diffusion model for some time. This has changed in the 1990's with the extension of
+the asymptotic analysis originally performed for the diffusion approximation. Larsen, Morel and McGhee
+\cite{Larsen1} have shown that under the scaling of the transport equation by a ``diffusivity'' parameter $\varepsilon$
+that makes the diffusion equation agree with the transport equation up to terms of order $\Oh(\varepsilon^3)$ as 
+$\varepsilon \to 0$ (as already discussed in \sref{sec:diffusive}), the $\SPN[3]$ equations are
+equivalent to the transport equation up to terms of order $\Oh(\varepsilon^7)$ provided that that the transport solution shows a nearly 
+one-dimensional behaviour in the vicinity of interfaces of different materials by having there sufficiently weak
+tangential derivatives. The approach used by the authors is sufficiently general to show
+that $\SPN$ equations of increasing order provide asymptotic corrections of the NTE of increasing order, which has been
+confirmed at least experimentally (e.g., \cite{Olbrant} or \cite{McClarren1}).
+
+Brantley and Larsen \cite{Brantley1} contributed to the theoretical justification of the method by
+variational analysis in which they showed that the $\SPN[3]$ equations are the approximate Euler-Lagrange equations
+whose solution makes stationary a special but physically reasonable functional characterizing arbitrary reaction rates. By
+including boundary terms in the functional, the authors also arrived at natural boundary conditions for the method,
+missing from the asymptotic approach. At internal interfaces, however, an assumption of one-dimensional behavior of
+solution was again required as in the asymptotic derivation of Larsen et al.
+
+Together with other asymptotic and variational analyses (e.g. \cite{Pomraning1}), the range of validity of the
+approximation had been finally determined by the end of the 1990's. Although it turned out that this range is not
+significantly larger than that of the diffusion theory (\cite{Larsen1}), the $\SPN$ approximation has recently been shown to produce more 
+accurate results than the diffusion model under these conditions and regained attention
+\cite{Frank1,McClarren1,Ragusa1,Larsen3,Kirschenmann1,Olbrant}.
+
+The $\SPN$ method is particularly suitable for solving reactor criticality problems, where the asymptotic conditions
+predominantly hold. Downar \cite{Downar} compared the \SN[16], \SPN[3] and diffusion approximations over several model
+problems, with results that the \SPN[3] method well agrees with the high-order transport solution of the \SN[16] method
+and provides more than 80\% improvement in reactor critical number and 50\% to 30\% improvement in pin
+powers\footnote{eq. \eqref{eq:power} integrated over elementary cells comprising fuel assemblies} over the diffusion
+approximation.
+Somewhat smaller but still well-noticeable improvement has been obtained by Brantley and Larsen in \cite{Brantley1}.
+Similarly to Downar and others, however, they conclude that \SPN[3] captures most of the transport effects in diffusive
+regimes of nuclear reactors (and that higher orders than 3 are not usually necessary, as also shown e.g. by Cho et al.
+in \cite{ChoAxialSPN}).
+The authors also warned, however, that more careful spatial discretization than in the
+diffusion methods is required in order to capture the sharper boundary layer behaviour of the more transport-like
+\SPN[3] approximation.
+
+Even though the $\SPN$ solution does not tend to the
+exact solution of the NTE as $N\to\infty$ in general, there are several cases in which it is equivalent to the
+convergent $\PN$ expansion (see some recent papers like \cite{Coppa2,McClarren2,Larsen2}) and further research of the
+$\SPN$ model and its connections to the NTE appears to be an interesting topic. This work contributes to this research
+by describing a new way of deriving the $\SPN$ equations from a specially formulated $\PN$ approximation, which will be
+the subject of \cref{chap:mcpn}. In this chapter, we will recall the standard derivation and conclude by a simple observation (that
+we, however, could not find published as of yet) that allows to prove well-posedness of the weak form of the $\SPN$
+equations via the standard Lax-Milgram lemma. 
+
+\section{Derivation of the $\SPN$ equations}
+To illustrate the original Gelbard's approach, let us consider the case of one-dimensional symmetry, in which neutron
+transport is characterized by neutron distribution that is spatially varying only along one coordinate direction and,
+moreover, that is symmetric with respect to rotations about that axis. Without loss of generality, we may choose the
+principal direction of variation along the $z$-axis. This situation may arise for example when the system is composed of
+slabs, each with homogeneous properties and extents in the $x$ and $y$ directions much larger than in the principal
+direction, so that dependence on $x$ and $y$ may be neglected. We will identify the inflow/outflow boundaries $\pV[\pm]$
+with points $z_{\pm}$ and interior points $\br\in\VV$ with $z\in (z_-, z_+)$.
+
+Under these assumptions, spherical harmonic functions
+reduce to Legendre polynomials in $\mu = \cost = \Omega_z$ and partial derivatives $\pd{}{x}$, $\pd{}{y}$ vanish, so that the set of $\PN$ equations
+\eqref{eq:pn1} (where we assume $N$ odd) becomes
+\begin{equation}
+    \label{eq:PN1d}
+\frac{n+1}{2n+1}\der{\angmom{n+1}{}(z)}{z} + \frac{n}{2n +1}\der{\angmom{n-1}{}(z)}{z} + \Sigma_n(z)\angmom{n}{}(z) =
+q_n(z),
+\end{equation}
+where $n = 0,1,\ldots, N$ (discarding the non-sensical moments $\angmom{n}{}$ for negative $n$),
+$$
+\Sa{n} = \sigma_t - \kappa_n = \sigma_t - \sigma_{sn} - \kron{n}{0}\nu\sigma_f
+$$
+and the moments are defined as
+$$
+\angmom{n}{} = \muint{\P{n}{}(\mu)\angflux(\cdot,\mu)},\quad q_n = \muint{\P{n}{}(\mu)q(\cdot,\mu)}
+$$
+(note that the definition of $\kappa_{n}$ by \eqref{eq:scattering_exp} is still valid with $\mu_0 = \mu\mu'$). 
+
+To proceed as in the derivation of the diffusion equation, we again assume that $\Sigma_n \geq \underline{\Sigma_n} > 0$
+for $n = 1,3,\ldots,N$ and $q_n = 0$ for $n \geq 1$. Then by solving the
+odd-order equations for the odd-order flux moments in terms of a derivative of the even-order flux moments and using the
+result to eliminate the odd-order flux moments from the even-order equations, we obtain the one dimensional $\SPN$ 
+equations. To write them in a convenient form, we define the auxiliary $\SPN$ moments:
+\begin{equation}\label{eq:SP3_mom}
+	\phi^s_n := (n+1) \phi _{n}+(n+2) \phi _{n+2},\quad n = 0,2,\ldots,N-1,
+\end{equation}
+(setting $\phi_{N+1} = 0$)
+and $\SPN$ ``diffusion coefficients''
+\begin{equation}\label{eq:SP3_dif}
+	D^s_n := \frac{1}{(2 n+1) \Sigma _{n}},\quad n = 1,3,\ldots,N
+\end{equation}
+so that $\SPN$ currents could be defined as
+$$
+	J^s_n \equiv \phi_{2n+1} = -D^s_{2n+1}\der{\phi^s_n}{z}, \quad n = 0,2,\ldots,N-1.
+$$
+Notice that $J^s_1 = J$ (neutron current in the one-dimensional symmetry) and that scalar flux is given by
+\begin{equation}\label{eq:SPN_scalar_flux}
+	\phi_0 = \phi^s_0 - {\frac23}\phi^s_2 + {\frac{8}{15}}\phi^s_4 - \ldots = \suma[n]{0}{(N+1)/2}{F_{n}}\phi^s_{2n},\quad
+	F_{n} = (-1)^n\frac{2^nn!}{(2n+1)\text{!!}}
+\end{equation}
+where
+$(2n+1)!! = (2n+1)(2n-1)\cdots 3\cdot 1$.
+
+One may note that these definitions are somewhat arbitrary and indeed, there have been several ``$\SPN$ approximations''
+reported in literature. We have compared several of them and found that they are all equivalent\footnote{For instance,
+going from ``our'' $\SPN[3]$ system to that used by Brantley \cite{Brantley1} for his variational analyses (which is
+actually the same as that used by Larsen, Morel and McGhee in \cite{Larsen1} for asymptotic analyses) amounts to multiplying the
+first $\SPN[3]$ equation of Brantley by $5/9$ and the second by $3$ and the use of \eqref{eq:SP3_mom} (and
+analogously for the boundary conditions).}.
+The formulation obtained with the above definitions is particularly convenient as it allows to easily obtain 
+well-posedness of its corresponding weak form (at least under some additional constraints on the higher-order
+anisotropic scattering moments).
+
+
+\subsection{The \SPN[3] case}
+As the practical usefulness of the $\SPN$ equations has been experimentally verified to be limited by orders up
+to around $N = 7$ (we refer to above mentioned papers and reports), we do not delve into technical derivation of the
+general form of the $\SPN$ equations here and rather consider the case $N=3$ (with cases $N = 5,7$ included in App.
+\ref{app:SPN} \footnote{The equations were generated by a simple Mathematica script that can
+be used for any reasonably high order $N$ if needed.}). 
+
+The one-dimensional $\PN[3]$ system reads 
+\begin{equation}
+    \label{eq:P3_1d}
+	\begin{aligned}
+\der{\phi_1(z)}{z} + \Sigma_{0}(z)\phi_0(z)&=q_0(z),\\[.25em]
+\frac{1}{3} \,\der{\phi_0(z)}{z} +
+\frac{2}{3} \,\der{\phi_2(z)}{z} + \Sigma_{1}(z)\phi_1(z)&=q_1(z),\\[.25em]
+\frac{2}{5} \,\der{\phi_1(z)}{z} + 
+\frac{3}{5} \,\der{\phi_3(z)}{z} + \Sigma_{2}(z)\phi_2(z)&=q_2(z),\\[.25em]
+\frac{3}{7} \,\der{\phi_2(z)}{z} + \Sigma_{3}(z)\phi_3(z)&=q_3(z)
+	\end{aligned}
+\end{equation}
+and the Marshak approximation of albedo boundary conditions \eqref{eq:nte3}
+\begin{equation}\label{eq:Marshak}
+\begin{aligned}
+\frac{\phi _0(z_{\pm})}{4}+\frac{5 \phi _2(z_{\pm})}{16}\mp\frac{\phi _1(z_{\pm})}{2} &= \alpha(z_{\pm})
+\left[\frac{\phi _0(z_{\pm})}{4}\pm\frac{\phi _1(z_{\pm})}{2}+\frac{5 \phi _2(z_{\pm})}{16}\right]\\
+-\frac{\phi _0(z_{\pm})}{16} +\frac{5 \phi _2(z_{\pm})}{16}\mp\frac{\phi _3(z_{\pm})}{2} &= \alpha(z_{\pm})
+\left[-\frac{\phi _0(z_{\pm})}{16} +\frac{5 \phi _2(z_{\pm})}{16}\pm\frac{\phi _3(z_{\pm})}{2}\right].
+\end{aligned}
+\end{equation}
+
+
+Using the approach described above together with the auxiliary $\SPN[3]$ definitions, we obtain the following
+one-dimensional $\SPN[3]$ system
+\begin{equation}\label{eq:sp3_1d}
+\begin{gathered}
+	-\der{}{z} \mathbf D^s(z) \der{}{z} \Phi^s(z) + \mathbf{C}^s(z) \Phi^s(z) = \mathrm{Q}^s(z), \quad z \in
+	(z_{-},z_{+})\\
+	\mat{D}^s(z) \der{}{z} \Phi^s(z) + \gamma(z_{\pm}) \mat{G}^s \Phi^s(z_{\pm})
+	\quad
+	\gamma(z\pm) =
+	\frac{1-\alpha(z_{\pm})}{2(1+\alpha(z_{\pm}))}
+\end{gathered}
+\end{equation}
+where $\gamma$ is the same albedo coefficient as in the diffusion case \eqref{eq:diffusion_bc} and
+\begin{equation}\label{eq:SP3_mat}
+\begin{gathered}
+	\Phi^s = [\phi^s_0, \phi^s_2]^T,\quad \mathrm{Q}^s = [q_0, -\tfrac{2}{3} q_0]^T, \quad 
+	\mat{D}^s = \diag \left\{\frac{1}{3\Sigma_1}, \frac{1}{7\Sigma_3}\right\},\\[.3em]
+	\mat{C}^s = \left[
+\begin{array}{cc}
+ \Sigma _0 & -\frac{2 \Sigma _0}{3} \\
+ -\frac{2 \Sigma _0}{3}  & \frac{4 \Sigma _0}{9}+\frac{5 \Sigma _2}{9}
+\end{array}
+\right],\quad 
+\mat{G}^s = \left[
+\begin{array}{cc}
+ 1 & -\frac{1}{4} \\
+ -\frac{1}{4} & \frac{7}{12} \\
+\end{array}
+\right].
+\end{gathered}
+\end{equation}
+
+Using the Gelbard's ad-hoc approach, the multidimensional equations are just
+\begin{equation}\label{eq:sp3}
+\begin{gathered}
+	-\nabla\cdot \mat{D}^s(\br) \nabla \Phi^s(\br) + \mat{C}^s(\br) \Phi^s(\br) = \mathrm{Q}^s(\br), \quad \br \in
+	\VV,\\
+	\bn(\br)\cdot\mat{D}^s(\br) \nabla \Phi^s(\br) + \gamma(\br) \mathbf{G}^s \Phi^s(\br), \quad \br\in\pV,
+\end{gathered}
+\end{equation}
+where $\nabla\Phi^s$ is the Jacobian matrix of $\Phi^s$:
+$$
+	\left[\nabla\Phi^s\right]_{i,\alpha} = \pd{\phi^s_{2i-2}}{x_\alpha},\quad i = 1,2
+$$
+(recall the convention that Greek letters index the Cartesian coordinate axes), 
+$$
+	\nabla = \left[\pd{}{x}, \pd{}{y}, \pd{}{z}\right],\ \bn = [n_x, n_y, n_z]
+$$
+and for $\bv = [v_x, v_y, v_z]$
+$$
+	\bv \cdot \mat{A} = \sum_{\alpha=1}^3 v_\alpha A_{i\alpha}.
+$$
+
+Let $\mathbb{H}^1(\VV) =
+[H^1(\VV)]^2$. To introduce some new notation, let us write the inner product on this space as
+\begin{equation}\label{eq:ipHH1}
+	(\mathrm{U}, \mathrm{V})_{\mathbb{H}^1(\VV)} = \int_{\VV}\left(\nabla\mathrm{U} : \nabla\mathrm{V} + U\cdot
+	V\right)\d{\br};
+\end{equation}
+here $\cdot$ denotes the usual inner product and $:$ the double inner product of matrices:
+$$
+	\mat{A} : \mat{B} = \sum_{i,j}A_{ij}B_{ij}.
+$$
+The weak formulation forming the basis for the finite
+element solution can now be stated as follows:
+\begin{problem}\label{prb:sp3}
+Given $q_0 \in \Lp[2](\VV)$, find $\Phi^s = \col \{\phi^s_0, \phi^s_2\} \in \mathbb{H}^1(\VV)$ such that
+\begin{equation}\label{eq:spn_weak}
+\begin{gathered}
+	a(\Phi^s, \mathrm{V}) = f(\mathrm{V}) \quad \forall \mathrm{V}\in \mathbb{H}^1(\VV),\\[.3em]
+	a(\mathrm{U}, \mathrm{V}) := \int_{\VV} \bigl(\mat{D}^s\nabla\mathrm{U} : \nabla \mathrm{V} +
+	\mat{C}^s \mathrm{U}\cdot\mathrm{V}\bigr)\d{\br} + \mat{G}^s \int_{\pV} \gamma\mathrm{U}\cdot\mathrm{V}
+	\,\d{S},\\
+ 	f(\mathrm{V}) = \int_{\VV}\mathrm{Q}^s\cdot\mathrm{V}\,\d{\br},\quad \bigl(\mat{D}^s\nabla\mathrm{U}\bigr) : \nabla
+ 	\mathrm{V} = \sum_{i,\alpha}D^s_i\pd{u_i}{x_\alpha}\pd{v_i}{x_\alpha}
+\end{gathered} 
+\end{equation}
+\end{problem}
+
+Note that eq. \eqref{eq:spn_weak} represent a set of weakly coupled diffusion equations. The case of $N=1$ also reduces
+to the weak form of the usual diffusion approximation, eq. \eqref{eq:dif_bil_ex}. We also note that in the multigroup
+approximation of energetic dependence, the diffusion approximation has the same form \eqref{eq:sp3} (with weak form
+\eqref{eq:spn_weak}), with 
+$$
+	\mat{D} = \diag\{D^g\}_G,\quad
+	[\mat{C}]_{gg'} = \sigma_t^g \delta_{gg'} - \sigma_{s}^{gg'} - \chi^g\nu\Sigma_f^{g'}, \quad
+	[\gamma\mat{G}]_{gg'} = \gamma^{gg'} 
+$$
+where $g,g' = 1,2,\ldots,G$. The extension to the multigroup $\SPN$ case is obvious, with the weak formulation posed in 
+$\mathbb{H}^1(\VV) = [H^1(\VV)]^{(2N-1)\times G}$.
+
+In the following subsection, we will study the properties of the coupling matrices of the (mono-energetic) $\SPN[3]$
+method, which allow us to establish well-posedness of Problem \ref{prb:sp3}.
+
+\subsection{Well-posedness of the $\SPN[3]$ formulation}
+
+
+The $\SPN[3]$ matrices $\mat{D}^s$, $\mat{C}^s$ and $\mat{G}^s$ are symmetric, with elements bounded
+a.e. in $\VV$, hence the bilinear form $a(\mathrm{U}, \mathrm{V})$ is also bounded on $\mathbb{H}^1(\VV)$ (with norm
+induced by the inner product \eqref{eq:ipHH1}; for the boundary term,  recall that $\gamma \in [0,0.5]$ with value $0$ at perfectly 
+reflecting boundary and value $0.5$ at vacuum boundary and use the standard trace inequality in
+$H^1(\VV)$ on each term in the sum of boundary integrals). The linear form $f$ is also obviously bounded when the
+isotropic source term $q_0 \in \Lp[2](\VV)$.
+
+For coercivity, note that the matrix $\mat{D}^s$ is positive definite, as is $\mat{G}^s$ (being symmetric and strictly
+diagonally dominant, it follows from the Gerschgorin theorem). 
+
+To show positive-definiteness of $\mat{C}^s$, let us
+again split 
+$$
+	\Sigma_n = \sigma_t - \kappa_n.
+$$
+Then 
+\begin{equation}\label{eq:Cs}
+	\mat{C}^s = \sigma_t\mat{C}^s_t - \kappa_0 \mat{C}^s_0 - \kappa_2 \mat{C}^s_2,
+\end{equation}
+where
+\begin{equation}\label{eq:Cs2}
+\begin{gathered}
+	\mat{C}^s_0 = \left[
+\begin{array}{rr}
+ 1 & -\frac{2}{3} \\
+ -\frac{2}{3} & \frac{4}{9} \\
+\end{array}
+\right],\quad
+\mat{C}^s_2 = 
+\left[
+\begin{array}{rr}
+ 0 & 0 \\
+ 0 & \frac{5}{9} \\
+\end{array}
+\right],\\
+\mat{C}^s_t = \mat{C}^s_0 + \mat{C}^s_2 = \left[
+\begin{array}{rr}
+ 1 & -\frac{2}{3} \\
+ -\frac{2}{3} & 1 \\
+\end{array}
+\right]
+\end{gathered}
+\end{equation}
+As the Legendre polynomials $P_n(\mu_0) < 1 = P_0(\mu_0)$ a.e. in $[-1,1]$ and fission part of the collision kernel
+$\kappa$ is isotropic, we have for $n \geq 1$
+\begin{equation}\label{eq:kappa_inequality}
+	\kappa_n = \sigma_{sn} = 2\pi \muint[_0]{\sigma_s(\mu_0)\P{n}{}(\mu_0)} < 2\pi
+	\muint[_0]{\sigma_s(\mu_0)} = \sigma_{s0} < \sigma_{s0} + \nu\sigma_f = \kappa_0. 
+\end{equation}
+If we now define the relation ``$<$'' between matrices as
+$$
+	\mat{A} < \mat{B}\quad \Leftrightarrow \quad \mat{x}^T \mat{A} \mat{x} < \mat{x}^T \mat{B} \mat{x},\ \ \forall \mat{x}
+	\neq \mat{0}, 
+$$
+we have from \eqref{eq:kappa_inequality}, \eqref{eq:Cs} and \eqref{eq:Cs2}
+$$
+	\mat{C}^s > \sigma_t\mat{C}^s_t - \kappa_0(\mat{C}^s_0 + \mat{C}^s_2) = (\sigma_t - \kappa_0)\mat{C}^s_t.
+$$
+Under the subcriticality conditions in $\Lp[2](\XE)$ (Def. \ref{def:subcriticality}), we have 
+$$
+	\sigma_t > \sigma_s + \nu\sigma_f = \kappa_0
+$$
+(cf. the representation \eqref{eq:scattering_ratio}). As the matrix $\mat{C}^s_t > 0$ (again because its strict
+diagonal dominance, symmetry and positivity of diagonal elements), we have thus proved that $\mat{C}^s$ is also positive
+definite. From the Lax-Milgram lemma \ref{lem:lax-milgram}, it now directly follows
+
+\begin{theorem}
+	Let the subcriticality conditions in $\Lp[2](\XE)$ hold. Then Problem \ref{prb:sp3} has a unique solution and there
+	exists constant $\alpha > 0$ such that
+	$$
+		\norm[{\Hp[1](\VV)}]{\Phi^s} < \frac{1}{\alpha} \norm[{\Lp[2](\VV)}]{\mathrm{Q}^s}
+	$$
+\end{theorem}
+
+We note that for higher order $\SPN$ approximations, the previously stated properties for $\mat{D}^s$, $\mat{G}^s$ are
+still valid and the decomposition \eqref{eq:Cs} has the following form:
+$$
+	\mat{C}^s = \sigma_t\mat{C}^s_t - \kappa_0 \mat{C}^s_0 - \kappa_2 \mat{C}^s_2 - \kappa_4 \mat{C}^s_4 \ldots -
+	\kappa_{2N-1} \mat{C}^s_{2N-1}.
+$$
+The matrix 
+$$
+	\mat{C}^s_t = \sum_{n=0}^{\floor{N/2}} \mat{C}^s_{2n}
+$$
+is no longer strictly diagonally dominant, but it is still positive definite, as can be verified
+by explicitly computing the eigenvalues (see App. \ref{app:SPN} for the cases $N = 5,7$).
+

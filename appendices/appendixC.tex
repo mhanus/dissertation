@@ -117,14 +117,27 @@ $$
 	\norm{D_{xy}} = \norm{D_{yz}} = \norm{D_{xz}} = \frac{2}{5}
 $$
 we observe that the matrices
-$A_{P_3}^s$ ($s = x,y,z$) do not commute and hence could not be simultaneously 
+$A_{P_3}^s$ ($s = x,y,z$) do not commute and hence can not be simultaneously 
 diagonalized by a common eigenvector matrix. Consequently, the radiation advected by these matrices cannot be decomposed into plane-waves propagating in distinct directions (as in 
 the case of the $\SN$ approximation), but rather consists of a combination of waves propagating in the infinitely many 
 directions in $\R[3]$.
 
-Let us now take an arbitrary fixed direction $\bn = [n_x,n_y,n_z]$ from this infinite set. The eigendecomposition of
-the matrix
-$\mat{A}_{P_N}^{\bn} = n_x \mat{A}_{P_N}^x + n_y \mat{A}_{P_N}^y + n_z \mat{A}_{P_N}^z$,
+Let us now take an arbitrary fixed direction $\bn = [n_x,n_y,n_z]$ from this infinite set. 
+The matrix
+$$
+	\mat{A}_{P_N}^{\bn} = n_x \mat{A}_{P_N}^x + n_y \mat{A}_{P_N}^y + n_z \mat{A}_{P_N}^z,
+$$
+displayed below for the case $N = 3$, shows that at most 7 unknowns are coupled in the $\PN[3]$ system, as the
+capture matrix $C = \Sigma_t - K$ is diagonal (Corollary \label{cor:capture} on p.~\pageref{cor:capture}).
+
+\begin{figure}[htb]
+\hspace*{-1.1cm}
+  \includegraphics[scale=.575]{nA_P3}
+  \caption{$\mat{A}_{\PN[3]}^{\bn}$}
+  \label{fig:nAP3}
+\end{figure}
+
+Its eigendecomposition
 shows that speed of propagation is uniform for all $\bn\in\R[3]$, given by the eigenvalues corresponding to the case
 $\norm{\bn} = 1$ (written with their multiplicities):
 $$
@@ -157,9 +170,11 @@ $$
 \end{array}
 \right]
 $$
-and $\PN[3]$ advection matrix $\mat{A}_{P_3}^{\bn}$:
+
+\noindent and $\PN[3]$ advection matrix $\mat{A}_{P_3}^{\bn}$:
+
 $$
-\hspace*{-2.5cm}
+\hspace*{-3.5cm}
 \scriptsize
 \left[
 \begin{array}{cccc}
@@ -182,8 +197,9 @@ $$
 \end{array}
 \right]
 $$
-Unlike the $\PN[3]$ approximation, we can see that the $\PN[2]$ approximation contains in its advection nullspace 
-nonzero components of the 0-th moment of angular flux, which is proportional to the scalar flux (total spatial neutron 
+
+\noindent Unlike the $\PN[3]$ approximation, we can see that the $\PN[2]$ approximation contains in its advection
+nullspace nonzero components of the 0-th moment of angular flux, which is proportional to the scalar flux (total spatial neutron 
 density). Therefore, as a consequence of $\PN[2]$ approximation, not all scalar flux components are propagated by the
 action $\mat{A}_{P_2}^{\bn} \Psi$. It turns out that this is true for any even-order $\PN$ approximation, which is
 ``probably the most salient argument why even-order expansions should be shunned for time dependent problems'' 

@@ -15,6 +15,9 @@
     \setlength{\parsep}{0em}     }
 { \end{itemize}                  }
 
+\DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor}
+\DeclarePairedDelimiter{\jump}{\llbracket}{\rrbracket}
+
 \newcommand{\cref}[1]{Chap.~\ref{#1}}
 \newcommand{\Cref}[1]{Chapter~\ref{#1}}
 \newcommand{\sref}[1]{Sec.~\ref{#1}}
@@ -49,6 +52,8 @@
 \newcommand{\PihSN}{\widehat{{\mathcal{I}}}_{S_N}}
 \newcommand{\PiPN}{{\mathcal{I}}_{P_N}}
 \newcommand{\PihPN}{\widehat{{\mathcal{I}}}_{P_N}}
+\newcommand{\PiHP}{{\mathcal{I}}_{hp}}
+\newcommand{\PihHP}{\widehat{{\mathcal{I}}}_{hp}}
 \newcommand{\idxset}[1]{#1}
 \newcommand{\ips}[2]{(#1, #2)_{\Lp[2](\Sphere)}}
 \newcommand{\ipsl}[2]{\bigl(#1, #2\bigr)_{\Lp[2](\Sphere)}}
@@ -67,7 +72,7 @@
 \newcommand{\Emin}{\ensuremath{E_{\text{min}}}}
 \newcommand{\Emax}{\ensuremath{E_{\text{max}}}}
 
-\newcommand{\der}[3][]{\ensuremath{\frac{\text{d}^{#1}{#2}}{\text{d} {#3}^{#1}}}}
+\newcommand{\der}[3][]{\ensuremath{\frac{{d}^{#1}{#2}}{{d} {#3}^{#1}}}}
 \newcommand{\pd}[3][]{\ensuremath{\frac{\partial^{#1}#2}{\partial #3^{#1}}}}
 \newcommand{\grad}{\nabla}
 \newcommand{\gradcomp}[1]{\nabla_{\!#1}}
@@ -92,9 +97,15 @@
 \newcommand{\pX}[1][]{\partial X^{#1}}
 \newcommand{\XE}[1][]{X_{\mid E}^{#1}}
 \newcommand{\pXE}[1][]{\partial \XE[{#1}]}
-\newcommand{\pV}[1][]{\partial \VV}
+\newcommand{\pV}[1][]{\partial \VV^{#1}}
+\newcommand{\pVm}[2][]{\partial \VV^{#1}_{#2}}
 \newcommand{\VV}{\mathcal{D}}
+\newcommand{\Space}{\mathcal{V}}
+\newcommand{\elem}{\tau}
+\newcommand{\mesh}[1][h]{\mathcal{T}_{#1}}
 
+\newcommand{\albedo}{\beta}
+\newcommand{\albedoop}{B_{\beta}}
 \newcommand{\polar}{\vartheta}
 \newcommand{\azimuthal}{\varphi}
 \newcommand{\sint}{\sin \polar}
@@ -109,6 +120,7 @@
 
 \newcommand{\Lp}[1][p]{L^{#1}}
 \newcommand{\Hp}[1][p]{H^{#1}}
+\newcommand{\Hpnot}[1][p]{H_0^{#1}}
 \newcommand{\Id}{\ensuremath{I}}
 \newcommand{\Dom}[1]{\mathrm{Dom}\,(#1)}
 
@@ -151,6 +163,8 @@
 
 \newcommand{\angflux}{\ensuremath{\psi}}
 
+\newcommand{\LL}[1]{\mathbb{L}^2(#1)}
+
 \newcommand{\genop}[1]{\mathcal{#1}}
 \DeclareMathOperator{\sgn}{sgn}
 \DeclareMathOperator{\esssup}{ess\,sup\,}
@@ -164,6 +178,7 @@
 \newcommand{\Projop}[1][P_N]{\Proj_{#1}}
 \DeclareMathOperator{\Rng}{Range}
 \DeclareMathOperator{\Ker}{Ker}
+%\DeclareMathOperator{\dim}{dim}
 
 \usepackage{colortbl}
 \newlength\celldim \newlength\fontheight \newlength\extraheight
@@ -176,3 +191,20 @@
 \newcolumntype{C}{ >{\centering } p{11em} <{\rule[-.5\extraheight]{0pt}{\extraheight+\fontheight}}}
 \newcolumntype{D}{ >{\centering } p{4em}  <{\rule[-.5\extraheight]{0pt}{\extraheight+\fontheight}}}
 \newcommand{\nl}{\tabularnewline\hline}
+
+
+
+\renewcommand{\Re}{{\rm I\negthinspace R}}
+\newcommand{\vc}[1]{{\bf #1}} 			%  use bold for vectors
+\newcommand{\eq}[1]{\begin{equation}\label{eq-#1}}
+\newcommand{\qe}{\end{equation}}
+\newcommand{\range}{{\;\mathop {\rm Range}\nolimits}}
+\newcommand{\eqr}[1]{~(\ref{eq-#1})}        %to reference equation
+
+\newenvironment{Algorithm}{\begin{algorithm}\begin{description}
+}{\end{description}\end{algorithm}}
+\newtheorem{algorithm}{Algorithm}
+\newtheorem{notenote}[theorem]{Remark}
+\newenvironment{note}{\begin{notenote}\rm}{\end{notenote}}
+\newtheorem{exple}{Example}
+\newenvironment{example}{\begin{exple}\it}{\end{exple}}%\newtheorem{notenote}[theorem]{Remark}
