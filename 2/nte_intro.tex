@@ -71,8 +71,8 @@ Then we may formally define the neutron phase space $$
   X \coloneqq \{(\br,\bomega,E):\ \br\in \VV\subset\R[3], \bomega\in \Sphere, E \in [\Emin,\Emax]\}
 $$ together with its outflow and inflow boundary subsets, respectively:
 $$
-  \pX[\pm] \coloneqq \bigl\{ (\br,\bomega,E) \in \pV \times \Sphere \times [E_m, E_M], \mbox{ s.t. } \bomega\cdot\bn(\br)
-  \gtrless 0 \bigr\}.
+  \pX[\pm] \coloneqq \bigl\{ (\br,\bomega,E) \in \pV \times \Sphere \times [E_m, E_M], \mbox{ s.t. }
+  \bomega\cdot\bn(\br) \gtrless 0 \bigr\}.
 $$ The whole boundary $\pX$ can be written as $$ \pX = \pX[+]\cup \pX[-] \cup \pX[0] $$ where $\pX[0]$ (boundary subset
 tangential to the flow), so that $\overline X = X \cup \pX$.
 \begin{figure}[!hbt]
@@ -89,10 +89,10 @@ while the boundary measure
 \end{equation}
 is used when integrating over $\pX[\pm]$, where $S = \mu(\pV)$.
 Note that
-because of the assumed regularity of the boundary, $\pX[0]$ is a closed subset of $\pX$ of $\db$-measure zero 
-(\cite[Chap. XXI, Sec. 2.2]{DautrayLions}). This will allow us to decompose spaces of measurable functions defined on 
-$\pX$ into a direct sum of subspaces of measurable functions defined on $\pX[+]$ and $\pX[-]$, respectively. When 
-refering to physical units, we will consider the length scale of $\VV$ in centimeters.
+because of the assumed regularity of the boundary, $\pX[0]$ is a closed subset of $\pX$ of
+\linebreak\mbox{$\db$-measure} zero (\cite[Chap. XXI, Sec. 2.2]{DautrayLions}). This will allow us to decompose spaces 
+of measurable functions defined on $\pX$ into a direct sum of subspaces of measurable functions defined on $\pX[+]$ and 
+$\pX[-]$, respectively. When refering to physical units, we will consider the length scale of $\VV$ in centimeters.
 
 \comment{
 When discussing various semi-discretizations of the NTE, we will also refer to the following subspaces  (``sections''

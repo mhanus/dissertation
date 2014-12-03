@@ -28,7 +28,7 @@ Author's work focus on the latter application domain further narrows scope of th
 neutron transport equation}, shortly NTE\index{NTE}. It is worth recalling, however, that many common numerical methods
 for solving transport problems involve repeated execution of methods designed for steady-state problems.
 
-\myparagraph{Numerical modelling of neutron transport}
+\myparagraph{Mathematical modelling of neutron transport}
 We will introduce the NTE in Chap. \ref{chap:nte-review} as an integro-differential equation in 6 dimensions and
 discuss its theoretical properties. The high dimensionality of the equation requires either a direct simulation of
 neutrons and using statistical methods to obtain the required physical quantities (the Monte Carlo approach) or a deterministic approach involving multiple discretizations.
@@ -43,12 +43,12 @@ One of the traditional discretization methods that converts the 6-dimensional in
 familiar 3-dimensional partial differential equations (PDEs\nomenclature[Z]{PDE}{Partial differential equation}) is the
 \textit{method of spherical harmonics}, denoted $\PN$\nomenclature[Z]{\PN}{Method of spherical harmonics of order
 $N$}\nomenclature[Z]{\SN}{Method of discrete ordinates of order $N$}. This method is recalled and its properties are
-studied in Chap. \ref{chap:nte-methods} and a new alternative set (equivalent to the original $\PN$ set) is developed in
-Chap. \ref{chap:mcpn}. From this set, it is possible to directly derive another traditional approximation of neutron
+studied in Chap. \ref{chap:nte-methods} and a new alternative set of equations (equivalent to the original $\PN$ set) is
+developed in Chap. \ref{chap:mcpn}. This set is directly connected to another traditional approximation of neutron
 transport -- the \textit{simplified spherical harmonic method}, or $\SPN$ \nomenclature[Z]{\SPN}{Method of simplified spherical
-harmonics of order $N$} -- which is the subject of the second part of Chap. \ref{chap:mcpn}\footnote{So far, however,
-the author has only been able to derive in this way the $\SPN$ equations in an interior of a homogeneous region, so the
-question of interface and boundary conditions is still left open for further research.}. 
+harmonics of order $N$} -- and this connection will be uncovered in the second part of Chap.
+\ref{chap:mcpn}.%\footnote{So far, however, the author has only been able to derive in this way the $\SPN$ equations in
+% an interior of a homogeneous region, so the question of interface and boundary conditions is still left open for further research.}. 
 
 The $\SPN$ method (particularly the $\SPN[3]$) already simplifies the NTE to the extent that it is applicable to
 day-by-day whole-core calculations on usual workstations with a few computational cores or small-scale parallel machines
@@ -62,7 +62,7 @@ supercomputing center, waiting for it to come to the front of an execution queue
 attractive for physicists to quickly test their empirical approximations used throughout their production code, which is
 usually based on the most restricting transport approximation -- the diffusion approximation.
 
-\myparagraph{Finite element framework for 2D neutron diffusion or transport problems}
+\myparagraph{Finite element framework for 2D neutron diffusion/transport}
 The neutron diffusion approximation, whereby the NTE is reduced to a second-order elliptic PDE (or, when energy
 dependence is taken into account implicitly, a weakly coupled non-symmetric system of second-order PDEs with
 positive-definite symmetric part -- the so-called \textit{multigroup neutron diffusion approximation}), also forms the
@@ -107,7 +107,7 @@ direct and iterative algebraic solvers (which also required reworking the CMake 
 involves solution jumps over element interfaces and thus uses elements of the discontinuous Galerkin framework). 
 \end{itemize}
 More details about the Hermes project and the implementation of neutronics modules will be given in \cref{chap:hermes},
-based on the theoretical formulation of the multigroup diffusion and $\SPN$ approximations (for orders $N \leq 9$,  but
+based on the theoretical formulation of the multigroup diffusion and $\SPN$ approximations (for orders $N = 3,5,7$,  but
 easily extendable to an arbitrary order) from \cref{chap:SPN}. To assess the benefits of using the $\SPN$ model over the
 simpler diffusion model, the author also implemented (still on top of the neutronics framework) a  discontinuous
 Galerkin discretization of the \textit{discrete ordinates} approximation of the transport equation  (the $\SN$ method,

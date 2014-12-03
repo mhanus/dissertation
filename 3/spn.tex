@@ -64,6 +64,8 @@ the subject of \cref{chap:mcpn}. In this chapter, we will recall the standard de
 we, however, could not find published as of yet) that allows to prove well-posedness of the weak form of the $\SPN$
 equations via the standard Lax-Milgram lemma. 
 
+
+
 \section{Derivation of the $\SPN$ equations}
 To illustrate the original Gelbard's approach, let us consider the case of one-dimensional symmetry, in which neutron
 transport is characterized by neutron distribution that is spatially varying only along one coordinate direction and,
@@ -127,7 +129,7 @@ well-posedness of its corresponding weak form (at least under some additional co
 anisotropic scattering moments).
 
 
-\subsection{The \SPN[3] case}
+\subsection{The \SPN[3] case}\label{sec:sp3}
 As the practical usefulness of the $\SPN$ equations has been experimentally verified to be limited by orders up
 to around $N = 7$ (we refer to above mentioned papers and reports), we do not delve into technical derivation of the
 general form of the $\SPN$ equations here and rather consider the case $N=3$ (with cases $N = 5,7$ included in App.
@@ -162,7 +164,7 @@ one-dimensional $\SPN[3]$ system
 \begin{equation}\label{eq:sp3_1d}
 \begin{gathered}
 	-\der{}{z} \mathbf D^s(z) \der{}{z} \Phi^s(z) + \mathbf{C}^s(z) \Phi^s(z) = \mathrm{Q}^s(z), \quad z \in
-	(z_{-},z_{+})\\
+	(z_{-},z_{+})\\[.3em]
 	\mat{D}^s(z) \der{}{z} \Phi^s(z) + \gamma(z_{\pm}) \mat{G}^s \Phi^s(z_{\pm})
 	\quad
 	\gamma(z\pm) =
@@ -173,7 +175,7 @@ where $\gamma$ is the same albedo coefficient as in the diffusion case \eqref{eq
 \begin{equation}\label{eq:SP3_mat}
 \begin{gathered}
 	\Phi^s = [\phi^s_0, \phi^s_2]^T,\quad \mathrm{Q}^s = [q_0, -\tfrac{2}{3} q_0]^T, \quad 
-	\mat{D}^s = \diag \left\{\frac{1}{3\Sigma_1}, \frac{1}{7\Sigma_3}\right\},\\[.3em]
+	\mat{D}^s = \diag \left\{\frac{1}{3\Sigma_1}, \frac{1}{7\Sigma_3}\right\},\\[.5em]
 	\mat{C}^s = \left[
 \begin{array}{cc}
  \Sigma _0 & -\frac{2 \Sigma _0}{3} \\
@@ -193,23 +195,24 @@ Using the Gelbard's ad-hoc approach, the multidimensional equations are just
 \begin{equation}\label{eq:sp3}
 \begin{gathered}
 	-\nabla\cdot \mat{D}^s(\br) \nabla \Phi^s(\br) + \mat{C}^s(\br) \Phi^s(\br) = \mathrm{Q}^s(\br), \quad \br \in
-	\VV,\\
+	\VV,\\[.2em]
 	\bn(\br)\cdot\mat{D}^s(\br) \nabla \Phi^s(\br) + \gamma(\br) \mathbf{G}^s \Phi^s(\br), \quad \br\in\pV,
 \end{gathered}
 \end{equation}
 where $\nabla\Phi^s$ is the Jacobian matrix of $\Phi^s$:
 $$
-	\left[\nabla\Phi^s\right]_{i,\alpha} = \pd{\phi^s_{2i-2}}{x_\alpha},\quad i = 1,2
+	\left[\nabla\Phi^s\right]_{i,\alpha} = \pd{\phi^s_{2i-2}}{x_\alpha},\quad i = 1,2,\quad \alpha = 1,2,3
 $$
-(recall the convention that Greek letters index the Cartesian coordinate axes), 
-$$
-	\nabla = \left[\pd{}{x}, \pd{}{y}, \pd{}{z}\right],\ \bn = [n_x, n_y, n_z]
+(we start using the convention that Greek subscripts index the Cartesian coordinate axes, which will become more
+copious in \cref{chap:mcpn}), $$ \nabla = \left[\pd{}{x}, \pd{}{y}, \pd{}{z}\right],\ \bn = [n_x, n_y, n_z]
 $$
 and for $\bv = [v_x, v_y, v_z]$
 $$
 	\bv \cdot \mat{A} = \sum_{\alpha=1}^3 v_\alpha A_{i\alpha}.
 $$
 
+\vspace{4em}
+\section{Weak formulation}\label{sec:sp3_weak}
 Let $\mathbb{H}^1(\VV) =
 [H^1(\VV)]^2$. To introduce some new notation, let us write the inner product on this space as
 \begin{equation}\label{eq:ipHH1}
@@ -217,9 +220,9 @@ Let $\mathbb{H}^1(\VV) =
 	V\right)\d{\br};
 \end{equation}
 here $\cdot$ denotes the usual inner product and $:$ the double inner product of matrices:
-$$
+\begin{equation}\label{eq:doubleprod}
 	\mat{A} : \mat{B} = \sum_{i,j}A_{ij}B_{ij}.
-$$
+\end{equation}
 The weak formulation forming the basis for the finite
 element solution can now be stated as follows:
 \begin{problem}\label{prb:sp3}
@@ -228,31 +231,76 @@ Given $q_0 \in \Lp[2](\VV)$, find $\Phi^s = \col \{\phi^s_0, \phi^s_2\} \in \mat
 \begin{gathered}
 	a(\Phi^s, \mathrm{V}) = f(\mathrm{V}) \quad \forall \mathrm{V}\in \mathbb{H}^1(\VV),\\[.3em]
 	a(\mathrm{U}, \mathrm{V}) := \int_{\VV} \bigl(\mat{D}^s\nabla\mathrm{U} : \nabla \mathrm{V} +
-	\mat{C}^s \mathrm{U}\cdot\mathrm{V}\bigr)\d{\br} + \mat{G}^s \int_{\pV} \gamma\mathrm{U}\cdot\mathrm{V}
+	\mat{C}^s \mathrm{U}\cdot\mathrm{V}\bigr)\d{\br} +  \int_{\pV} \gamma\mat{G}^s\mathrm{U}\cdot\mathrm{V}
 	\,\d{S},\\
- 	f(\mathrm{V}) = \int_{\VV}\mathrm{Q}^s\cdot\mathrm{V}\,\d{\br},\quad \bigl(\mat{D}^s\nabla\mathrm{U}\bigr) : \nabla
- 	\mathrm{V} = \sum_{i,\alpha}D^s_i\pd{u_i}{x_\alpha}\pd{v_i}{x_\alpha}
+ 	f(\mathrm{V}) := \int_{\VV}\mathrm{Q}^s\cdot\mathrm{V}\,\d{\br},\quad \bigl(\mat{D}^s\nabla\mathrm{U}\bigr) : \nabla
+ 	\mathrm{V} = \sum_{i=1}^2\sum_{\alpha=1}^3 D^s_{2i-1}\pd{u_i}{x_\alpha}\pd{v_i}{x_\alpha}.
 \end{gathered} 
 \end{equation}
 \end{problem}
 
-Note that eq. \eqref{eq:spn_weak} represent a set of weakly coupled diffusion equations. The case of $N=1$ also reduces
-to the weak form of the usual diffusion approximation, eq. \eqref{eq:dif_bil_ex}. We also note that in the multigroup
+Note that eq. \eqref{eq:spn_weak} represent a set of weakly coupled diffusion-like equations. The case of $N=1$ also
+reduces to the weak form of the usual diffusion approximation, eq. \eqref{eq:dif_bil_ex}. We also note that in the multigroup
 approximation of energetic dependence, the diffusion approximation has the same form \eqref{eq:sp3} (with weak form
-\eqref{eq:spn_weak}), with 
-$$
+\eqref{eq:spn_weak}), with $\mat{D}^s$, $\mat{C}^s$, $\gamma\mat{G}^s$, $\mathrm{Q}^s$ and $\Phi^s$ replaced by 
+\begin{equation}\label{eq:dif_mat}
+\begin{gathered}
 	\mat{D} = \diag\{D^g\}_G,\quad
-	[\mat{C}]_{gg'} = \sigma_t^g \delta_{gg'} - \sigma_{s}^{gg'} - \chi^g\nu\Sigma_f^{g'}, \quad
-	[\gamma\mat{G}]_{gg'} = \gamma^{gg'} 
-$$
+	[\mat{C}]_{gg'} = \sigma_t^g \delta_{gg'} - \sigma_{s}^{gg'} - \chi^g\nu\sigma_f^{g'}, \quad
+	[\gamma\mat{G}]_{gg'} = \gamma^{gg'},\\[.3em] 
+	\mathrm{Q} = \colset{q_0^g}{G},\quad \Phi = \colset{\phi^g}{G},
+\end{gathered}
+\end{equation}
 where $g,g' = 1,2,\ldots,G$. The extension to the multigroup $\SPN$ case is obvious, with the weak formulation posed in 
 $\mathbb{H}^1(\VV) = [H^1(\VV)]^{(2N-1)\times G}$.
 
-In the following subsection, we will study the properties of the coupling matrices of the (mono-energetic) $\SPN[3]$
-method, which allow us to establish well-posedness of Problem \ref{prb:sp3}.
+Also note that Problem \ref{prb:sp3} is equivalent to
+\begin{problembis}\label{prb:sp3bis}
+Given $q_0 \in \Lp[2](\VV)$, find $\Phi^s = \col \{\phi^s_0, \phi^s_2\} \in \mathbb{H}^1(\VV)$ such that
+\begin{equation}\label{eq:spn_weak2}
+\begin{gathered}
+\begin{aligned}
+	a_{00}(\phi^s_0, \varphi_0) + a_{02}(\phi^s_2, \varphi_0) &= f_0(\varphi_0),\quad \forall \varphi_0\in H^1(\VV),\\
+	a_{20}(\phi^s_0, \varphi_2) + a_{22}(\phi^s_2, \varphi_2) &= f_2(\varphi_2),\quad \forall \varphi_2\in H^1(\VV)\,
+	\footnotemark,
+\end{aligned}\\[.3em] 
+	a_{ij}(u,v) := \int_{\VV} \bigl({D}^s_{ij}\nabla u \nabla v +
+	C^s_{ij} u v \bigr)\d{\br} + G^s_{ij} \int_{\pV} \gamma u v
+	\,\d{S},\\
+ 	f_i(v) := \int_{\VV}q^s_i v\,\d{\br},\quad i = 0,2,\ j = 0,2.
+\end{gathered} 
+\end{equation}
+\end{problembis}%
+\footnotetext{The reason for the here superfluous distinction between the test functions $\varphi_0$ and $\varphi_2$
+becomes clear when the approximate problem is formulated on finite-dimensional subspaces of $H^1(\VV)$; different approximation order can then be used for
+approximating the zero-th and second order moments, as we will see in \cref{chap:hermes}.}%
+To see this, if $\Phi^s$ is
+the solution of Problem \ref{prb:sp3}, then for $V = [\varphi_0,0]^T$ and $V =[0,\varphi_2]^T$, respectively, we satisfy the first and second equation of Problem \ref*{prb:sp3bis}, respectively. On the other hand, if $\Phi^s$ is the solution of Problem \ref*{prb:sp3bis}, then summing up the equations \eqref{eq:spn_weak2} shows that
+$\Phi^s$ also solves Problem \ref{prb:sp3}. The same approach can be obviously used to generate appropriate formulations
+of the higher-$N$ or multigroup problems.
 
-\subsection{Well-posedness of the $\SPN[3]$ formulation}
+When using the finite element method to obtain approximate solution of Problem \ref{prb:sp3} (or equivalently
+\ref{prb:sp3bis}), it is restricted to a finite-dimensional subspace of $\mathbb{H}^1(\VV)$ as discussed
+in \sref{sec:FEM} and an element-by-element assembling procedure is employed to obtain a system of discrete algebraic
+equations. Two finite element frameworks have been considered in this thesis for this task --
+Hermes2D (which the author helped developing and uses for testing $hp$-adaptivity ideas) and Dolfin (which, thanks to
+its 3D support, has been used as a basis for the project on Nuclear fuel reloading optimization mentioned in the
+Introduction). Problem \ref{prb:sp3bis} is in the form suited for implementation in the Hermes2D framework, while the
+form of Problem \ref{prb:sp3} is appropriate for the Dolfin framework (\cref{chap:hermes}).
 
+\comment{Thorough description of the
+coupled neutronics-thermal hydraulics module is beyond the scope of this thesis (it comprises three technical reports
+\cite{Hanus5,Hanus6,Hanus7}) To provide a basis for further description of
+}
+
+
+\section{Well-posedness of the $\SPN[3]$ formulation}
+
+In this section, we will study 
+properties of coupling matrices of the (mono-energetic) $\SPN[3]$ method, which allow us to establish well-posedness
+of Problem \ref{prb:sp3}. As far as the author knows, this property has not been demonstrated before and is
+formulated as Theorem \ref{thm:well-posedness-sp3} at the end of the section. The section concludes by Remark
+\ref{rem:well-posedness-sp3}, discussing the extension to higher $\SPN$ orders.
 
 The $\SPN[3]$ matrices $\mat{D}^s$, $\mat{C}^s$ and $\mat{G}^s$ are symmetric, with elements bounded
 a.e. in $\VV$, hence the bilinear form $a(\mathrm{U}, \mathrm{V})$ is also bounded on $\mathbb{H}^1(\VV)$ (with norm
@@ -262,7 +310,7 @@ $H^1(\VV)$ on each term in the sum of boundary integrals). The linear form $f$ i
 isotropic source term $q_0 \in \Lp[2](\VV)$.
 
 For coercivity, note that the matrix $\mat{D}^s$ is positive definite, as is $\mat{G}^s$ (being symmetric and strictly
-diagonally dominant, it follows from the Gerschgorin theorem). 
+diagonally dominant, positive-definiteness follows from the Gerschgorin theorem). 
 
 To show positive-definiteness of $\mat{C}^s$, let us
 again split 
@@ -278,27 +326,43 @@ where
 \begin{gathered}
 	\mat{C}^s_0 = \left[
 \begin{array}{rr}
- 1 & -\frac{2}{3} \\
+ 1 & -\frac{2}{3} \\[.2em]
  -\frac{2}{3} & \frac{4}{9} \\
 \end{array}
 \right],\quad
 \mat{C}^s_2 = 
 \left[
 \begin{array}{rr}
- 0 & 0 \\
+ 0 & 0 \\[.2em]
  0 & \frac{5}{9} \\
 \end{array}
-\right],\\
+\right],\\[.5em]
 \mat{C}^s_t = \mat{C}^s_0 + \mat{C}^s_2 = \left[
 \begin{array}{rr}
- 1 & -\frac{2}{3} \\
+ 1 & -\frac{2}{3} \\[.2em]
  -\frac{2}{3} & 1 \\
 \end{array}
-\right]
+\right].
 \end{gathered}
 \end{equation}
-As the Legendre polynomials $P_n(\mu_0) < 1 = P_0(\mu_0)$ a.e. in $[-1,1]$ and fission part of the collision kernel
-$\kappa$ is isotropic, we have for $n \geq 1$
+Using the Cauchy-Schwarz inequality and the addition theorem \eqref{eq:additionThm}, we obtain
+\begin{equation*}
+\begin{aligned}
+	\frac{2n+1}{4\pi}\abs{P_n(\mu_0)}&=\abs{\suma[m]{-n}{n}\Y{n}{m}(\bomega)\Y{n}{m}(\bomega')}\\
+	&\leq	
+	\sqrt{\suma[m]{-n}{n}\bigl[\Y{n}{m}(\bomega)\bigr]^2}\sqrt{\suma[m]{-n}{n}\bigl[\Y{n}{m}(\bomega')\bigr]^2}\\
+	&=  \frac{2n+1}{4\pi} \sqrt{P_n(\bomega\cdot\bomega)P_n(\bomega'\cdot\bomega')}\\
+	&= 	\frac{2n+1}{4\pi} \abs{P_n(\bomega\cdot\bomega)}\\
+	&= 	\frac{2n+1}{4\pi} P_n(1).
+\end{aligned}
+\end{equation*}
+with equality occurring in the case $\mu_0 = \bomega\cdot\bomega' = 1$.
+It follows that 
+$$
+	P_n(\mu_0) \leq \abs{P_n(\mu_0)} < P_n(1) = 1 = P_0(\mu_0),\quad n \geq 1,\ \mu_0\in(-1,1).
+$$
+Since the fission part of the collision kernel
+$\kappa$ is isotropic, we thus have for $n \geq 1$
 \begin{equation}\label{eq:kappa_inequality}
 	\kappa_n = \sigma_{sn} = 2\pi \muint[_0]{\sigma_s(\mu_0)\P{n}{}(\mu_0)} < 2\pi
 	\muint[_0]{\sigma_s(\mu_0)} = \sigma_{s0} < \sigma_{s0} + \nu\sigma_f = \kappa_0. 
@@ -318,16 +382,17 @@ $$
 $$
 (cf. the representation \eqref{eq:scattering_ratio}). As the matrix $\mat{C}^s_t > 0$ (again because its strict
 diagonal dominance, symmetry and positivity of diagonal elements), we have thus proved that $\mat{C}^s$ is also positive
-definite. From the Lax-Milgram lemma \ref{lem:lax-milgram}, it now directly follows
+definite. From the Lax-Milgram lemma (Lemma \ref{lem:lax-milgram} on pg. \pageref{lem:lax-milgram}), we directly
+obtain the following theorem.
 
-\begin{theorem}
+\begin{theorem}\label{thm:well-posedness-sp3}
 	Let the subcriticality conditions in $\Lp[2](\XE)$ hold. Then Problem \ref{prb:sp3} has a unique solution and there
 	exists constant $\alpha > 0$ such that
 	$$
-		\norm[{\Hp[1](\VV)}]{\Phi^s} < \frac{1}{\alpha} \norm[{\Lp[2](\VV)}]{\mathrm{Q}^s}
+		\norm[{\mathbb{H}^1(\VV)}]{\Phi^s} \leq \frac{1}{\alpha} \norm[{\LL\VV}]{\mathrm{Q}^s}.
 	$$
 \end{theorem}
-
+\begin{remark}\label{rem:well-posedness-sp3}
 We note that for higher order $\SPN$ approximations, the previously stated properties for $\mat{D}^s$, $\mat{G}^s$ are
 still valid and the decomposition \eqref{eq:Cs} has the following form:
 $$
@@ -338,6 +403,7 @@ The matrix
 $$
 	\mat{C}^s_t = \sum_{n=0}^{\floor{N/2}} \mat{C}^s_{2n}
 $$
-is no longer strictly diagonally dominant, but it is still positive definite, as can be verified
-by explicitly computing the eigenvalues (see App. \ref{app:SPN} for the cases $N = 5,7$).
-
+(where $\floor{N/2}$ is the integer part of $N/2$) is no longer strictly diagonally dominant, but it is still positive
+definite, as can be verified by explicitly computing the eigenvalues (see App. \ref{app:SPN} for the cases $N = 5,7$; the Mathematica script
+referenced in the appendix may be easily used for higher $N$).
+\end{remark}

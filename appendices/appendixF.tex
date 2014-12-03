@@ -1,0 +1,52 @@
+\chapter{Tensor identities}\label{app:F}
+The following tensor identities are used in \cref{chap:mcpn}.
+\begin{align}
+\label{eq:tid1}
+	\div\Sym{\del\otimes\AA[2]} &= \frac23 \Sym{\del\otimes\div\AA[2]} + \frac13 \lap\AA[2]\\
+\label{eq:tid2}
+	\div\Sym{\del\otimes\AA[1]} &= \frac12 \del\div\AA[1] + \frac12 \lap\AA[1]\\
+\label{eq:tid3}
+	\div\Sym{\eye\otimes\div\AA[2]} &= \frac23 \Sym{\del\otimes\div\AA[2]} + \frac13\Sym{\eye\otimes\div\div\AA[2]} 
+\end{align}
+where
+%the differential operator
+%\begin{equation}\label{eq:distortion}
+%	\del\circ\AA = \detr\Sym{\del\otimes\AA}
+%\end{equation}
+%has been used to simplify the notation and 
+$\AA[n]$ is a totally symmetric traceless rank-$n$ tensor. 
+%Note that
+%operator \eqref{eq:distortion} is called ``distortion'' in \cite{Clarkson} and identities \eqrefs{}{} also appear in 
+%that paper. Identity \eqref{eq:tid3} is a special case of the general identity \cite[B.4]{Coppa3}.
+
+These identities can be derived using the index notation and definitions of the relevant operators  (and
+verified relatively easily using a computational algebra system like Mathematica). Letting
+$$
+	\spd{}{\alpha} = \pd{}{x_\alpha},\quad \spd[2]{}{\alpha\beta} = \pdd[2]{}{\partial x_\alpha \partial x_\beta}
+$$
+to simplify the notation, identity \eqref{eq:tid1}, for instance, is obtained by using
+$$
+\begin{aligned}
+	T := \div\Sym{\del\otimes\AA[2]} &= \frac{1}{3}\spd{}{\alpha}
+	\left(
+		\spd{\AAAA{\alpha\beta}}{\gamma} + \spd{\AAAA{\alpha\gamma}}{\beta} + \spd{\AAAA{\beta\gamma}}{\alpha}
+	\right)\\
+	&= \frac13 \left(
+		\spd[2]{\AAAA{\alpha\beta}}{\alpha \gamma} + 
+		\spd[2]{\AAAA{\alpha\gamma}}{\alpha \beta} +
+		\spd[2]{\AAAA{\beta\gamma}}{\alpha \alpha} 
+	\right)
+\end{aligned}
+$$
+in
+$$
+	\Sym{\del\otimes\div\AA[2]} = \frac12\left(\spd[2]{\AAAA{\beta\gamma}}{\alpha\beta}	+
+	\spd[2]{\AAAA{\beta\alpha}}{\gamma\beta} \right)  = \frac32 T - \frac12 \spd[2]{\AAAA{\beta\gamma}}{\alpha \alpha} =
+	\frac32 T - \frac12 \lap \otimes \AA[2]
+$$ 
+so that (dropping the $\otimes$ sign from the last term as $\lap$ is a scalar operator)
+$$
+	T = \frac23 \Sym{\del\otimes\div\AA[2]} + \frac13 \lap\AA[2].
+$$
+
+Identity \eqref{eq:tid3} is a special case of the general identity \cite[B.4]{Coppa3}. 

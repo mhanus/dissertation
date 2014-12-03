@@ -4,15 +4,16 @@
 	\graphicspath{{3/pic/EPS/}{3/pic/}}
 \fi
 
-\chapter{Numerical methods for neutron transport}\label{chap:nte-methods}
+\chapter{Neutron transport approximations}\label{chap:nte-methods}
 
 As mentioned in the introductory chapter, we will focus on deterministic methods for solving the NTE, requiring proper
-discretization of \eqref{eq1} and solution of the resulting system of algebraic equations. 
-In the following sections, we review some of the most widely used (in author's opinion) semi-discretizations with respect to
-energy, angle and spatial variables and finish this chapter with a general discussion on solving large sparse systems of
-algebraic equations, resulting from the combination of semi-discretizations that are most suitable for our purposes. We
-will focus on the fixed-source problem, whose solution is a neccessary part in practically all numerical methods for
-solving the generalized eigenvalue problem \eqref{eq:critical}.
+discretization of \eqref{eq1} and solution of the resulting system of algebraic equations.
+In the following sections, we review some of the most widely used semi-discretizations with respect to energy, angle and
+spatial variables and put them into a unified Hilbert space projection framework. We finish this chapter with a general
+discussion on solving the associated large sparse systems of algebraic equations and a review of adaptive approaches to
+these discretizations (some of which will be later developed in \cref{chap:hermes}). We will focus on the fixed-source
+problem, whose solution is a neccessary part in practically all numerical methods for solving the generalized eigenvalue
+problem \eqref{eq:critical}.
 
 \myparagraph{Notation conventions}
 Concerning fonts and subscripts/superscripts, we will generally use the following conventions (wherever exception will
@@ -21,11 +22,13 @@ be needed, it will be clearly stated):
   \item $\mathbf{f}$ $\ldots$ column vector with numerical values ($\mathbf{f}\in\R[N]$ for some $N\in\mathbb{N}$);
   \item $f_n$ or $[\mathbf{f}]_n$ $\ldots$ components of $\mathbf{f}$;
   \item $\mathbf{A}$ $\ldots$ matrix with numerical values ($\mathbf{A}\in\R[M\times N]$, $M,N\in\mathbb{N}$);
-  %also, $\mathbf{A}(\br)$ will be used for matrix fields with elements being functions defined in $\VV$;
-  \item $A_{ij}$ or $[\mathbf{A}]_{ij}$ $\ldots$ elements of matrix $\mathbf{A}$;
-  \item upshape $\mathrm{F}$ $\ldots$ vector field $\VV\to\R[N]$, $N\in\mathbb{N}$;
-  \item $f_n$ or $[\mathrm{F}]_n$ $\ldots$ components of $\mathrm{F}$ (we will not need to distinguish between
-  components of $\mathrm{F}$ and $\mathbf{f}$ at the same place, so we use $f_n$ for both);
+  also, $\mathbf{A}(\br)$ will denote matrix-valued function with elements being functions defined in~$\VV$;
+  \item $A_{ij}$ or $[\mathbf{A}]_{ij}$ $\ldots$ elements of $\mathbf{A}$;
+  \item upshape $\mathrm{F}$ (including $\Psi$, $\Phi$) $\ldots$ vector-valued function $\VV\to\R[N]$,
+  $N\in\mathbb{N}$; as an exception, $\bn(\br)$ denotes as before the vector-valued function representing unit outward
+  normal field of $\pV$;
+  \item $f_n$ or $[\mathrm{F}]_n$ $\ldots$ components of $\mathrm{F}$\comment{ (we will not need to distinguish between
+  components of $\mathrm{F}$ and $\mathbf{f}$ at the same place, so we use $f_n$ for both)};
   \item $A$ or calligraphic $\mathcal{A}$ $\ldots$ in the context of an operator acting on some vector space $V$, usual
   letters will be used for transport operators introduced in previous chapter, while calligraphic letters for general  
   operators;
@@ -37,8 +40,6 @@ be needed, it will be clearly stated):
   \item $\col s$ $\ldots$ column vector with entries $c_1,c_2,\ldots,c_N$;
   \item $\diag s$ $\ldots$ diagonal matrix whose diagonal is given by elements of $s$;
   \item $f_{(i)}$ $\ldots$ $i$-th iterate in an iteration process.
-  \item Greek subscripts (as in $A_{\alpha})$ $\ldots$ indices of the Cartesian axes (with the
-    correspondence $\alpha = 1,2,3 \leftrightarrow x,y,z$),
 \end{itemize}
 So with this notation, we have, for instance, $\mathrm{F} = \col \{f_n\}_N$ with each $f_n$ being a function from some
 space $V_n$.
@@ -340,10 +341,10 @@ $$
  	that}\ \, \phi_k(\br) = \intA{\psi(\br,\bomega) \Y{k}{}(\bomega)}. 
 $$
 \begin{remark}[\textsc{Suppression of spatial dependence}]\mbox{}\\
-In order to prevent proliferation of $\cdot$'s, we will in the two following subsections
-\ref{sec:pn_op} and \ref{sec:PN_struct} consider all functions and operators with spatial dependence at an arbitrary 
-fixed point $\br\in\VV$. We will then write e.g. $\psi\in\Lp[2](\Sphere)$, $\mathbf{K}_{P_N}$ becomes an ordinary matrix
-in $\R[K\times K]$, etc.
+In order to prevent proliferation of $\cdot$'s, we will, until \sref{sec:drawbacksPN} and when not explicitly stated
+otherwise, consider all functions and operators with spatial dependence at an arbitrary fixed point $\br\in\VV$. This
+allows us to write e.g. $\psi\in\Lp[2](\Sphere)$, $\mathbf{K}_{P_N}$ becomes an ordinary matrix in $\R[K\times K]$,
+etc.
 \end{remark}
 
 Using again the double index
@@ -458,7 +459,10 @@ $$
 	u(\br,\bomega)v(\br,\bomega)\,\d{S}\d{\bomega}.
 $$
  We will call boundary conditions of this form (as in \cite{Davis}) \textit{Marshak boundary
-conditions}.
+conditions}\footnote{We only make a remark that there is 
+another form of approximate boundary conditions known as the Mark conditions. The relative merit of one over the other 
+is not completely resolved so both are used in practice. We prefer the former as they are consistent with the Galerkin 
+interpretation of the $\PN$ equations.}.
 
 \subsubsection{Collision part}
 As we have seen in previous paragraphs, the $\PN$ system \eqref{eq:pn1} couples the advected angular moments in the sum
@@ -494,7 +498,7 @@ spatial dependence of $\kappa$ and $\kappa_n$ is not explicitly shown}
 		\kappa_n = 2\pi \muint[_0]{\kappa(\mu_0)\P{n}{}(\mu_0)}.
 	\end{equation}
 	Then for any $n = 0,1,\ldots,\ -n \leq m \leq n$,
-	\begin{equation}\label{eq:scattering_PN}
+\begin{equation}\label{eq:scattering_PN}
 \begin{aligned}
 	\bigl(K\Y{n}{m}\bigr)(\bomega) &= \intA[']{\kappa(\bomega\cdot\bomega')\Y{n}{m}(\bomega')} \\
 	&= \intA[']{\suma[p]{0}{\infty}\frac{2p+1}{4\pi}\kappa_p\P{p}{}(\bomega\cdot\bomega')\Y{n}{m}(\bomega')} \\
@@ -638,8 +642,8 @@ Each $\Lambda_n$ is a Hilbert space possessing the following \textit{reproducing
 %
 \noindent Now we are ready to show that the $\PN$ equations are rotationally
 invariant in cases when the original NTE is. We note that even though the rotation operator $\genop{R}$ acts on both the
-spatial and angular variables, the $\PN$ projection operator acts only on the latter. Therefore, we can consider $\psi$
-again as a function of only the angular variable in the proof of the following theorem.
+spatial and angular variables, the $\PN$ projection operator acts only on the latter. Therefore, we can still consider
+$\psi$ as a function of only the angular variable in the proof of the following theorem.
 
 \begin{theorem}\label{thm:commut_PN}
 Let $T$ be the transport operator defined in \sref{sec:fixed-source} such that the assumptions of Theorem
@@ -686,11 +690,11 @@ $$
 
 
 
-\subsection{Drawbacks of the $\PN$ approximation}
+\subsection{Drawbacks of the $\PN$ approximation} \label{sec:drawbacksPN}
 Using the results of the previous subsection and well-known results from the theory of Hilbert spaces, we can see that
 the sum \eqref{eq:pn_approx2} (or \eqref{eq:pn_approx}) converges in the $\Lp[2](\Sphere)$ norm to the true solution of
-eq. \eqref{eq1} as $N\to\infty$. However, the convergence may be very slow if the true solution to the NTE is not
-sufficiently regular in the angular variable. In particular, pointwise convergence is hindered in the neighborhood of
+eq. \eqref{eq1} as $N\to\infty$ (\cite[Thm. 3.54]{Schreiner}). However, the convergence may be very slow if the true
+solution to the NTE is not sufficiently regular in the angular variable. In particular, pointwise convergence is hindered in the neighborhood of
 phase space points where the exact solution has jump discontinuity in $\bomega$ (which may occur for example
 when a narrow beam of neutrons is freely streaming through a non-interacting medium, but, as we already mentioned at the
 beginning of \sref{sec:ntp}, also in a more typical case of domains with multiple regions with different materials,
@@ -780,10 +784,10 @@ demkowicz}).
 Note that the self-adjoint property of the diffusion model can only be spoiled by the multigroup energy discretization, where energy 
 transfers in neutron collisions result in non-symmetric coupling of the multigroup system -- as we have seen before 
 (\sref{sec:MG}), this can be prevented by moving the non-symmetric parts to the right-hand side and solving the 
-resulting system iteratively\footnote{In our experience with nuclear reactor calculations, the multigroup coupling through the absolute
-terms is rather weak compared to the diffusion terms, resulting in the skew-symmetric part of the final system matrix
+resulting system iteratively\comment{\footnote{In our experience with nuclear reactor calculations, the multigroup
+coupling through the absolute terms is rather weak compared to the diffusion terms, resulting in the skew-symmetric part of the final system matrix
 being about 2-3 orders of magnitude (in row-sum norm) smaller than the symmetric part; this allows to use for instance
-the standard symmetric algebraic multigrid preconditioner without a significant performance deterioration.}.
+the standard symmetric algebraic multigrid preconditioner without a significant performance deterioration.}}.
 
 \comment{
 Although methods based on the diffusion approximation have been experimentally proven to be widely applicable for
@@ -878,8 +882,8 @@ corresponding set of weights $\{w_m\}_{m=1}^{M}$, together defining a quadrature
 requirement of accurate evaluation of the integral term of eq.
 \eqref{eq1} as well as accurate integration of the angular flux function over the sphere (to obtain the scalar flux)
 constitutes the main guideline for the choice of directions and weights. We will return to this matter later in 
-\sref{sec:DO}; for now it suffices to say that for three-dimensional problems without any symmetries, \mbox{$M = \left|\{\bomega_m, w_m\}\right| = \Oh(N^2)$} (with the
-value of $M$ for typically used quadrature sets stated above).
+\sref{sec:ordinates}; for now it suffices to say that for three-dimensional problems without any symmetries, \mbox{$M =
+\left|\{\bomega_m, w_m\}\right| = \Oh(N^2)$} (with the value of $M$ for typically used quadrature sets stated above).
 
 To write  the final result of the $\SN$ approximation, let us first recall that for a sequence
 $s = \{c_k\}_\idxset{N}$, $\col s$ denotes the column vector with entries $c_1,c_2,\ldots,c_N$ and $\diag s$ the 
@@ -905,13 +909,13 @@ following set of $M$ PDEs in spatial domain ($\br\in\VV$) \footnote{Differentiat
 \end{equation}
 where $\mat{I}$ is the $M\times M$ identity matrix,
 $$
-	\mat{A}_{S_N}^x = \diag\{\Omega_{m,x}\}_{\idxset{M}},\ \mat{A}_{S_N}^y = \diag\{\Omega_{m,y}\}_{\idxset{M}},\
-	\mat{A}_{S_N}^z = \diag\{\Omega_{m,z}\}_{\idxset{M}}.
+	\mat{A}_{S_N}^x = \diag\{{\Omega_{m}}_x\}_{\idxset{M}},\ \mat{A}_{S_N}^y = \diag\{{\Omega_{m}}_y\}_{\idxset{M}},\
+	\mat{A}_{S_N}^z = \diag\{{\Omega_{m}}_z\}_{\idxset{M}}.
 $$
 and
 \begin{equation}\label{eq:SNK}
-	\left[\mathbf{K}_{S_N}\right]_{m,n} = w_n \kappa(\cdot,\bomega_m\cdot\bomega_n),\quad
-	\bomega_n,\bomega_m\in \omega,\ w_n\in \mathcal{W},\ 1 \leq m,n \leq M.
+	\left[\mathbf{K}_{S_N}(\br)\right]_{m,n} = w_n \kappa(\br,\bomega_m\cdot\bomega_n),\quad
+	\bomega_n,\bomega_m\in \omega,\ w_n\in \mathcal{W},\ 1 \leq m,n \leq M,\quad \br\in\VV.
 \end{equation}
 After solution vector $\Psi(\br)$ is computed, the
 important physical quantities (scalar flux, neutron current) can be obtained directly from their definition \eqref{eq:scalar_flux}
@@ -952,7 +956,7 @@ trying to reduce spatial discretization errors by using finer mesh). Being argua
 remedies have been proposed in literature (which, as expected, typically sacrifice some properties of the $\SN$
 approximation), see e.g. \cite{Li1} and the references therein.
 
-\subsubsection{Boundary conditions}
+\subsubsection{Boundary conditions}\label{sec:sn_bnd}
 The decoupled hyperbolic character allows straightforward determination of inflow and outflow boundaries. Boundary
 conditions \eqref{eq:nte2} are then easily taken into account as long as the ordinates set $\omega$ contains directions
 in which $\psi_{\text{in}}$ is specified:
@@ -962,10 +966,10 @@ in which $\psi_{\text{in}}$ is specified:
 while (as already mentioned above), the conditions of type
 \eqref{eq:nte3} require that for each $\bomega_m\in\omega$, 
 $$
-	\bomega_m - 2 \bn (\bomega_m \cdot \bn) \in \omega.
-$$ 
-
-
+	\bomega_{mR} \equiv \bomega_m - 2 \bn (\bomega_m \cdot \bn) \in \omega.
+$$
+This constraint is difficult to satisfy for generally oriented surfaces and some sort of interpolation of angular fluxes
+in directions adjacent to $\bomega_{mR}$ is usually needed.
  
 \subsubsection{Collisions}
 Input data for the collision term usually include the isotropic fission cross-section and Legendre scattering moments up
@@ -973,23 +977,11 @@ to some finite degree of scattering anisotropy $N_s$, as explained in \sref{rem:
 order to incorporate this data to the $\SN$ approximation, the expansion \eqref{eq:scattering_exp} truncated to length
 $N_s$ is used in conjunction with the addition theorem \eqref{eq:additionThm} to obtain elements of the collision
 matrix:
-$$
+\begin{equation}\label{eq:KSN}
 \left[\mathbf{K}_{S_N}(\br)\right]_{m,n} = 
 w_n \suma[p]{0}{N_s}\kappa_p(\br)\suma[q]{-p}{p}\Y{p}{q}(\bomega_m)\Y{p}{q}(\bomega_n),\quad  1 \leq m,n \leq M, \quad
 \br\in\VV.
-$$
-\comment{
-Consider now the action of $\mat{K}_{S_N}$ on the $\SN$ representation of $\Y{r}{s}(\bomega)$ for some admissible
-index pair $r,s$:
-$$
-\begin{aligned}
-	\mat{K}_{S_N} \bigl(\PihSN \Y{r}{s}\bigr) &= \sum_{n=1}^M w_n
-	\suma[p]{0}{N_s}\kappa_p\suma[q]{-p}{p}\Y{p}{q}(\bomega_m)\Y{p}{q}(\bomega_n)\Y{r}{s}(\bomega_n) \\
-	&= \suma[p]{0}{N_s}\kappa_p\suma[q]{-p}{p}\Y{p}{q}(\bomega_m)\sum_{n=1}^M
-	w_n\Y{p}{q}(\bomega_n)\Y{r}{s}(\bomega_n)
-\end{aligned}
-$$
-}
+\end{equation}
 
 \comment{
 The following theorem can serve as another guideline for the construction of the
@@ -1093,9 +1085,9 @@ the given set of ordinates $\omega = \{\bomega_m\}_{\idxset{M}}$ and a correspon
 For each $\bomega_m\in\omega$, we define a patch $\Delta\bomega_m$ on the sphere with (spherical) area $w_m$ (see
 \fref{fig:element} where the patch would correspond to the shaded area and $\Delta\bomega_m = \abs{\d{\bomega}}$). This
 construction requires 
-$$
+\begin{equation}\label{eq:sphintc1}
 	\sum_{m=1}^M w_m = \mu(\Sphere) = 4\pi\quad \mbox{ and }\quad  w_m > 0, \ \, 1 \leq m \leq M,
-$$
+\end{equation}
 which is satisfied by most discrete ordinates quadrature sets in use\comment{\footnote{although we note that one of the
 first and most widely used quadrature sets, Carlson's \textit{level-symmetric} set, allows negative weights when $N > 20$  (e.g.
 \cite[Sec. 8.5.1]{Cacuci1})}}.% 
@@ -1130,7 +1122,7 @@ where $\imath$ is the indicator function of the patch $\Delta\bomega_n$:
 \begin{equation}\label{eq:indicator}
 \imath_m(\bomega) = \pw{1}{if $\bomega \in \Delta\bomega_m$}{0}{otherwise.}
 \end{equation}
-Here we introduced $V_{S_N}\subset \subset V \subset \Lp[2](X)$ as a subspace of a space of functions that
+Here we introduced $V_{S_N}\subset V \subset \Lp[2](X)$ as a subspace of a space of functions that
 are (as functions of $\bomega$) piecewise constant on $\Sphere$ and satisfy the homogeneous inflow boundary condition\footnote{Note that an
 analogous mapping could be defined for non-homogeneous boundary conditions and used in a lifting argument
 as in Sec. \ref{sec:fixed-source} to convert a nonhomogeneous boundary value problem to the one analyzed here.}. With
@@ -1293,8 +1285,8 @@ contraction principle (e.g., \cite[Thm.
 	\eqref{eq:mg} is again a restriction of the continuous NTE to a subspace of piecewise constant functions with respect
 	to energy, using $\Projop[G] \coloneqq \PiG\PihG$ where
 	$$
-		\PihG\psi = \left\{\frac{1}{\Delta E^{g}}\int_{g}\psi(\cdot,\cdot,E)\,\d{E}\right\},\quad
-		\PiG\{\psi^g\} = \sum_{g=1}^G \psi^g(\cdot,\cdot)\imath_g(E)
+		\PihG\psi = \left\{\frac{1}{\Delta E^{g}}\int_{g}\psi(\cdot,\cdot,E)\,\d{E}\right\}_G,\quad
+		\PiG\{\psi^g\}_G = \sum_{g=1}^G \psi^g(\cdot,\cdot)\imath_g(E)
 	$$
 	with obviously defined group indicator function $\imath_g$.
 	The above results then apply to the Jacobi version of iteration \eqref{eq:MGGS}, while the Gauss-Seidel form
@@ -1333,6 +1325,134 @@ acceleration of SI}. For more details, we refer to \cite[Chap. 1]{Azmy1} or \cit
 convergence characteristics of the discrete ordinates source iteration similar to Thm. \ref{thm:3} were obtained for
 homogeneous infinite medium with isotropic scattering by means of Fourier analysis).
 
+\subsection{Selection of ordinates and weights}\label{sec:ordinates}
+In this subsection, we return to the question of the selection of the angular quadrature set
+$\{\bomega_m,w_m\}_{M}$.
+The first constraint that we encountered was connected with the reflective boundary conditions. If these conditions are
+imposed for the problem at hand, for each direction $\bomega_m\in\omega$ we should require 
+\begin{equation}\label{eq:refl_constraint}
+	\bomega_m - 2 \bn (\bomega_m \cdot \bn) \in \omega,
+\end{equation}
+where $\bn$ is the unit outward normal to the reflective boundary. As already mentioned in \sref{sec:sn_bnd}, this
+condition needs to be imposed approximately for generally oriented surfaces. The set $\omega$ in most widely adopted
+ordinates sets is constructed so as to preserve the symmetry of the eight octants of $\Sphere$ with respect to $\pi/2$
+rotations (such sets are usually called \textit{level-symmetric}). Constraint \eqref{eq:refl_constraint} is then
+satisfied for boundaries parallel to the Cartesian coordinate planes. Moreover, ordinates and the corresponding weights need to be specified only in the principal octant of the
+sphere; the same direction cosines with only an appropriately changed sign define corresponding points in the remaining
+octants (with the same quadrature weights).
+
+The choice of quadrature set is further guided by the requirement of exact integration of angular integrals appearing in
+the $\SN$ model. This can be represented by the so-called \textit{moment conditions}:
+\begin{equation}\label{eq:moment_cnd}
+	\sum_{m=1}^M w_m ({\Omega_m}_x)^n =
+	\sum_{m=1}^M w_m ({\Omega_m}_y)^n =
+	\sum_{m=1}^M w_m ({\Omega_m}_z)^n =
+	\pw{0}{$n$ odd}{\frac{4\pi}{n+1}}{$n$ even}. 
+\end{equation}
+Note that the odd moment conditions are automatically satisfied for level-symmetric sets. For $n = 0$, we recover the
+condition \eqref{eq:sphintc1}. This is needed for correct integration of isotropic terms (like the scalar flux).
+Satisfaction of the conditions for $n = 1$ is required for correct determination of neutron current from $\SN$ fluxes
+(cf. eq. \eqref{eq:bJ}). Satisfaction of higher order moments has more subtle physical significance, e.g.
+\eqref{eq:moment_cnd} for $n = 2$ is needed so that the $\SN$ solution obeys the diffusion limit \cite{Larsen5}; it is
+also important when higher anisotropy degrees are present in the scattering integral, as we will explain next. 
+
+Consider the action of
+$\mat{K}_{S_N}$ on the $\SN$ representation of $\Y{r}{s}(\bomega)$ for some admissible index pair $r,s$:
+$$
+\begin{aligned}
+	\left[\mat{K}_{S_N} \PihSN \Y{r}{s}\right]_m &= \sum_{n=1}^M w_n
+	\suma[p]{0}{N_s}\kappa_p\suma[q]{-p}{p}\Y{p}{q}(\bomega_m)\Y{p}{q}(\bomega_n)\Y{r}{s}(\bomega_n) \\
+	&= \suma[p]{0}{N_s}\kappa_p\suma[q]{-p}{p}\Y{p}{q}(\bomega_m)\sum_{n=1}^M
+	w_n\Y{p}{q}(\bomega_n)\Y{r}{s}(\bomega_n).
+\end{aligned}
+$$
+If the quadrature set is constructed so that products of spherical harmonics up to degree
+$N_s$ are integrated exactly, the orthogonality property \eqref{eq:og} is recovered by the last sum and we obtain
+$$
+\begin{aligned}
+	\mat{K}_{S_N} \PihSN \Y{r}{s}\bigr = \left\{\kappa_r\Y{r}{s}(\bomega_m)\right\}_{m=1}^M = \PihSN
+	K\Y{r}{s}
+\end{aligned}
+$$
+where the last equality follows from \eqref{eq:scattering_PN}. 
+
+The requirement of exact integration of spherical
+harmonics up to degree $N_s$ is equivalent to the exact integration of polynomials in $\bomega_x$,
+$\bomega_y$, $\bomega_z$ of the same degree (as both sets generate the same polynomial space on $\Sphere$, cf.
+Tab. \ref{tab:harmonics} and \sref{sec:tens_sph} for more details), i.e. conditions \eqref{eq:moment_cnd}. 
+That is, if conditions \eqref{eq:moment_cnd} are satisfied through $m = 2 N_s$, the product of spherical harmonics
+up to degree $N_s$ and hence their orthogonality relation will be integrated exactly. 
+
+To obtain an optimal quadrature rule capable of integrating exactly polynomials of highest possible degree, we use the 
+well-known property of Gauss quadrature: if the $N$ abscissae of an $N$-point Gauss quadrature rule for integrating
+functions over given interval with a particular weighting function are chosen as the roots of the polynomial
+of degree $N$ from a set of polynomials orthogonal over the same interval with the same weighting function,
+then the quadrature rule will be exact for all polynomials up to degree $2N-1$ (e.g., \cite[Chap. 4]{Ralston}).
+Realizing that with $\mu = \cost$ and $y = \cosp$,
+$$
+	\intA{} = \int_0^\pi\sint\d{\polar}\int_0^{2\pi}\d{\azimuthal}
+	 = 2\int_{-1}^{1}\d{\mu}\int_{-1}^{1}\frac{1}{\sqrt{1-y^2}}\,\d{y}. 
+$$
+we come to the conclusion that the quadrature rule optimal with respect to the above conditions is the tensor product
+rule composed of the $N_\mu$-point Gauss-Legendre rule in the polar direction (as Legendre polynomials are orthogonal over
+$[-1,1]$ with the unit weight function) and the $N_\azimuthal$-point Gauss-Chebyshev rule in the azimuthal direction (as
+Chebyshev polynomials are orthogonal over $[-1,1]$ with the weight $(1-y^2)^{-1/2}$) with $N_\mu = N_\azimuthal
+= N_s + 1$ points (so that it is exact for polynomials of degree $2 N_s + 1$). As weight functions for both rules are positive over $[-1,1]$, the
+weights are also positive for arbitrary $N_\mu$, $N_\azimuthal$ and consequently both 1D quadrature rules comprising the
+final product rule are convergent (\cite[Chap. 4]{Ralston}).
+
+\subsubsection{Legendre-Chebyshev quadrature in the first octant}
+Because of the symmetry constraints, we actually have for an $\SN$
+quadrature $N_\mu = N$ and $N_y = N + 2$, resulting in ordinates set $\omega$ with $M = N(N+2)$ directions over the unit
+sphere. The directions are arranged in the principal octant on $N/2$ levels of constant polar angle $\polar_l$ (and thus
+constant $\mu_l = {\Omega_l}_z = \cos \polar_l$) with $l$ directions at the $l$-th level. 
+
+\begin{figure}[!h]
+  \centering
+  \includegraphics[scale=.375]{ordinates}
+  \caption[Discrete ordinates in the first octant]{Legendre-Chebyshev
+  ordinates in first octant, $N=30$}
+\end{figure}
+
+\myparagraph{Polar components}
+For $l = 1,2,\ldots
+N/2$, $\mu_l$ are the abscissae of the Gauss-Legendre rule, i.e. the $N/2$ positive roots of Legendre polynomial
+$P_N(\mu)$. The weights are given as
+$$
+	w_{l}^\mu = \frac{1}{(1-\mu_l^2)\Bigl(\left.\der{P_N(\mu)}{\mu}\right\vert_{\mu_l}\Bigr)^2}.
+$$
+
+\myparagraph{Azimuthal components}
+The azimuthal angle of the $i$-th direction on the $l$-th polar level is the arcus-cosine of the
+$i$-th root of the Chebyshev polynomial of the first kind of degree $l$ (\cite[p.402]{weissteinCRC})\footnote{With the
+ordering of the roots according to \cite{weissteinCRC}, more precisely the arcus cosine of the $l-i+1$-st root.}. That
+is, for given $l = 1,2,\ldots,N$, 
+$$
+	\azimuthal_{l,i} = \frac{2l-2i+1}{2l}\cdot\frac{\pi}{2},\quad i = 1,2,\ldots, l.
+$$
+All weights on the given polar level $l$ are equal to (\cite[p.402]{weissteinCRC})
+$$
+	w_{l,i}^\azimuthal = \frac{\pi}{l},\quad i = 1,2,\ldots, l.
+$$
+
+
+\myparagraph{Complete quadrature set}
+The Legendre-Chebyshev quadrature set 
+$$
+	\{\bomega_m,w_m\}_{M} \equiv \{\bomega_{l,i},w_{l,i}\mid l = 1,2,\ldots N,\ i = 1,2,\ldots l\}
+$$ 
+is defined by
+\begin{equation}\label{eq:LCNset}
+		\bomega_{l,i} = 
+		\left[\begin{array}{c}
+		\sqrt{1-\mu_l^2}\cos \azimuthal_{l,i} \\
+		\sqrt{1-\mu_l^2}\sin \azimuthal_{l,i} \\
+		\mu_l
+	\end{array}\right],\quad
+	w_{l,i} = w_{l}^\mu w_{l,i}^\azimuthal
+\end{equation}
+and is used in the $\SN$ module for the Hermes2D FE system (\cref{chap:hermes}). Mathematica script for generating the
+quadrature points and weights is available from \alert{ref}.
 
 
 \comment{
@@ -1504,7 +1624,7 @@ $m$-th advection-reaction equation
 \end{equation}
 Let us further consider this single advection-reaction problem and suppress the index $m$. 
 
-\subsection{Finite element method}
+\subsection{Finite element method}\label{sec:FEM}
 We proceed by defining a (general unstructured, quasiuniform) mesh
 $\mesh = \{\elem\}$ ($\elem$ being either a simplex or a hypercube) such that $$
 	\overline{\VV} = \bigcup_{\elem\in\mesh} \overline\elem
@@ -1527,12 +1647,12 @@ The classical choice of shape functions are the piecewise polynomial functions, 
 subspace
 \begin{equation}\label{eq:space}
 	\Space_{hp} = \{v_{hp} \in C^0(\VV): \left. v_{hp}\right\vert_{\elem} \circ\, \mathfrak{r} \in
-	\mathcal{P}_p(\hat{\elem}),\ \elem\in\mesh)
+	\mathcal{P}_p(\hat{\elem}),\ \elem\in\mesh
 	\}
 \end{equation}
 where $\hat{\elem}$ is the reference unit hypercube or simplex, $\mathfrak{r} : \elem \to \hat{\elem} $
-is the standard reference mapping and $\mathcal{P}_p(\hat{\elem})$ is the space of polynomials of degree $p$ (tensor
-product polynomials in case of $\elem$ being a hypercube).
+is the standard reference mapping and $\mathcal{P}_p(\hat{\elem})$ is the space of polynomials of degree up to $p$
+(tensor product polynomials in case of $\elem$ being a hypercube).
 
 As a result of the restriction of \eqref{eq:SN_weak_one} to $\Space_{hp}$, we obtain for $u,v\in\Space$
 \begin{equation}\label{eq:aaa}
@@ -1557,9 +1677,8 @@ $$
 would form the $mm$ block in the global $\SN$ matrix (restriction of eq. \eqref{eq:weak1} to $\prod_{m} \Space_{m,hp}(\VV)$).  
 
 By this construction, $\Space_{hp} \subset \Space$ \footnote{provided that \eqref{eq:mesh} holds, which is often
-violated by the inability to precisely capture the geometrical boundaries; we will not however consider this \textit{variational crime
-} here} and we may consider the above procedure as another restriction of the NTE following its restriction to
-$V_{SN}$.
+violated by the inability to precisely capture the geometrical boundaries; however, we will not consider this
+\textit{variational crime} here} and we may consider the above procedure as another restriction of the NTE following its restriction to $V_{SN}$.
 The finite dimensional subspace in which we are looking for the solution has dimension $N_{hp} \times M \times G$ (if we also consider the multigroup discretization of energy).
 
 Equations of type \eqref{eq:SN_weak_one} have been studied extensively in the past (see e.g. \cite{hartmann} and
@@ -1655,7 +1774,7 @@ Because of the insufficient smoothness of functions from $\Space_{hp}^{dg}$, the
 weak form must be applied element-wise, leading to the formulation (for a particular direction $\bomega\in\omega$)
 $$
 	\sum_{\elem\in\mesh}\int_{\elem} (-u_{hp}\bomega\cdot\nabla v_{hp} + 
-	\sigma_t u_{hp} v_{hp})\,\d{\br} + \sum_{e\not\subset\pV[-]}\int_{e} \{\bomega u_{hp}\}\cdot \jump{v_{hp}}\,
+	\sigma_t u_{hp} v_{hp})\,\d{\br} + \sum_{e\not\subset\pV[-]}\int_{e} \langle\bomega u_{hp}\rangle\cdot \jump{v_{hp}}\,
 	\d{S} = \int_{\VV} q v_{hp}\,\d{\br} 
 $$
 where $e$ denotes subsequently all faces of all elements $\elem\in\mesh$ (both interior and those coinciding with
@@ -1667,7 +1786,7 @@ with $\bn^{\pm}$ the outer normal of $\elem^+$ and $\elem^-$, respectively, wher
 There are several ways of approximating $\bomega u_{hp}$ by $\{\bomega u_{hp}\}$ (called \textit{numerical flux}), the
 simplest stable approximation being the \textit{upwind numerical flux}:
 $$
-	\{\bomega u_{hp}\} = 
+	\langle\bomega u_{hp}\rangle = 
 	\begin{cases}
 		\bomega u_{hp}^-, & \bomega\cdot\bn^- > 0,\\
 		\bomega u_{hp}^+, & \bomega\cdot\bn^- < 0,\\
@@ -1686,8 +1805,8 @@ the discontinuous Galerkin method.
 \subsection{Diffusion approximation}\label{sec:diffusion_weak}
 
 Much simpler situation arises in the spatial discretization of the diffusion equation \eqref{eq:diffusion} with boundary
-conditions \eqref{eq:diffusion_bc}. In this case, we look for the solution in the usual Sobolev space $H^1(\VV)$ and the
-problem reads: Find $u\in H^1(\VV)$ such that
+conditions \eqref{eq:diffusion_bc}. In this case, the original problem is posed in the usual Sobolev space $H^1(\VV)$: 
+Find $u\in H^1(\VV)$ such that
 \begin{equation}\label{eq:dif_bil_ex}
 	a(u,v) = f(v)	\quad	\forall v\in H^1(\VV)
 \end{equation}
@@ -1700,16 +1819,17 @@ $$
 $\gamma$ in \eqref{eq:diffusion_bc}).
 Under the subcriticality conditions, the bilinear form $a$ is bounded and coercive on $H^1(\VV)$ (even in the multigroup
 case -- see \cite[Chap. VII]{DautrayLions2}). By using the finite element method as described
-above with the approximation space \eqref{eq:space}, an algebraic problem
+above with the approximation space \eqref{eq:space}, an algebraic system
 \begin{equation}\label{eq:syst}
 	\mat{A}\mat{u} = \mat{b}
 \end{equation}
-with sparse, symmetric, positive definite (in the mono-energetic case) matrix $\mat{A}$ is obtained.
+with sparse, symmetric, positive definite (in the mono-energetic case) matrix $\mat{A}$ is obtained, amenable to
+solution by standard numerical methods.
 
 
 \subsection{On origin of errors in the FE approximation}
-Let us finish this section by recalling the well-known, but very important connection between the above described finite
-element discretization and solution of \eqref{eq:syst} (see, e.g., \cite{Arilie} for more details). Even though the
+Let us finish this section by recalling a simple, but very important connection between the above described finite
+element discretization and solution of \eqref{eq:syst}. Even though the
 analysis is done here for the case of the diffusion approximation with symmetric and positive definite system
 \eqref{eq:syst}, keeping in mind its conclusion is equally important for finite-element discretizations of the other
 models as well.
@@ -1766,19 +1886,19 @@ available, some sort of automatic adaptivity is needed, which we will discuss in
 adaptivity in angular domain) in the following section.
 
 As a final note, we would like to remark that solution of the algebraic systems 
-
+}
 \section{Adaptivity}
 In real applications, automatic adaptivity of the discrete phase space is usually needed to obtain sufficiently accurate
-results sufficiently fast. Except for the scheme described in the Ph.D. thesis of H. Park \cite{Park} -- a rare case of coupled angular and spatial adaptivity -- all literature
-available to the author describes schemes where angular and spatial adaptivity is performed separately (and there is
-none about adaptivity with respect to the energetic variable). In the context of the $\PN$ method, there are examples
-where the order of the spherical harmonic expansion is varied throughout the spatial domain (see e.g. \cite{Ackroyd2})
-based on material properties and physical reasoning. Properties of spherical wavelets have been used in \cite{Buchan} to
-drive automatic selection of the order of the expansion (in this case with respect to the wavelet interpolation basis of
-$\Lp[2](\Sphere)$ instead of the spherical harmonics basis) based on the increasing size of expansion coefficients
-corresponding to wavelets supported over underresolved areas of $\Sphere$. Angular adaptivity in the $\SN$ approximation
-(i.e., adaptive control of the number of discrete ordinates in local areas on the sphere) is described in
-\cite{Jarrell}.
+results sufficiently fast. Except for the scheme described in the Ph.D. thesis of H. Park \cite{Park} -- a rare case of 
+ coupled angular and spatial adaptivity -- all literature available to the author describes schemes where angular and
+spatial adaptivity is performed separately (and there is none about adaptivity with respect to the energetic variable). 
+In the context of the $\PN$ method, there are examples where the order of the spherical harmonic expansion is varied 
+throughout the spatial domain (see e.g. \cite{Ackroyd2}) based on material properties and physical reasoning. Properties
+of spherical wavelets have been used in \cite{Buchan} to drive automatic selection of the order of the expansion  (in
+this case with respect to the wavelet interpolation basis of $\Lp[2](\Sphere)$ instead of the spherical harmonics basis)
+based on the increasing size of expansion coefficients corresponding to wavelets supported over underresolved areas of 
+$\Sphere$. Angular adaptivity in the $\SN$ approximation (i.e., adaptive control of the number of discrete ordinates in 
+local areas on the sphere) is described in \cite{Jarrell}.
 
 More widespread use has found the adaptivity in spatial domain, using techniques developed for finite element
 approximations of general hyperbolic systems. They are usually used in DG $\SN$ methods, see e.g.
@@ -1808,9 +1928,9 @@ estimates involving solution regularity typically doesn't appear until very late
 all (\cite{wang2009convergence}). Hence, utilizing higher order approximations still makes sense to accelerate
 pre-asymptotic convergence rate as much as possible (for an attempt to use hp-adaptivity with DG $\SN$ methods -- to
 author's knowledge first of its kind, see \cite{FournierDGHP}). Implementation of an $\SN$ solver in the general hp-FEM
-framework Hermes, described in \cref{chap:hermes}, could be seen as a first step for future investigations in this
+framework Hermes (see \cref{chap:hermes}), could be seen as a first step for future investigations in this
 direction.
-}
+
 
 
 % REGULARITY

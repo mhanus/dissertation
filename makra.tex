@@ -65,7 +65,7 @@
 \newcommand{\bv}{\ensuremath{\mathbf{v}}}
 \newcommand{\bn}{\ensuremath{\mathbf{n}}}
 \newcommand{\be}{\ensuremath{\mathbf{e}}}
-\newcommand{\bJ}{\ensuremath{\mathbf{J}}}
+\newcommand{\bJ}{\ensuremath{\mathrm{J}}}
 
 \newcommand{\bomega}{\mathbf{\Omega}}
 \newcommand{\Sphere}{\ensuremath{\mathcal{S}_2}}
@@ -74,10 +74,14 @@
 
 \newcommand{\der}[3][]{\ensuremath{\frac{{d}^{#1}{#2}}{{d} {#3}^{#1}}}}
 \newcommand{\pd}[3][]{\ensuremath{\frac{\partial^{#1}#2}{\partial #3^{#1}}}}
+\newcommand{\pdd}[3][]{\ensuremath{\frac{\partial^{#1}#2}{#3}}}
+\newcommand{\spd}[3][]{\ensuremath{\partial_{#3}^{#1}#2}}
 \newcommand{\grad}{\nabla}
+\newcommand{\del}{\nabla}
 \newcommand{\gradcomp}[1]{\nabla_{\!#1}}
 \newcommand{\lapv}{\nabla^2}
 \newcommand{\lap}{\nabla^2}
+\renewcommand{\div}{\nabla\cdot}
 
 \renewcommand{\d}[1]{\ensuremath{\text{d}#1\,}}
 \newcommand{\intE}[4][]{\int_{#2}^{#3}#4\,\d{E#1}}
@@ -94,6 +98,17 @@
 \newcommand{\abs}[1]{\ensuremath{\left\vert #1 \right\vert}}
 \newcommand{\norm}[2][]{\ensuremath{\lVert #2 \rVert_{#1}}}
 
+\newcommand{\fl}{u}
+\newcommand{\flfl}{\U}
+\newcommand{\rf}{\text{ref}}
+\newcommand{\flhp}{u^{hp}}
+\newcommand{\vhp}{v}
+\renewcommand{\a}[3][]{\ensuremath{\ifthenelse{\equal{#1}{}}{a_{#2#3}(\flhp_{#3},\vhp_{#2})}{a_{#2#3}({\flhp_{#3}},{\vhp_{#2}})}}}
+\renewcommand{\b}[3][]{\ensuremath{\ifthenelse{\equal{#1}{}}{a_{#2#3}(\flhp_{#3},\vhp_{#2})}{a_{#2#3}({\flhp_{#3}},{\vhp_{#2}})}}}
+\renewcommand{\l}[1][]{\ensuremath{f_{#1}(\vhp_{#1})}}
+\newcommand{\U}{\mathrm{U}}
+
+
 \newcommand{\pX}[1][]{\partial X^{#1}}
 \newcommand{\XE}[1][]{X_{\mid E}^{#1}}
 \newcommand{\pXE}[1][]{\partial \XE[{#1}]}
@@ -104,6 +119,7 @@
 \newcommand{\elem}{\tau}
 \newcommand{\mesh}[1][h]{\mathcal{T}_{#1}}
 
+\newcommand{\indic}{e}
 \newcommand{\albedo}{\beta}
 \newcommand{\albedoop}{B_{\beta}}
 \newcommand{\polar}{\vartheta}
@@ -135,6 +151,7 @@
 \newcommand{\PPP}[2][n]{P^{(#1)}_{#2}}
 \renewcommand{\AA}[1][n]{\mathbb{A}^{(#1)}}
 \newcommand{\AAA}[2][n]{A^{(#1)}_{#2}}
+\newcommand{\AAAA}[1]{A^{(2)}_{#1}}
 \newcommand{\BB}[1][n]{\mathbb{B}^{(#1)}}
 \newcommand{\BBB}[2][n]{B^{(#1)}_{#2}}
 \newcommand{\CC}[1][n]{\mathbb{C}^{(#1)}}
@@ -142,9 +159,10 @@
 
 
 \newcommand{\kron}[2]{\delta_{#1#2}}
-\newcommand{\Sym}[1]{\left[#1\right]_{\mbox{\scriptsize sym}}}
+%\newcommand{\Sym}[1]{\left[#1\right]_{\mbox{\scriptsize sym}}}
+\newcommand{\Sym}[1]{\mathscr{S}\left(#1\right)}
 \newcommand{\eye}{\mathbb{I}}
-\newcommand{\detr}[1][n]{\mathscr{D}_{#1}}
+\newcommand{\detr}[1][n]{\mathscr{D}}%_{#1}}
 \newcommand{\contr}[1][n]{\cdot}%\underset{#1}{\cdot}}
 \newcommand{\perm}[1]{\pi(#1)}
 
@@ -162,6 +180,8 @@
 \newcommand{\lvect}[1]{\left[#1\right]^T}
 
 \newcommand{\angflux}{\ensuremath{\psi}}
+
+
 
 \newcommand{\LL}[1]{\mathbb{L}^2(#1)}
 

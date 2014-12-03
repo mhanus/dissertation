@@ -37,7 +37,7 @@
 % The section below defines www links/email for author and institutions
 % They will appear on the title page of the PDF and can be clicked
 \ifpdf
-  \author{\href{mailto:mhanus@kma.zcu.cz}{Milan Hanu{\v s}}}
+  \author{\href{mailto:mhanus@kma.zcu.cz}{Ing. Milan Hanu{\v s}}}
 %  \cityofbirth{born in XYZ} % uncomment this if your university requires this
 %  % If city of birth is required, also uncomment 2 sections in PhDthesisPSnPDF 
 %  % Just search for the "city" and you'll find them.
@@ -45,21 +45,22 @@
   \university{\href{http://www.zcu.cz}{University of West Bohemia, Pilsen}}
 
   % The crest is a graphics file of the logo of your research institution.
-  % Place it in ./0_frontmatter/figures and specify the width
-  \crest{\includegraphics[width=4cm]{logo}}
+  % Place it in ./0_frontmatter/figures and specify the width 
+  \crest{\includegraphics[width=10cm]{fav_en_cmyk}}
   
 % If you are not creating a PDF then use the following. The default is PDF.
 \else
-  \author{Milan Hanu{\v s}}
-  \collegeordept{Department of Mathematics}
+  \author{Ing. Milan Hanu{\v s}}
+  \collegeordept{Department of Mathematics} 
   \university{University of West Bohemia, Pilsen}
-  \crest{\includegraphics[width=4cm]{logo}}
+  \crest{\includegraphics[width=10cm]{fav_en_cmyk}}
 \fi
 
-%\renewcommand{\submittedtext}{Ph.D. Thesis}
+\renewcommand{\submittedtext}{Thesis Submitted in Partial Fulfillment of the Requirements for the Degree: \textit{Doctor
+of Philosophy (Ph.D.)}}
 \supervisor{Doc. Ing. Marek Brandner, Ph.D.}
 \degree{Doctor of Philosophy (Ph.D.)}
-\degreedate{11/2014}
+\degreedate{November 2014}
 
 
 % ----------------------------------------------------------------------
@@ -120,7 +121,7 @@
 % \end{abstractseparate}
 
 
-%: ----------------------- tie in front matter ------------------------
+%: ----------------------- tie in front matter ------------------------ 
 
 \frontmatter
 \include{0/acknowledgement}
@@ -178,26 +179,12 @@
   \include{3/nte_methods}
   \include{3/spn}
   \include{4/mcpn}
-  %\include{5/hermes}
+  \include{5/hermes}
   %\include{6/coupled}
   %\include{7/evc}
 
 %\chapter{Conclusions}
 
-%: ----------------------- bibliography ------------------------
-
-%\begin{multicols}{2} % \begin{multicols}{ # columns}[ header text][ space]
-%\begin{tiny} % tiny(5) < scriptsize(7) < footnotesize(8) < small (9)
-
-%\addcontentsline{toc}{chapter}{Bibliography}
-%\bibliographystyle{alphaurl}
-\bibliographystyle{plainnat} % Title is link if provided
-\renewcommand{\bibname}{Literature} % changes the header; default: Bibliography
-
-\bibliography{literature} % adjust this to fit your BibTex file
-
-%\end{tiny}
-%\end{multicols}
 
 \appendix
 \makeatletter
@@ -223,11 +210,28 @@
 \include{appendices/appendixA}
 %\include{appendices/appendixB}
 \include{appendices/appendixC}
-\include{appendices/appendixD}
 \include{appendices/appendixE}
+\include{appendices/appendixD}
+\include{appendices/appendixF}
 \include{appendices/multigrid}
 %: Declaration of originality
 %\include{7_backmatter/declaration}
+
+%: ----------------------- bibliography ------------------------
+
+%\begin{multicols}{2} % \begin{multicols}{ # columns}[ header text][ space]
+%\begin{tiny} % tiny(5) < scriptsize(7) < footnotesize(8) < small (9)
+
+%\addcontentsline{toc}{chapter}{Bibliography}
+%\bibliographystyle{alphaurl}
+\bibliographystyle{plainnat} % Title is link if provided
+\renewcommand{\bibname}{Literature} % changes the header; default: Bibliography
+
+\bibliography{literature} % adjust this to fit your BibTex file
+
+%\end{tiny}
+%\end{multicols}
+
 \printindex
 
 \end{document}

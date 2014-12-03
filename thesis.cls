@@ -114,6 +114,13 @@
 \newtheorem*{remark*}{\textsc{Remark}}
 \newtheorem{remark}{\textsc{Remark}}
 
+% primed problem number
+\newenvironment{problembis}
+  {\addtocounter{problem}{-1}%
+   \renewcommand{\theproblem}{\arabic{problem}$'$}%
+   \begin{problem}}
+  {\end{problem}}
+
 
 % 
 % \theoremstyle{break}
@@ -285,6 +292,14 @@
 \usepackage{breakurl}
 
 
+\usepackage{listings}%, multicol}
+\lstset { %
+    language=C++
+    %backgroundcolor=\color{black!5},
+    %basicstyle=\scriptsize,
+    %frame=single
+}
+
 %:-------------------------- page layout -----------------------
 
 %A4 settings
@@ -394,23 +409,23 @@
 %  \null\vfill
   \begin{center}
     { \Huge {\bfseries {\@title}} \par}
-{\large \vspace*{35mm} {{\@crest} \par} \vspace*{25mm}}
+{\large \vspace*{15mm} {{\@crest} \par} \vspace*{10mm}}
     {{\LARGE \@author} \par}
 %	\vspace*{1ex}
 %	{{\@cityofbirth} \par}    
 {\Large 
 	\vspace*{1ex}
     {{\@collegeordept} \par}
-	\vspace*{1ex}
+	\vspace*{.1ex}
     {{\@university} \par}
 	\vspace*{6ex}
-    %{\Large {\submittedtext} \par}
-  %\vspace*{.5ex}
+    { \Large {\submittedtext} \par}
+  	\vspace*{3ex}
     {\Large Supervisor: {\@supervisor} \par}
-	\vspace*{1ex}
-    {\it {\@degree} \par}
+	\vspace*{4ex}
+    %{\it {\@degree} \par}
 	\null\vfill
-    {Submitted: \@degreedate}
+    {\@degreedate}
 }%end large
   \end{center}
   \null\vfill

@@ -1,0 +1,573 @@
+%% AMS-LaTeX Created by Wolfram Mathematica 9.0 : www.wolfram.com
+
+\documentclass{article}
+\usepackage{amsmath, amssymb, graphics, setspace}
+
+\newcommand{\mathsym}[1]{{}}
+\newcommand{\unicode}[1]{{}}
+
+\begin{document}
+
+\title{\(\text{SP}_L \text{equations}\)}
+\author{}
+\date{}
+\maketitle
+
+\section*{Interior equations}
+
+Expansion of solution in zonal spherical harmonics (1D Legendre polynomials)
+
+\begin{doublespace}
+\noindent\(\pmb{\psi [\mu \_,\text{L$\_$}]\text{:=}\sum _{n=0}^L \frac{2n+1}{2}\text{LegendreP}[n,\mu ] \phi _n[z]}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\pmb{L=3;}\)
+\end{doublespace}
+
+\(P_n\text{equations}\) (replace Q by d/dz)
+
+\begin{doublespace}
+\noindent\(\pmb{P[\text{n$\_$}]=\frac{n+1}{2n+1}Q \phi _{n+1}[z] +\frac{n}{2n+1}Q \phi _{n-1}[z]+\Sigma _{a,n}[z]\phi _n[z]==S_n[z]}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\frac{n Q \phi _{-1+n}[z]}{1+2 n}+\frac{(1+n) Q \phi _{1+n}[z]}{1+2 n}+\phi _n[z] \Sigma _{a,n}[z]==S_n[z]\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\pmb{\text{eqns}=\text{Table}\left[P[n]\text{/.}\text{If}\left[n\geq 1, S_n[z]\to 0,S_n[z]\to S_n[z]\right],\{n,0,L\}\right]\text{/.}\phi
+_{L+1}[z]\to 0;}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\pmb{\text{MatrixForm}[\text{eqns}]}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\left(
+\begin{array}{c}
+ Q \phi _1[z]+\phi _0[z] \Sigma _{a,0}[z]==S_0[z] \\
+ \frac{1}{3} Q \phi _0[z]+\frac{2}{3} Q \phi _2[z]+\phi _1[z] \Sigma _{a,1}[z]==0 \\
+ \frac{2}{5} Q \phi _1[z]+\frac{3}{5} Q \phi _3[z]+\phi _2[z] \Sigma _{a,2}[z]==0 \\
+ \frac{3}{7} Q \phi _2[z]+\phi _3[z] \Sigma _{a,3}[z]==0 \\
+\end{array}
+\right)\)
+\end{doublespace}
+
+Expansion moments (odd/even)
+
+\begin{doublespace}
+\noindent\(\pmb{\text{oddn}=\text{Table}[2n-1,\{n,1,(L+1)/2\}];}\\
+\pmb{\text{evenn}=\text{Table}[2n,\{n,1,(L+1)/2\}];}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\pmb{\text{oddmom}=\text{Table}\left[\phi _n[z],\{n,0,L\}\right][[\text{evenn}]]}\\
+\pmb{\text{evenmom}=\text{Table}\left[\phi _n[z],\{n,0,L\}\right][[\text{oddn}]]}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\left\{\phi _1[z],\phi _3[z]\right\}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\left\{\phi _0[z],\phi _2[z]\right\}\)
+\end{doublespace}
+
+Reduction to the {``}simplified \(P_L\) form{''} (second order eqns.)
+
+\(\text{express} \text{odd} \text{moments} \text{using} \text{the} \text{even} \text{ones}\)
+
+\begin{doublespace}
+\noindent\(\pmb{\text{oddWrtEven}=\text{Solve}[\text{eqns}[[\text{evenn}]],\text{oddmom}]}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\left\{\left\{\phi _1[z]\to \frac{-Q \phi _0[z]-2 Q \phi _2[z]}{3 \Sigma _{a,1}[z]},\phi _3[z]\to -\frac{3 Q \phi _2[z]}{7 \Sigma _{a,3}[z]}\right\}\right\}\)
+\end{doublespace}
+
+insert into the equations
+
+\begin{doublespace}
+\noindent\(\pmb{\text{SPL}=\text{eqns}[[\text{oddn}]]\text{/.}\text{oddWrtEven}[[1]]\text{/.}S_0[z]\to \nu \Sigma _f\phi _0[z];}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\pmb{\text{MatrixForm}[\text{SPL}]}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\left(
+\begin{array}{c}
+ \phi _0[z] \Sigma _{a,0}[z]+\frac{Q \left(-Q \phi _0[z]-2 Q \phi _2[z]\right)}{3 \Sigma _{a,1}[z]}==\nu \Sigma _f \phi _0[z] \\
+ \frac{2 Q \left(-Q \phi _0[z]-2 Q \phi _2[z]\right)}{15 \Sigma _{a,1}[z]}+\phi _2[z] \Sigma _{a,2}[z]-\frac{9 Q^2 \phi _2[z]}{35 \Sigma _{a,3}[z]}==0
+\\
+\end{array}
+\right)\)
+\end{doublespace}
+
+Definition of {``}pseudo-fluxes{''} \(F_i\) and {``}pseudo-diffusion-coefficients{''} \(D_i\)\\
+such that {``}pseudo-currents{''} may be defined according to {``}pseudo-Fick{'}s-law{''} as \(D_{2i+1} dF_i/dz\)(here \(D_iQ F_i\)\()\)
+
+\begin{doublespace}
+\noindent\(\pmb{\text{evenPseudoFluxes}=\text{Table}\left[(n+1) \phi _n[z] +(n+2) \phi _{n+2}[z]\text{==}F_n[z],\{n,0,L,2\}\right]\text{/.}\phi _{L+1}[z]\to
+0}\\
+\pmb{\text{pseudoDiffusions}=\text{Table}\left[\frac{1}{(2n+1)\Sigma _{a,n}[z]}\to D_n[z],\{n,1,L,2\}\right]}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\left\{\phi _0[z]+2 \phi _2[z]==F_0[z],3 \phi _2[z]==F_2[z]\right\}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\left\{\frac{1}{3 \Sigma _{a,1}[z]}\to D_1[z],\frac{1}{7 \Sigma _{a,3}[z]}\to D_3[z]\right\}\)
+\end{doublespace}
+
+Even expansion moments expressed using the even pseudo-fluxes\\
+the zero-th moment is the scalar flux
+
+\begin{doublespace}
+\noindent\(\pmb{\text{Table}\left[\phi _{2i}[z]\text{/.}\text{Solve}\left[\text{Eliminate}[\text{evenPseudoFluxes},\text{Drop}[\text{evenmom},\{i+1\}]],\phi
+_{2i}[z]\right]\text{//}\text{First}\text{//}\text{Expand},\left\{i,0,\frac{L-1}{2}\right\}\right]\text{//}\text{MatrixForm}}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\left(
+\begin{array}{c}
+ F_0[z]-\frac{2 F_2[z]}{3} \\
+ \frac{F_2[z]}{3} \\
+\end{array}
+\right)\)
+\end{doublespace}
+
+Expressing the \(\text{SP}_N\)equations in the operator form \(A \left\{F_i\right\}=\left.\{b_i\right\},\) where the streaming matrix \(A=\left.\text{diag}(\frac{d}{dz}D_{2i+1}\frac{d}{dz}\right)\)
+
+\begin{doublespace}
+\noindent\(\pmb{\text{lower}=\text{Table}\left[\frac{n}{2n+1},\{n,2,L,2\}\right]}\\
+\pmb{\text{centr}=\text{Table}\left[\frac{n+1}{2n+1},\{n,0,L,2\}\right]}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\left\{\frac{2}{5}\right\}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\left\{1,\frac{3}{5}\right\}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\pmb{\text{Adata}=\text{If}[L>1,\{\text{Band}[\{2,1\}]\to \text{lower},\text{Band}[\{1,1\}]\to \text{centr}\},\{\text{Band}[\{1,1\}]\to
+\text{centr}\}];}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\pmb{A=\text{SparseArray}[\text{Adata},\text{Floor}[L/2]+1];}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\pmb{A\text{//}\text{Normal}\text{//}\text{MatrixForm}}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\left(
+\begin{array}{cc}
+ 1 & 0 \\
+ \frac{2}{5} & \frac{3}{5} \\
+\end{array}
+\right)\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\pmb{\text{rhs}=\text{Table}\left[\Sigma _{a,n}[z]\phi _n[z],\{n,0,L,2\}\right];}\)
+\end{doublespace}
+
+Eliminating the even flux { }expansion moments in favor of the unknowns: the even pseudo-fluxes \(F_i\)
+
+\begin{doublespace}
+\noindent\(\pmb{\text{DelDDelFs}=\text{Table}\left[\text{DelDDelF}_n,\{n,0,L,2\}\right];}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\pmb{\text{eqnsForDelDDelFs1}=\text{Thread}[\text{DelDDelFs}\text{==}\text{LinearSolve}[A,\text{rhs}]]}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\left\{\text{DelDDelF}_0==\phi _0[z] \Sigma _{a,0}[z],\text{DelDDelF}_2==\frac{1}{3} \left(-2 \phi _0[z] \Sigma _{a,0}[z]+5 \phi _2[z]
+\Sigma _{a,2}[z]\right)\right\}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\pmb{\text{eqnsForDelDDelFs2}=\text{Map}[\text{Join}[\{\#\},\text{evenPseudoFluxes}]\&,\text{eqnsForDelDDelFs1}]}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\left\{\left\{\text{DelDDelF}_0==\phi _0[z] \Sigma _{a,0}[z],\phi _0[z]+2 \phi _2[z]==F_0[z],3 \phi _2[z]==F_2[z]\right\},\left\{\text{DelDDelF}_2==\frac{1}{3}
+\left(-2 \phi _0[z] \Sigma _{a,0}[z]+5 \phi _2[z] \Sigma _{a,2}[z]\right),\phi _0[z]+2 \phi _2[z]==F_0[z],3 \phi _2[z]==F_2[z]\right\}\right\}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\pmb{\text{eqnsForDelDDelFs3}=\text{Map}[\text{Eliminate}[\#,\text{evenmom}]\&,\text{eqnsForDelDDelFs2}]}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\left\{3 \text{DelDDelF}_0+2 F_2[z] \Sigma _{a,0}[z]==3 F_0[z] \Sigma _{a,0}[z],-9 \text{DelDDelF}_2+4 F_2[z] \Sigma _{a,0}[z]+5 F_2[z]
+\Sigma _{a,2}[z]==6 F_0[z] \Sigma _{a,0}[z]\right\}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\pmb{\text{coefAtDs}=\text{Thread}[\text{Coefficient}[\text{eqnsForDelDDelFs3}\text{/.}\text{Equal}\to \text{Plus},\text{DelDDelFs}]]}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\{3,-9\}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\pmb{\text{eqnsForDelDDelFs4}=\text{Thread}[\text{Thread}[\text{Expand}[\text{eqnsForDelDDelFs3}[[\text{All},1]]/\text{coefAtDs}]]\text{==}\text{Thread}[\text{Expand}[\text{eqnsForDelDDelFs3}[[\text{All},2]]/\text{coefAtDs}]]]}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\left\{\text{DelDDelF}_0+\frac{2}{3} F_2[z] \Sigma _{a,0}[z]==F_0[z] \Sigma _{a,0}[z],\text{DelDDelF}_2-\frac{4}{9} F_2[z] \Sigma _{a,0}[z]-\frac{5}{9}
+F_2[z] \Sigma _{a,2}[z]==-\frac{2}{3} F_0[z] \Sigma _{a,0}[z]\right\}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\pmb{\text{eqnsForDelDDelFs5}=\text{eqnsForDelDDelFs4}\text{/.}\text{Thread}\left[\text{DelDDelFs}\to \text{Table}\left[\text{DelDDel}_n[z]F_n[z],\{n,0,L,2\}\right]\right]}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\left\{\text{DelDDel}_0[z] F_0[z]+\frac{2}{3} F_2[z] \Sigma _{a,0}[z]==F_0[z] \Sigma _{a,0}[z],\text{DelDDel}_2[z] F_2[z]-\frac{4}{9}
+F_2[z] \Sigma _{a,0}[z]-\frac{5}{9} F_2[z] \Sigma _{a,2}[z]==-\frac{2}{3} F_0[z] \Sigma _{a,0}[z]\right\}\)
+\end{doublespace}
+
+Rewriting the equations into a form { }\(m \left\{F_i\right\}-\left\{b_i\right\}==0\), { }where now the matrix \(m\) contains both the streaming
+and reaction operators  
+
+\begin{doublespace}
+\noindent\(\pmb{\{b,m\}=\text{CoefficientArrays}\left[\text{eqnsForDelDDelFs5},\text{Table}\left[F_n[z],\{n,0,L,2\}\right]\right]}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\{\text{SparseArray}[<0>,\{2\}],\text{SparseArray}[<4>,\{2,2\}]\}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\pmb{\text{Normal}[b]\text{//}\text{MatrixForm}}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\left(
+\begin{array}{c}
+ 0 \\
+ 0 \\
+\end{array}
+\right)\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\pmb{\text{Normal}[m]\text{//}\text{MatrixForm}}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\left(
+\begin{array}{cc}
+ \text{DelDDel}_0[z]-\Sigma _{a,0}[z] & \frac{2}{3} \Sigma _{a,0}[z] \\
+ \frac{2}{3} \Sigma _{a,0}[z] & \text{DelDDel}_2[z]-\frac{4}{9} \Sigma _{a,0}[z]-\frac{5}{9} \Sigma _{a,2}[z] \\
+\end{array}
+\right)\)
+\end{doublespace}
+
+Some formal changes to improve readability
+
+\begin{doublespace}
+\noindent\(\pmb{F[\text{A$\_$}]\text{:=}\text{TraditionalForm}\left[A\text{/.}\left\{\text{DelDDel}_{\text{n$\_$}}[z]\to \text{DelDDel}_n,\Sigma
+_{a,\text{n$\_\_$}}[z]\to \Sigma _n\right\}\right]}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\pmb{F[\text{Normal}[m]\text{//}\text{MatrixForm}]}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\left(
+\begin{array}{cc}
+ \text{DelDDel}_0-\Sigma _0 & \frac{2 \Sigma _0}{3} \\
+ \frac{2 \Sigma _0}{3} & \text{DelDDel}_2-\frac{4 \Sigma _0}{9}-\frac{5 \Sigma _2}{9} \\
+\end{array}
+\right)\)
+\end{doublespace}
+
+Make sure that in the monoenergetic case, \(m\) is symmetric
+
+\begin{doublespace}
+\noindent\(\pmb{\text{Normal}[m-\text{Transpose}[m]]}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\{\{0,0\},\{0,0\}\}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\pmb{\text{m2}=-\text{Normal}[m]\text{/.}\left\{\text{DelDDel}_{\text{n$\_$}}[z]\to \text{DelDDel}_n,\Sigma _{a,\text{n$\_\_$}}[z]\to
+\Sigma _n\right\}}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\left\{\left\{-\text{DelDDel}_0+\Sigma _0,-\frac{2 \Sigma _0}{3}\right\},\left\{-\frac{2 \Sigma _0}{3},-\text{DelDDel}_2+\frac{4 \Sigma
+_0}{9}+\frac{5 \Sigma _2}{9}\right\}\right\}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\pmb{\text{m2}\text{//}\text{MatrixForm}}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\left(
+\begin{array}{cc}
+ -\text{DelDDel}_0+\Sigma _0 & -\frac{2 \Sigma _0}{3} \\
+ -\frac{2 \Sigma _0}{3} & -\text{DelDDel}_2+\frac{4 \Sigma _0}{9}+\frac{5 \Sigma _2}{9} \\
+\end{array}
+\right)\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\pmb{\text{Sm}=0;}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\pmb{\text{For}[i=0,i<L,i\text{+=}2,}\\
+\pmb{\{b,\text{s0}\}=\text{CoefficientArrays}\left[\text{m2}, \Sigma _i\right];}\\
+\pmb{c[i]=\text{Flatten}[ \text{Normal}[\text{s0}],\{1,3\}];}\\
+\pmb{\text{Print}[\text{MatrixForm}[c[i]]];}\\
+\pmb{\text{Print}[\text{Eigenvalues}[c[i]]];}\\
+\pmb{\text{Sm}=\text{Sm}+c[i]}\\
+\pmb{]}\)
+\end{doublespace}
+
+\noindent\(\left(
+\begin{array}{cc}
+ 1 & -\frac{2}{3} \\
+ -\frac{2}{3} & \frac{4}{9} \\
+\end{array}
+\right)\)
+
+\noindent\(\left\{\frac{13}{9},0\right\}\)
+
+\noindent\(\left(
+\begin{array}{cc}
+ 0 & 0 \\
+ 0 & \frac{5}{9} \\
+\end{array}
+\right)\)
+
+\noindent\(\left\{\frac{5}{9},0\right\}\)
+
+\begin{doublespace}
+\noindent\(\pmb{\text{Eigenvalues}[\text{Sm}]\text{//}N}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\{1.66667,0.333333\}\)
+\end{doublespace}
+
+\section*{Boundary conditions}
+
+Legendre expansion of the outgoing partial current 
+
+\begin{doublespace}
+\noindent\(\pmb{j^+=\text{Table}\left[\int _0^1\text{LegendreP}[n,\mu ]\psi [\mu ,L]d\mu ,\{n,1,L,2\}\right]}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\left\{\frac{\phi _0[z]}{4}+\frac{\phi _1[z]}{2}+\frac{5 \phi _2[z]}{16},-\frac{1}{16} \phi _0[z]+\frac{5 \phi _2[z]}{16}+\frac{\phi _3[z]}{2}\right\}\)
+\end{doublespace}
+
+expressed using only the even order moments (as in the simplified form of the \(P_n\) equations)
+
+\begin{doublespace}
+\noindent\(\pmb{j^+=j^+\text{/.}\text{oddWrtEven}[[1]]}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\left\{\frac{\phi _0[z]}{4}+\frac{5 \phi _2[z]}{16}+\frac{-Q \phi _0[z]-2 Q \phi _2[z]}{6 \Sigma _{a,1}[z]},-\frac{1}{16} \phi _0[z]+\frac{5
+\phi _2[z]}{16}-\frac{3 Q \phi _2[z]}{14 \Sigma _{a,3}[z]}\right\}\)
+\end{doublespace}
+
+Extract the equations for pseudo-currents
+
+\begin{doublespace}
+\noindent\(\pmb{\text{DDelFs}=\text{Table}\left[\text{DDelF}_n,\{n,0,L,2\}\right]}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\left\{\text{DDelF}_0,\text{DDelF}_2\right\}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\pmb{\text{eqnsForDDelFs1}=\text{Thread}\left[\text{DDelFs}==2\text{Map}\left[\text{Delete}[\#,-1]\&,j^+\right]\right]}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\left\{\text{DDelF}_0==2 \left(\frac{\phi _0[z]}{4}+\frac{5 \phi _2[z]}{16}\right),\text{DDelF}_2==2 \left(-\frac{1}{16} \phi _0[z]+\frac{5
+\phi _2[z]}{16}\right)\right\}\)
+\end{doublespace}
+
+Express the boundary equations in terms of only the even expansion moments and pseudo-currents
+
+\begin{doublespace}
+\noindent\(\pmb{\text{eqnsForDDelFs2}=\text{Map}[\text{Join}[\{\#\},\text{evenPseudoFluxes}]\&,\text{eqnsForDDelFs1}]}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\left\{\left\{\text{DDelF}_0==2 \left(\frac{\phi _0[z]}{4}+\frac{5 \phi _2[z]}{16}\right),\phi _0[z]+2 \phi _2[z]==F_0[z],3 \phi _2[z]==F_2[z]\right\},\left\{\text{DDelF}_2==2
+\left(-\frac{1}{16} \phi _0[z]+\frac{5 \phi _2[z]}{16}\right),\phi _0[z]+2 \phi _2[z]==F_0[z],3 \phi _2[z]==F_2[z]\right\}\right\}\)
+\end{doublespace}
+
+The final Robin-type boundary conditions 
+
+\begin{doublespace}
+\noindent\(\pmb{\text{bc1p}=\text{Map}[\text{Eliminate}[\#,\text{evenmom}]\&,\text{eqnsForDDelFs2}]}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\left\{4 F_0[z]-F_2[z]==8 \text{DDelF}_0,-3 F_0[z]+7 F_2[z]==24 \text{DDelF}_2\right\}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\pmb{\text{bc2p}=\text{Solve}[\text{bc1p},\text{DDelFs}]\text{//}\text{Flatten}\text{//}\text{Expand}}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\left\{\text{DDelF}_0\to \frac{F_0[z]}{2}-\frac{F_2[z]}{8},\text{DDelF}_2\to -\frac{1}{8} F_0[z]+\frac{7 F_2[z]}{24}\right\}\)
+\end{doublespace}
+
+The same as above, only for the incoming partial currents
+
+\begin{doublespace}
+\noindent\(\pmb{j^-=\text{Table}\left[\int _{-1}^0\text{LegendreP}[n,\text{Abs}[\mu ]]\psi [\mu ,L]d\mu \text{//}\text{Distribute},\{n,1,L,2\}\right]}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\left\{\frac{\phi _0[z]}{4}-\frac{\phi _1[z]}{2}+\frac{5 \phi _2[z]}{16},-\frac{1}{16} \phi _0[z]+\frac{5 \phi _2[z]}{16}-\frac{\phi _3[z]}{2}\right\}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\pmb{j^-=j^-\text{/.}\text{oddWrtEven}[[1]]}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\left\{\frac{\phi _0[z]}{4}+\frac{5 \phi _2[z]}{16}-\frac{-Q \phi _0[z]-2 Q \phi _2[z]}{6 \Sigma _{a,1}[z]},-\frac{1}{16} \phi _0[z]+\frac{5
+\phi _2[z]}{16}+\frac{3 Q \phi _2[z]}{14 \Sigma _{a,3}[z]}\right\}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\pmb{\text{eqnsForDDelFs1}=\text{Thread}\left[\text{DDelFs}==-2\text{Map}\left[\text{Delete}[\#,-1]\&,j^-\right]\right]}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\left\{\text{DDelF}_0==-2 \left(\frac{\phi _0[z]}{4}+\frac{5 \phi _2[z]}{16}\right),\text{DDelF}_2==-2 \left(-\frac{1}{16} \phi _0[z]+\frac{5
+\phi _2[z]}{16}\right)\right\}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\pmb{\text{eqnsForDDelFs2}=\text{Map}[\text{Join}[\{\#\},\text{evenPseudoFluxes}]\&,\text{eqnsForDDelFs1}]}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\left\{\left\{\text{DDelF}_0==-2 \left(\frac{\phi _0[z]}{4}+\frac{5 \phi _2[z]}{16}\right),\phi _0[z]+2 \phi _2[z]==F_0[z],3 \phi _2[z]==F_2[z]\right\},\left\{\text{DDelF}_2==-2
+\left(-\frac{1}{16} \phi _0[z]+\frac{5 \phi _2[z]}{16}\right),\phi _0[z]+2 \phi _2[z]==F_0[z],3 \phi _2[z]==F_2[z]\right\}\right\}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\pmb{\text{bc1m}=\text{Map}[\text{Eliminate}[\#,\text{evenmom}]\&,\text{eqnsForDDelFs2}]}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\left\{-8 \text{DDelF}_0+F_2[z]==4 F_0[z],24 \text{DDelF}_2+7 F_2[z]==3 F_0[z]\right\}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\pmb{\text{bc2m}=\text{Solve}[\text{bc1m},\text{DDelFs}]\text{//}\text{Flatten}\text{//}\text{Expand}}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\left\{\text{DDelF}_0\to -\frac{1}{2} F_0[z]+\frac{F_2[z]}{8},\text{DDelF}_2\to \frac{F_0[z]}{8}-\frac{7 F_2[z]}{24}\right\}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\pmb{\text{curs} = -\text{DDelFs}\text{/.}\text{bc2m}}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\left\{\frac{F_0[z]}{2}-\frac{F_2[z]}{8},-\frac{1}{8} F_0[z]+\frac{7 F_2[z]}{24}\right\}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\pmb{\text{ca}=\text{CoefficientArrays}[\text{curs},\text{evenmom}\text{/.}\phi \to F]}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\{\text{SparseArray}[<0>,\{2\}],\text{SparseArray}[<4>,\{2,2\}]\}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\pmb{\text{Normal}[\text{ca}[[2]]]}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\left\{\left\{\frac{1}{2},-\frac{1}{8}\right\},\left\{-\frac{1}{8},\frac{7}{24}\right\}\right\}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\pmb{N[\text{Eigenvalues}[\text{ca}[[2]]]]}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\{0.558547,0.23312\}\)
+\end{doublespace}
+
+Albedo boundary conditions for \(\text{SP}_3\)
+
+\begin{doublespace}
+\noindent\(\pmb{\text{alpha}=\text{Solve}\left[\gamma \text{==} \frac{1-\alpha }{2(1+\alpha )},\alpha \right][[1]];}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\pmb{\text{aj}=\text{Thread}\left[j^-==\alpha  j^+\right]}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\left\{\frac{\phi _0[z]}{4}+\frac{5 \phi _2[z]}{16}-\frac{-Q \phi _0[z]-2 Q \phi _2[z]}{6 \Sigma _{a,1}[z]}==\alpha  \left(\frac{\phi
+_0[z]}{4}+\frac{5 \phi _2[z]}{16}+\frac{-Q \phi _0[z]-2 Q \phi _2[z]}{6 \Sigma _{a,1}[z]}\right),-\frac{1}{16} \phi _0[z]+\frac{5 \phi _2[z]}{16}+\frac{3
+Q \phi _2[z]}{14 \Sigma _{a,3}[z]}==\alpha  \left(-\frac{1}{16} \phi _0[z]+\frac{5 \phi _2[z]}{16}-\frac{3 Q \phi _2[z]}{14 \Sigma _{a,3}[z]}\right)\right\}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\pmb{\text{aj}[[1,1,3]]}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(-\frac{-Q \phi _0[z]-2 Q \phi _2[z]}{6 \Sigma _{a,1}[z]}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\pmb{\text{aj2}=\text{ReplacePart}\left[\text{aj},\left\{\{\{1,1,3\}\}\to -\frac{\text{J1}}{2},\{\{1,2,2,3\}\}\to \frac{\text{J1}}{2},\{\{2,1,3\}\}\to
+-\frac{\text{J3}}{2},\{\{2,2,2,3\}\}\to \frac{\text{J3}}{2}\right\}\right]\text{//}\text{FullSimplify}}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\left\{8 \text{J1} (1+\alpha )+4 (-1+\alpha ) \phi _0[z]+5 (-1+\alpha ) \phi _2[z]==0,8 \text{J3} (1+\alpha )+5 (-1+\alpha ) \phi _2[z]==(-1+\alpha
+) \phi _0[z]\right\}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\pmb{\text{aj2}\text{/.}\text{alpha}\text{//}\text{FullSimplify}}\)
+\end{doublespace}
+
+\begin{doublespace}
+\noindent\(\left\{\frac{-4 \text{J1}+4 \gamma  \phi _0[z]+5 \gamma  \phi _2[z]}{1+2 \gamma }==0,\frac{4 \text{J3}+\gamma  \phi _0[z]-5 \gamma  \phi
+_2[z]}{1+2 \gamma }==0\right\}\)
+\end{doublespace}
+
+\end{document}
