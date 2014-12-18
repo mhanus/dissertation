@@ -29,15 +29,15 @@
 % ----------------------------------------------------------------------
 % below is to generate the title page with crest and author name
 
-\title{Mathematical Modeling of Neutron Transport}
+\title{Mathematical Modeling of\\[.2em] Neutron Transport}
 
 
-
+%\singlespacing
 % ----------------------------------------------------------------------
 % The section below defines www links/email for author and institutions
 % They will appear on the title page of the PDF and can be clicked
 \ifpdf
-  \author{\href{mailto:mhanus@kma.zcu.cz}{Ing. Milan Hanu{\v s}}}
+  \author{\href{mailto:mhanus@kma.zcu.cz}{Milan Hanu{\v s}}}
 %  \cityofbirth{born in XYZ} % uncomment this if your university requires this
 %  % If city of birth is required, also uncomment 2 sections in PhDthesisPSnPDF 
 %  % Just search for the "city" and you'll find them.
@@ -50,18 +50,21 @@
   
 % If you are not creating a PDF then use the following. The default is PDF.
 \else
-  \author{Ing. Milan Hanu{\v s}}
+  \author{Milan Hanu{\v s}}
   \collegeordept{Department of Mathematics} 
   \university{University of West Bohemia, Pilsen}
   \crest{\includegraphics[width=10cm]{fav_en_cmyk}}
 \fi
 
-\renewcommand{\submittedtext}{Thesis Submitted in Partial Fulfillment of the Requirements for the Degree: \textit{Doctor
-of Philosophy (Ph.D.)}}
-\supervisor{Doc. Ing. Marek Brandner, Ph.D.}
-\degree{Doctor of Philosophy (Ph.D.)}
-\degreedate{November 2014}
 
+\renewcommand{\submittedtext}{Thesis submitted in partial fulfillment\\ of the requirements for the degree
+of\\[.5em]
+\textit{Doctor of Philosophy (Applied Mathematics)}}
+\supervisor{Doc. Ing. Marek Brandner, Ph.D.}
+\degree{Doctor of Philosophy}
+\degreedate{Pilsen, Czech Republic, 2014}
+
+%\onehalfspacing
 
 % ----------------------------------------------------------------------
        
@@ -78,9 +81,10 @@ of Philosophy (Ph.D.)}}
 
 %\language{english}
 
+
 % sets line spacing
-\renewcommand\baselinestretch{1.2}
-\baselineskip=18pt plus1pt
+%\renewcommand\baselinestretch{1}
+%\baselineskip=15pt plus1pt
 
 
 %: ----------------------- generate cover page ------------------------
@@ -89,6 +93,7 @@ of Philosophy (Ph.D.)}}
 
 % command to print the title page with above variables
 \maketitle
+\cleardoublepage
 
 %: ----------------------- cover page back side ------------------------
 % Your research institution may require reviewer names, etc.
@@ -113,19 +118,19 @@ of Philosophy (Ph.D.)}}
 
 % Your institution may have specific regulations if you need an abstract and where it is to be placed in the document. The default here is just after title.
 
-%\include{0/abstract}
-
-% The original template provides and abstractseparate environment, if your institution requires them to be separate. I think it's easier to print the abstract from the complete thesis by restricting printing to the relevant page.
-% \begin{abstractseparate}
-%   \input{Abstract/abstract}
-% \end{abstractseparate}
+\include{0/declaration}
+\include{0/abstract}
+\include{0/acknowledgement}
 
 
 %: ----------------------- tie in front matter ------------------------ 
 
 \frontmatter
-\include{0/acknowledgement}
 
+
+% sets line spacing
+\renewcommand\baselinestretch{1.2}	% onehalf
+\baselineskip=18pt plus1pt
 
 %: ----------------------- contents ------------------------
 
@@ -137,8 +142,8 @@ of Philosophy (Ph.D.)}}
 
 %: ----------------------- list of figures/tables/todos ------------------------
 
-\listoffigures	% print list of figures
-%\listoftables  % print list of tables
+\listoffigures
+\listoftables 
 
 %\todototoc
 %\listoftodos
@@ -165,6 +170,8 @@ of Philosophy (Ph.D.)}}
 %:                  MAIN DOCUMENT SECTION
 % --------------------------------------------------------------
 
+
+
 % the main text starts here with the introduction, 1st chapter,...
 \mainmatter
 
@@ -183,18 +190,158 @@ of Philosophy (Ph.D.)}}
   %\include{6/coupled}
   %\include{7/evc}
 
-%\chapter{Conclusions}
+\chapter{Conclusion}
 
+The overarching subject of this work was computational modeling of neutron transport relevant to development and
+analysis of computer codes for simulating the long-term operation of nuclear facilities. Its focus was on deterministic
+models originating in the linear Boltzmann's transport equation -- in a general three-dimensional setting, an
+integro-differential equation describing the evolution of neutron distribution as a function of time, three spatial, two
+angular and one energy variable. In particular, the steady state form of the equation was studied in this work, forming
+a basis for both steady and transient neutron transport calculations. The general mathematical model was presented in
+\cref{chap:nte-review}, together with a review of known results about the solvability and well-posedness of two main
+problems arising in neutron transport -- the fixed source problem and the reactor criticality (eigenvalue) problem.
 
-\appendix
-\makeatletter
+High-dimensionality and complicated structure of the equation for real-world problems preclude in most situations an
+analytical solution and present serious difficulties when a computational solution is attempted. Several dimension-reduction
+techniques thus need to be employed along with appropriate numerical solution schemes. These techniques were reviewed in
+\cref{chap:nte-methods}, starting with
+the classical discretization of energetic dependence -- the multigroup method. 
+
+Two
+most widely used methods for approximating angular dependence (the $\SN$ and $\PN$ methods) were presented next.
+ We demonstrated how these two methods -- well known for a long time, but typically presented
+independently of each other -- can be described using a single abstract mathematical framework. \sref{sec:pn_op} showed the standard derivation of the
+$\PN$ equations as an orthogonal projection of the continuous neutron transport equation onto a subspace of
+$\Lp[2](\Sphere)$ spanned by suitable functions of the angular variable (the spherical harmonics).
+\sref{sec:operator_sn} showed how the $\SN$ equations can also be obtained by projecting the NTE onto a suitable
+subspace of $\Lp[2](\Sphere)$, at least in the case of isotropic scattering. This time, however, the projection is no
+longer orthogonal. Viewing the $\SN$ approximation as a subspace projection makes the properties of the continuous NTE
+directly translate to the approximate method. As a particular example, \sref{sec:SI} outlined how this fact could be
+used to prove convergence of the basic iterative method for actual solution of the $\SN$ equations --
+the source iteration.
+
+The part devoted to angular approximation methods was concluded by introducing a concrete angular quadrature set
+for the $\SN$ approximation, satisfying various requirements uncovered during the description of the
+approximation. This quadrature set was later used in an actual computer code for solving the $\SN$
+equations, described in \cref{chap:hermes}. In order to obtain this final neutron transport solver, the spatial
+dependence in the NTE had to be discretized. For this purpose, a general discontinuous Galerkin
+method was applied to the $\SN$ equations in \sref{sec:FEM} to obtain the weak formulation in a form suitable for
+implementing into common FE libraries. 
+
+The attention was then turned to the $\PN$ approximation. The diffusion equation, a standard tool for whole-core nuclear
+reactor calculations that can be obtained from the lowest order $\PN[1]$ approximation under well-understood
+assumptions, has been recalled in \sref{sec:diffusion} and its weak form suitable for finite element spatial
+discretization in \sref{sec:diffusion_weak}. Unlike the $\SN$ approximation, standard continuous Galerkin finite
+elements can be used for discretizing the diffusion equation and a symmetric and positive definite system of algebraic
+equations is obtained by the procedure in the monoenergetic case. This allows to use matured methods for solving
+such algebraic systems, like the conjugate gradient method preconditioned by algebraic multigrid.
+
+Some recent nuclear reactor problems involving higher amount of material and geometric heterogeneity, where diffusion no
+longer provides an adequate approximation and using $\SN$ approximation with sufficient angular resolution would be
+prohibitive in terms of computer resources, have increased the interest of nuclear engineers in the simplified $\PN$
+approximations -- higher order approximations of neutron transport that preserve the simple and numerically convenient
+structure of the diffusion equation. In \cref{chap:SPN}, we repeated the classical derivation of these equations by a
+straightforward extension of the approach used to derive the diffusion equation from the $\PN[1]$ equations to higher
+orders. However, this approach is rigorous only in 1D case where the basis for the $\PN$ method is represented by the
+Legendre polynomials. An ad-hoc generalization is needed in multiple dimensions as described in \cref{chap:SPN}, 
+although, as also recalled in this chapter, asymptotic and variational analyses that have been performed over the
+years eventually provided more sound mathematical grounds for this derivation. One of the contributions of this thesis
+to the vast body of existing $\SPN$ knowledge is the strengthening of theoretical foundations also for the numerical
+methods for solving the $\SPN$ equations -- \cref{chap:SPN} was concluded by formulating the weak form of the $\SPN$
+system and proving its well-posedness for $N = 3,5,7$ (the orders that generally have the most impact on
+accuracy while keeping the computational requirements on acceptable levels) with an obvious extendability to higher
+orders.
+
+In Chapter \ref{chap:mcpn}, we were concerned with the derivation of the $\SPN$ equations itself. An alternative set of
+equations corresponding to the $\PN$ approximation was introduced, using instead of the tesseral spherical harmonic
+basis as in the $\PN$ approximation a basis formed by special linear combinations of these functions  as a starting
+point. These Maxwell-Cartesian surface spherical harmonics form components of totally symmetric and traceless Cartesian
+tensors and provide a direct generalization of Legendre polynomials to multiple dimensions. The resulting system of
+$\MCPN$ equations -- first order partial differential equations for the unknown moment tensors of increasing rank -- was
+derived and explicitly written for the case of $N = 3$. It was then demonstrated that in the interior of a homogeneous
+region, operations analogous to those used to derive the diffusion equation from the $\PN[1]$ approximation and
+tensor structure of the equations can be used to manipulate the $\MCPN[3]$ system into a set of
+second-order partial differential equations. Moreover, it was shown that the zero-th order solution moment (scalar flux)
+satisfies a weakly coupled set of two diffusion-like equations. \cref{chap:mcpn} was concluded by exhibiting the
+equivalence of this set with the $\SPN[3]$ equations presented in \cref{chap:SPN}.
+
+The final chapter addressed actual implementation of the neutron transport approximations described in previous chapters
+as neutronics modules in existing finite element frameworks. We started by the $\SN$ and adaptive multigroup $\SPN$
+modules in the Hermes2D library. It was explained why Hermes2D is a particularly suitable tool for developing adaptive
+solvers of coupled systems of PDE's (in 2D), i.e. its advanced approach to $hp$-adaptivity and the multimesh assembling
+capability, which allows to approximate each solution component using its own adapted approximation space and mesh
+without introducing any interpolation errors. The basic idea behind multimesh assembling was used by the author and his
+colleague L. Korous in the implementation of discontinuous Galerkin assembling procedure, described in
+\sref{sec:hermes_dg}.
+Regarding the neutronics modules, this newly added feature was utilized when writing the $\SN$ module. We also presented
+a simple modification of standard element error indicator used by Hermes2D to drive the $hp$-adaptivity that is more
+suitable for quantifying error in scalar flux (the physical quantity of interest) rather than in the artificial $\SPN$
+fluxes.
+
+Actual examples of solution of typical neutron transport problems by the developed code constituted the second part of
+the final chapter. Both fixed source and eigenvalue problems were solved using diffusion and higher order $\SPN$
+approximations and limitations of the various models were exhibited. Errors arising from spatial approximation were
+minimized by employing the $hp$-adaptivity of Hermes2D. Two problems verifying the implementation of the $\SN$
+model were also presented in this part. Even though the Hermes library supports only two-dimensional problems, the
+experience gained by implementing neutronics modules into it was utilized in the development of a 3D
+multigroup diffusion solver with nonlinear thermal/hydraulic feedback coupling for the purposes of a major research
+project investigated at author's department. Sample results of this solver concluded the thesis.
+
+\section*{Directions for future research}
+There are several directions in which the topics of this thesis may be further explored. In \cref{chap:nte-methods}, we
+showed how the $\SN$ approximation can be formulated as a projection onto a Hilbert subspace of $\Lp[2](\Sphere)$. The
+derivation was limited to the case of isotropic scattering, so that a proper basis for the projection subspace could be
+established. The study of the possibility of using Dirac delta distributions instead of the piecewise constant
+functions $\iota_m$ could lead to extension of the analysis to general anisotropic scattering, as remarked at the end of 
+\sref{sec:remarks}. The Hilbert space projection approach certainly opens more ways of analyzing the behavior of
+numerical methods by the means of functional analytic tools than the simple convergence analysis of the $\SN$ source
+iteration presented in \sref{sec:SI} -- see for instance \cite{Kirby} for an application to abstract preconditioning
+ by Riesz mappings.
+ 
+In \cref{chap:mcpn}, we derived the general form of the $\MCPN$ equations, but then proceeded to a coupled
+diffusion-like system of equations for scalar flux only for the $\MCPN[3]$ equations and isotropic scattering. The
+possibility of extension to higher orders and anisotropic scattering is apparent from the procedure, but would be more
+technically involved. However, using computer algebra systems like Mathematica could greatly simplify and automate this
+task (as it did for the $\SPN$ derivation, cf. Appendix \ref{app:SPN}). The search for interface and boundary conditions
+remains the largest open question regarding the coupled diffusion-like system derivable from the $\MCPN$
+approximation (see \sref{sec:mcp3_discussion}). Note that the approach used in \cite{Selengut} is based on the
+classical general Gauss-Ostrogradski pill-box argument and requires to express the second-order moment tensor
+$\fmom[2]$ in terms of $\phi$ (which constitutes another puzzling equation, eq. (7), in the paper). In a preliminary investigation,
+we were able to derive \cite[Eq. (7)]{Selengut} as a scalar part of the scalar-vector-tensor decomposition of $\fmom[2]$
+(\cite{Clarkson}), which is the complete representation of the tensor under the assumption of $\fmom[1]$ and $\fmom[3]$ 
+being curl-free (conservative). This indicates one direction that may be taken in the quest for complete understanding
+of Selengut's paper (and formulating a practical way of obtaining $\PN$ scalar flux from solving much smaller system of
+elliptic equations).
+
+A large space for further work lies in the area of adaptive solution methods for the NTE.  While $h$-adaptivity for the
+$\SN$ equations has received attention in several recent papers (see e.g.
+\cite{Fournier,Duo,ragusa2010two} for adaptivity based on a-posteriori estimation of global $\Lp[2]$ norm of solution
+error or \cite{LathouwersGoal, Wang2} for a method based on goal oriented adaptivity), \cite{FournierDGHP} appears to
+be the first paper aimed at employing $hp$-adaptivity for the $\SN$ equations.
+Prevalence of h-adaptivity and use of $p=1$ (linear) finite element spaces is caused partly by the difficulty of implementation of an
+$hp$-adaptive FE code itself, partly by the fear of the well known limited regularity of the exact solution of the NTE
+even for smooth input data\footnote{By the method of characteristics, we can expect the angular fluxes
+$\angflux(\cdot,\bomega)$ to be differentiable in the direction of $\bomega$, but not in any other direction. As shown
+in \cite{Johnson}, the scalar fluxes, i.e. integrals of $\angflux$ over $\Sphere$, belong at most to
+$H^{3/2-\epsilon}(\VV)$ where $0 < \epsilon \ll 1$ and $H^{k}(\VV)$ denotes the Sobolev space of fractional order $k$
+(e.g., \cite[Sec. 9.2]{demkowicz}).}.
+However, similarly to the experience with hp-adaptive methods in different fields, the limitation of asymptotic
+convergence rate (as $h\to 0$ where $h$ is the diameter of the largest element in the mesh) dictated by a-priori error
+estimates involving solution regularity typically doesn't appear until very late in the mesh refinement process or at
+all (\cite{wang2009convergence}). Hence, utilizing higher order approximations still makes sense to accelerate
+pre-asymptotic convergence rate as much as possible. Implementation of an $\SN$ solver in the general hp-FEM
+framework provided by the Hermes2D library (see \cref{chap:hermes}) could be used as a basic building block for future
+investigations in this direction. Note that some kind of angular adaptivity should also be considered in conjunction
+with spatial adaptivity for the $\SN$ equations in order to keep the ray-effects under control (cf. \sref{sec:wm1}).
+
+\appendix 
+\makeatletter 
 \@addtoreset{theorem}{chapter}% Reset theorem counter with stepping of chapter
-\@addtoreset{lemma}{chapter}% Reset theorem counter with stepping of chapter
-\@addtoreset{remark}{chapter}% Reset theorem counter with stepping of chapter
+\@addtoreset{lemma}{chapter}% Reset theorem counter with stepping of chapter 
+\@addtoreset{remark}{chapter}% Reset theorem counter with stepping of chapter 
 \makeatother
-\renewcommand\thetheorem{\thechapter.\arabic{theorem}}
-\renewcommand\thelemma{\thechapter.\arabic{lemma}}
-\renewcommand\theremark{\thechapter.\arabic{remark}}
+% \renewcommand\thetheorem{\thechapter.\arabic{theorem}}
+\renewcommand\thelemma{\thechapter.\arabic{lemma}} \renewcommand\theremark{\thechapter.\arabic{remark}}
 \renewcommand\thecorollary{\thechapter.\arabic{corollary}}
 \setcounter{theorem}{0}
 \setcounter{lemma}{0}
@@ -215,7 +362,7 @@ of Philosophy (Ph.D.)}}
 \include{appendices/appendixF}
 \include{appendices/multigrid}
 %: Declaration of originality
-%\include{7_backmatter/declaration}
+%\include{7_backmatter/declaration} 
 
 %: ----------------------- bibliography ------------------------
 
@@ -229,9 +376,12 @@ of Philosophy (Ph.D.)}}
 
 \bibliography{literature} % adjust this to fit your BibTex file
 
+\printindex
+
 %\end{tiny}
 %\end{multicols}
 
-\printindex
+\newpage
+\include{appendices/pubs}
 
 \end{document}

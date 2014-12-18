@@ -2,137 +2,161 @@
 
 Computer simulation of radiative transfer of energy is an important task in many engineering and research areas, as
 diverse as biomedicine, astrophysics, optics or nuclear engineering. In nuclear engineering, the area of primary
-interest in this work, there are two main goals of evaluating computer models of radiative transfer. The first is
+interest in this work, there are two main goals of computer modeling of radiative transfer. The first is
 to simulate short-term transient behavior of nuclear devices under given initial conditions such as geometry and material
 configuration. The second is to determine under which conditions such devices (in this case typically nuclear reactor
 cores) will be capable of long-term, stable operation satisfying certain safety, technical and economical limitations,
 with only a minimal human intervention. Repeated calculations of the second type form the basis for designing new
 nuclear reactors or optimizing fuel reloading of existing ones. Optimization of fuel reloading schemes for nuclear
-reactors is the topic of a major research and development project that is being investigated at author's department
+reactors is the topic of a major research and development project investigated at author's department
 \footnote{Project TA01020352 -- Increasing utilization of nuclear fuel through optimization of an inner fuel cycle and
 calculation of neutron-physics characteristics of nuclear reactor cores. Principal investigators: R. {\v C}ada
 (University of West Bohemia) and J. Rataj (Czech Technical University). \label{ftn:TACR}}.
 Author's participation in this project during the course of his doctoral studies involved the development of a
-neutron-physical calculation module, employed by the overall optimization suite to evaluate fitness of its candidate
-configurations. This fact largely influenced the direction for development and analysis of mathematical models and
-numerical methods described in this thesis.
+neutron-physical calculation module that could be employed by the overall optimization suite to evaluate fitness of its
+candidate configurations. This fact largely influenced the choice of mathematical models and
+numerical methods studied in this thesis.
 
-All forms of radiative transfer are governed by physical laws that can be abstracted by a single mathematical model,
-represented by the Boltzmann transport equation. In nuclear reactors, the effects of neutron-induced reactions dominate
-those caused by other types of particles and we will therefore consider the transport equation for neutrons in this
-thesis, even though it has the same form for other types of non-charged particles, such as photons. While the short-term
-transient simulations require accurate solution methods for the time-dependent NTE, a quasi-steady state solution (a
-sequence of steady state calculations) is generally sufficient to capture slow changes in core configuration and
-material characteristics during its long-term stable operation.
+The most accurate mathematical model of the physical laws governing radiative transfer mediated by mutually
+non-interacting particles is acknowledged to be the linear Boltzmann transport equation. In nuclear reactors, the
+effects of neutron-induced reactions dominate those caused by other types of particles and we will therefore consider
+the transport equation for neutrons in this thesis, even though it has the same form for other types of non-charged
+particles, such as photons. While the short-term transient simulations require accurate solution methods for the
+time-dependent transport equation, a quasi-steady state solution (a sequence of steady state calculations) is generally
+sufficient to capture slow changes in core configuration and material characteristics during its long-term stable
+operation.
 Author's work focus on the latter application domain further narrows scope of this thesis to the \textit{steady state
 neutron transport equation}, shortly NTE\index{NTE}. It is worth recalling, however, that many common numerical methods
 for solving transport problems involve repeated execution of methods designed for steady-state problems.
 
 \myparagraph{Mathematical modelling of neutron transport}
-We will introduce the NTE in Chap. \ref{chap:nte-review} as an integro-differential equation in 6 dimensions and
-discuss its theoretical properties. The high dimensionality of the equation requires either a direct simulation of
-neutrons and using statistical methods to obtain the required physical quantities (the Monte Carlo approach) or a deterministic approach involving multiple discretizations.
-As the second approach is still preferable in terms of overall efficiency, we choose it as a basis for our methods and
-study classical discretization methods for the NTE in Chap. \ref{chap:nte-methods}. We will focus on some of
-their intrinsic properties that have important consequences for their practical use. Although these properties are
-generally known, they are usually described in an intuitive manner, so we will try to uncover their roots in the
-mathematical structure of the corresponding equations.
+We will introduce the steady state NTE in Chap. \ref{chap:nte-review} as an integro-differential equation with 6
+independent variables (three characterizing position of neutrons, two their streaming direction and one
+their energy) and review its theoretical properties.
+The high dimensionality of the equation requires either a direct particle simulation and use of statistical
+methods for obtaining the required physical quantities (the Monte Carlo approach) or a deterministic approach involving
+multiple discretizations.
+As the second approach is still preferable in terms of overall efficiency, we choose it as a basis for our research and
+study classical discretization methods for the NTE in Chap. \ref{chap:nte-methods}. 
+
+We will focus on two widely used methods of this category -- the \textit{method of spherical harmonics}, abbreviated
+$\PN$\index{PN@$\PN$|see {method of spherical harmonics}} and the \textit{method of discrete ordinates}, abbreviated
+$\SN$\index{SN@$\SN$|see {method of discrete ordinates}}. Both these methods can be viewed as projections of the NTE
+onto a particular Hilbert subspace of $\Lp[2](\Sphere)$ --  the space of square integrable functions of the directional
+variables\index{L2@$\Lp[2](\Sphere)$}. This is the way how the $\PN$ method is usually presented, but it is not
+immediately obvious in the $\SN$ case (this will be addressed in \sref{sec:operator_sn}).  This fact will be used to
+study numerical behavior of the methods by translating properties of the continuous NTE. As a first application, we will
+give a proof of rotational invariance property of the $\PN$ approximation. This is a well known fact preventing the
+undesirable ``ray effects" (\sref{sec:SN_advection})\index{ray effects} of the rotationally non-invariant $\SN$
+approximation, of which we however couldn't find a formal proof in available literature. As a second application, we will analyze convergence of a
+classical iterative method for the $\SN$ approximation (\sref{sec:SI}) by direct application of a Banach fixed-point
+argument proved for the continuous NTE in \cite{Egger}.
 
 \paragraph{The $\MCPN$ approximation and its relation to the $\SPN$ approximation} 
-One of the traditional discretization methods that converts the 6-dimensional integro-differential NTE into a system of
-familiar 3-dimensional partial differential equations (PDEs\nomenclature[Z]{PDE}{Partial differential equation}) is the
-\textit{method of spherical harmonics}, denoted $\PN$\nomenclature[Z]{\PN}{Method of spherical harmonics of order
-$N$}\nomenclature[Z]{\SN}{Method of discrete ordinates of order $N$}. This method is recalled and its properties are
-studied in Chap. \ref{chap:nte-methods} and a new alternative set of equations (equivalent to the original $\PN$ set) is
-developed in Chap. \ref{chap:mcpn}. This set is directly connected to another traditional approximation of neutron
-transport -- the \textit{simplified spherical harmonic method}, or $\SPN$ \nomenclature[Z]{\SPN}{Method of simplified spherical
-harmonics of order $N$} -- and this connection will be uncovered in the second part of Chap.
-\ref{chap:mcpn}.%\footnote{So far, however, the author has only been able to derive in this way the $\SPN$ equations in
+In \cref{chap:mcpn}, we will derive a new set of equations equivalent to the original $\PN$ set. The
+derivation starts by choosing an alternative approximation basis, composed of special linear combinations of the
+original basis used in the $\PN$ approximation. These new basis functions (the Maxwell-Cartesian surface spherical
+harmonics introduced in \cite{Applequist2}) have a clear tensorial structure formally resembling that of Legendre polynomials
+and lead to a set of equations resembling the 1D $\PN$ equations. We call this set the $\MCPN$ approximation
+(``Maxwell-Cartesian $\PN$'' approximation)\index{MCPN@$\MCPN$|see {method of Maxwell-Cartesian spherical harmonics}}
+and use its structure to uncover its connection to another traditional approximation of neutron transport -- the
+\textit{simplified spherical harmonic method}, or $\SPN$, in the second part of \cref{chap:mcpn}. 
+\nomenclature[Z]{\SPN}{Method of simplified spherical harmonics of order $N$}
+\index{SPN@$\SPN$|see {method of simplified spherical harmonics}}
+%\footnote{So far, however, the author has only been able to derive in this way the $\SPN$ equations in
 % an interior of a homogeneous region, so the question of interface and boundary conditions is still left open for further research.}. 
 
 The $\SPN$ method (particularly the $\SPN[3]$) already simplifies the NTE to the extent that it is applicable to
 day-by-day whole-core calculations on usual workstations with a few computational cores or small-scale parallel machines
 with tens to a few hundred cores, which are the typical machines available to nuclear engineering
 companies\footnote{\label{sjsexp}from personal experience of the author coming out of the long-term collaboration with
-the Czech nuclear engineering company {\v S}koda JS; more generally, see the discussion in \cite[Sec.
+the Czech nuclear engineering company {\v S}koda JS led by author's colleague R. \Kuzel; more generally, see the
+discussion in \cite[Sec.
 2.4]{Sanchez7}}. As is well known and will be recalled in \cref{chap:SPN}, when the $\SPN[3]$ method is applied to the
 typical reactor core calculations, its solution captures most of the features of the true solution of the NTE. Combined
 with its efficiency that allows this method to be used ``off the desk'' (without the need of submitting the job to some
 supercomputing center, waiting for it to come to the front of an execution queue and gathering the results) makes it
 attractive for physicists to quickly test their empirical approximations used throughout their production code, which is
-usually based on the most restricting transport approximation -- the diffusion approximation.
+usually based on the most restricting transport approximation -- the diffusion approximation\index{method!diffusion}.
 
 \myparagraph{Finite element framework for 2D neutron diffusion/transport}
 The neutron diffusion approximation, whereby the NTE is reduced to a second-order elliptic PDE (or, when energy
 dependence is taken into account implicitly, a weakly coupled non-symmetric system of second-order PDEs with
-positive-definite symmetric part -- the so-called \textit{multigroup neutron diffusion approximation}), also forms the
-basis of the neutronics module used in the above mentioned core loading optimization code. However, to obtain the final
-discrete algebraic system of equations, it uses the finite element method. This distinguishes it from the majority of 
+positive-definite symmetric part -- the so-called \textit{multigroup neutron diffusion
+approximation})\index{method!multigroup}, also forms the basis of the neutronics module to be used in the above
+mentioned core loading optimization code. However, to obtain the final discrete algebraic system of equations, it uses the finite element method. This distinguishes it from the majority of 
 other codes used for similar purposes, which are usually based on the so-called \textit{nodal method}\footnote{See e.g.
 \cite{opt1,opt2,opt3} for the specific application area of core reloading optimization; some other nodal codes widely
-employed in various whole-core calculations are tabulated in \cite{mox-bench}. One of the two Czech standardized codes
-for reactor calculations -- ANDREA \cite{ANDREA} -- also falls into this category (the other -- MOBY-DICK
-\cite{MOBYDICK} -- is based on a finite-difference method on a structured mesh)\label{ftn:nodal}}.
+employed in various whole-core calculations are tabulated in \cite{mox-bench}. \comment{One of the two Czech
+standardized codes for reactor calculations -- ANDREA \cite{ANDREA} -- also falls into this category (the other -- MOBY-DICK
+\cite{MOBYDICK} -- is based on a finite-difference method on a structured mesh)}\label{ftn:nodal}}.
 
-Generally speaking, a nodal method is a coarse mesh finite volume method iteratively combined with fine-level correction
-steps, specially tailored to the neutron diffusion (or recently $\SPN$) model and reactor core domain (i.e., typically, 
+Generally speaking, a nodal method\index{method!nodal} is a coarse mesh finite volume method iteratively combined with
+fine-level correction steps, specially tailored to the neutron diffusion (or recently $\SPN$) model and reactor core domain (i.e., typically, 
 coarse level cells correspond to real fuel assemblies and the correction consists of analytic solution of the diffusion equation in a
 geometrically simple homogeneous region). Its advantage is the speed and overall efficiency, but it is greatly limited
-in geometrical flexibility. Because of the way the nodal equations are derived, it also requires the
-\textit{homogenization} procedure to represent each coarse cell by a single set of material coefficients and the 
-corresponding \textit{dehomogenization} procedure to reconstruct the fine structure of the solution needed for further 
-computations (where the latter, in particular, is difficult to formulate in general cases). Moreover, the convergence
-and stability of the method is, to the knowledge of the author, not very well understood (\cite{ZiminComm}).
+in geometrical flexibility. Because of the way the standard nodal equations are derived, it also requires the
+\textit{homogenization} procedure to represent each coarse cell by a single set of material coefficients (or in more
+modern nodal methods by coefficients with a pre-specified polynomial variation) and the corresponding
+\textit{dehomogenization} procedure to reconstruct the fine structure of the solution needed for further computations
+(where the latter, in particular, is difficult to formulate in general cases). Moreover, the convergence and stability
+of the method is, to the knowledge of the author, not very well understood (\cite{ZiminComm}).
 
-The finite-element approximation, which will be considered in this thesis, does not
-suffer from the above issues.
  %In fact, one of the objectives of the thesis is to show the
 %feasibility of using finite element approximation in a quasi-steady state whole-core calculation code. 
-In order to
-provide a viable alternative to coarse nodal and structured finite-difference discretizations, the need for automatic
-mesh adaptivity and fast algebraic solvers has been recognized from the beginning of the research. Rather than developing an
-adaptive finite element code from scratch, it has been decided to modify an existing library for the needs of neutron transport
-modelling. This led the author to the finite-element C++ framework Hermes (\cite{Hermes-project}) with advanced
-\textit{hp-adaptivity} capabilities (\cite{Hermes-hanging-nodes}) and a unique way of assembling coupled systems of PDEs
-(\cite{Hermes-thermoelasticity}).
-Author's main contributions to the Hermes project involved:
+This motivated the study of the feasibility of solving whole-core neutronics
+problems by the finite element method, which does not suffer from these issues. The basic principle underlying the
+nodal method, i.e. comparing two solutions with different accuracy to provide a more accurate one, has led the author to
+the open-source finite element C++ library Hermes2D \cite{Hermes-project} \index{code library!Hermes2D}, which uses the
+same principle to drive its advanced \textit{hp-adaptivity} procedure \cite{Hermes-hanging-nodes}. Combined with its unique way of assembling coupled
+systems of PDEs \cite{Hermes-thermoelasticity}, the Hermes2D library has proved to be well-suited for
+serving as a basis for testing the neutronic approximations described in the first part of the thesis.
+
+The author has also participated in the development of the core library; the main contributions to the Hermes
+project involved:
 \begin{itemize}
     \item development of an interface for various existing sparse,
 direct and iterative algebraic solvers (which also required reworking the CMake build system of Hermes),
 	\item development of a multigroup neutron diffusion framework, simplifying and unifying the formulation of
-	multiregion, multigroup neutron diffusion problems within Hermes,
+	multiregion, multigroup neutron diffusion problems within Hermes2D,
 	\item development of the discontinuous Galerkin framework (together with L. Korous, the main developer of Hermes at
 	present time) and
 	\item extension of the h-adaptivity capabilities by the standard a-posteriori error estimation for elliptic problems (which
 involves solution jumps over element interfaces and thus uses elements of the discontinuous Galerkin framework). 
 \end{itemize}
-More details about the Hermes project and the implementation of neutronics modules will be given in \cref{chap:hermes},
-based on the theoretical formulation of the multigroup diffusion and $\SPN$ approximations (for orders $N = 3,5,7$,  but
-easily extendable to an arbitrary order) from \cref{chap:SPN}. To assess the benefits of using the $\SPN$ model over the
-simpler diffusion model, the author also implemented (still on top of the neutronics framework) a  discontinuous
-Galerkin discretization of the \textit{discrete ordinates} approximation of the transport equation  (the $\SN$ method,
-introduced in \Sref{sec:1-SN}). Unlike the $\SPN$ approximation, this
-approximation, theoretically as $N\to\infty$, converges to the true solution of the NTE in general multidimensional,
-multiregion domains. Combined with the automatic, problem independent spatial adaptivity capabilities provided by Hermes
-and its unique multi-mesh assembling strategy, the author expects that this implementation can serve as a first step for
-exploring adaptive solutions to more difficult transport problems not covered by the $\SPN$ model.
+More details about the neutronics modules for Hermes2D will be given in
+\cref{chap:hermes}, based on the abstract weak formulation of the multigroup diffusion approximation from
+\cref{chap:SPN}. An extension for the $\SPN$ approximation will also be discussed, including a modification of the
+standard error indicator used in Hermes2D to guide the $hp$-adaptivity process. While well-posedness
+of the weak form of the multigroup diffusion approximation has been proved in \cite[Chap.
+VII]{DautrayLions2} or \cite{Bourhrara1}, we could not find a formal proof for the $\SPN$ case and hence provide one in 
+\sref{sec:sp3_wellposed}.
 
-\comment{
+To assess the benefits of using the $\SPN$ model over the simpler diffusion model, the author also implemented (still on top of the neutronics
+framework) a discontinuous Galerkin discretization of the \textit{discrete ordinates} approximation of the transport
+equation  (the $\SN$ method, studied in \Sref{sec:1-SN}). Unlike the $\SPN$ approximation, this approximation,
+theoretically as $N\to\infty$, converges to the true solution of the NTE in general multidimensional, multiregion
+domains. Combined with the automatic, problem independent spatial adaptivity capabilities provided by Hermes and its 
+multimesh assembling strategy, the author expects that this implementation can serve in future as a first step
+for exploring adaptive solutions to more difficult transport problems not covered by the $\SPN$ model.
+
 \myparagraph{3D coupled neutron-physical finite element code based on the multigroup diffusion approximation}
-Unfortunately, the 3D version of Hermes has not yet been released and thus the main utility of the neutronics framework
-introduced in previous paragraph is in testing new ideas on hp-adaptivity for neutron transport problems. For the
-purposes of the research project underlying this thesis (see the footnote \ref{ftn:TACR} on pg. \pageref{ftn:TACR}), a
-3D finite element framework was needed. The final choice has been the FEniCS/Dolfin framework (\cite{dolfin1, dolfin2}).
-The final code, that the author developed within this framework, is described in \cref{chap:coupled} and demonstrated on
-several industrial and custom benchmarks. It allows parallel assembly of the multigroup neutron diffusion problem and
-solution of the obtained algebraic problem using the well-established PETSc/SLEPc solvers (\cite{petsc1, slepc1})
-wrapped by FEniCS.
-This can be repeated in a feedback loop (until a steady state is found), in which the computed neutron flux directly influences
-thermal/hydraulic properties of the core, the change of which in turn leads to a change of coefficients in the diffusion
-equations. On top of that loop, another loop representing fuel burnup can be executed. At this point, the author would
-like to acknowledge the work of his colleagues -- R. Ku{\v z}el (the coordinator of the whole effort and also the author
-of a GPU eigensolver module), J. Egermaier and H. Kopincov{\' a} (who implemented the thermal/hydraulics
-module) and Z. Vastl (who generated the meshes for the MOX-UO$_2$ and VR-1 benchmarks).
+For the purposes of the research project ``Project TA01020352 -- Increasing utilization of nuclear fuel through
+optimization of an inner fuel cycle and calculation of neutron-physics characteristics of nuclear reactor cores''
+(cf. footnote \ref{ftn:TACR} on pg. \pageref{ftn:TACR}), a 3D neutron diffusion solver was needed. Using the
+experience with the Hermes2D library, the author also developed a multigroup neutron diffusion solver within the
+FEniCS/Dolfin framework (\cite{dolfin1, dolfin2})\index{code library!FEniCS/Dolfin}.
+It features distributed (MPI) assembly of the multigroup neutron diffusion problem and solution of the obtained algebraic problem using the well-established PETSc/SLEPc solvers (\cite{petsc1, slepc1})
+wrapped by FEniCS. This can be repeated in a feedback loop, in which the computed
+neutron flux directly influences thermal/hydraulic properties of the core, the change of which in turn leads to a change
+of coefficients in the diffusion equations. On top of that loop, another loop representing fuel burnup can be executed. 
+At this point, the author would like to acknowledge the work of his colleagues -- R. Ku{\v z}el (the coordinator of the 
+whole effort and also the author of a GPU eigensolver module), J. Egermaier and H. Kopincov{\' a} (who implemented the 
+thermal/hydraulics module) and Z. Vastl (who generated the meshes for the benchmarks on which the module has been
+tested).
+
+Thorough description of the coupled code system is beyond the scope of this thesis. To give at least the glimpse of the
+scale of the problems that are solvable by the code, results of a selected benchmark conclude \cref{chap:hermes}.
 
 %\myparagraph{Well-posedness of the $\SPN$ equations}
 %While there are many papers where the finite element method has been \textit{used} to find the weak solution of
@@ -143,6 +167,7 @@ module) and Z. Vastl (who generated the meshes for the MOX-UO$_2$ and VR-1 bench
 % Sec.
 %\alert{ref}.
 
+\comment{
 \myparagraph{New method for solving large eigenvalue problems}
 Determination of reactor steady state requires finding the dominant eigenpair of a generalized eigenvalue problem. This
 has been traditionally performed by the simple power method, accelerated by eigenvalue shifting or Chebyshev

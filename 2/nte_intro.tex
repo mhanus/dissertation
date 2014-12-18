@@ -11,8 +11,8 @@
 \nomenclature[a]{$\R[n]$}{an n-dimensional Euclidean vector space}
 
 The steady state neutron transport equation is a mathematical representation of balance between neutron gains and losses
-within a given macroscopic domain $\VV\subset\R[3]$\index{$\VV$}. Let us consider the equation in its
-integro-differential form with given neutron source function $Q$\index{$Q$}:
+within a given macroscopic domain $\VV\subset\R[3]$\index{D@$\VV$}. Let us consider the equation in its
+integro-differential form with given neutron source function $q$\index{q@$q$}:
 \begin{equation}\label{eq0}
   \begin{multlined}
     \Bigl[
@@ -23,76 +23,86 @@ integro-differential form with given neutron source function $Q$\index{$Q$}:
     \src(\br,\bomega,E).
   \end{multlined}  
 \end{equation}
-Function $\sigma_t$\index{$\sigma_t$} groups all reactions that result in a loss of neutron, while
-$\kappa$\index{$\kappa$} represents reactions that introduce neutrons into direction $\bomega$ and energy $E$ by, e.g.,
-scattering from direction $\bomega'$, slowing down (or accelerating) from higher (lower) energies $E'$ or releasing new neutrons from fissioned nuclei.
+Function $\sigma_t$\index{$\sigma_t$|see {cross-section: total}} groups all reactions that result in a loss of neutron,
+while $\kappa$\index{$\kappa$} represents reactions that introduce neutrons into direction $\bomega$ and energy $E$ by,
+e.g., scattering from direction $\bomega'$, slowing down (or accelerating) from higher (lower) energies $E'$ or releasing new neutrons from fissioned nuclei.
 They are given by material composition of the domain and we will return to their more detailed description, as
-well as to boundary conditions for \eqref{eq0}, in section \ref{sec:NTE}.
+well as to boundary conditions for \eqref{eq0}, in Section \ref{sec:NTE}.
 
-Solution of eq. \eqref{eq0}, the \textit{angular neutron flux density} $\psi$ -- is a function of the following
-independent variables, which define the neutron phase space:
+Solution of eq. \eqref{eq0}, the \textit{angular neutron flux density} $\psi$\index{$\psi$|see {angular
+flux}}\index{angular flux} -- is a function of the following independent variables, which define the neutron
+phase space:
 \begin{itemize}
- 	\item $\br = (x,y,z)$	\index{$\br$}
+ 	\item $\br = (x,y,z)$	\index{r@$\br$}
  	\nomenclature[A]{\br}{position vector}
  	\nomenclature[U]{x,y,z}{components of vectors in Cartesian coordinate system} represents the spatial distribution of
  	 neutrons,
- 	\item $\bomega$\nomenclature[g]{$\bomega$}{unit vector of neutrons flow direction}\index{$\bomega$} represents the
- 	angular distribution of neutrons on a unit sphere $\Sphere$\nomenclature[A]{\Sphere}{unit sphere ($\{x\in\R[3]: \norm{x} =
- 	1\}$)} ,i.e. their flow direction ($\bomega\in\R[3]$, $\norm{\bomega}=1$);
- 	\item $E\in [E_{\text{min}},E_{\text{max}}]$\nomenclature[g]{$E$}{Energy of neutrons\nomunit{eV}}\index{E} is the
- 	kinetic energy of neutrons
+ 	\item $\bomega$\nomenclature[g]{$\bomega$}{unit vector of neutrons flow direction}\index{$omega$@$\bomega$}
+ 	represents the angular distribution of neutrons on a unit sphere $\Sphere$\nomenclature[A]{\Sphere}{unit sphere ($\{x\in\R[3]: \norm{x} =
+ 	1\}$)}\index{S@$\Sphere$}, i.e. their streaming direction ($\bomega\in\R[3]$, $\norm{\bomega}=1$);
+ 	\item $E\in [E_{\text{min}},E_{\text{max}}]$\nomenclature[g]{$E$}{Energy of neutrons\nomunit{eV}}\index{E@$E$} is the
+ 	kinetic energy of neutrons.
 \end{itemize}
 
 \begin{remark}
 	The phase space could be also defined in terms of the velocity vector $\bv$ and speed $v = \norm{\bv} = \sqrt{2E/m}$
-	($m$ being the mass of neutron) instead of $\bomega$ and $E$. 
+	($m$ being neutron mass) instead of $\bomega$ and $E$. 
 	This form appears to be preferred in analytical works, while our choice is more often used in practical numerical
 	calculations.
 	Corresponding changes in the formulation of the NTE are
-	explicitely given e.g. in \cite[Chap. XXI, eqns. (1.1) and (1.2)]{DautrayLions}. For further use, we will just note
-	that we can write $\bomega = \bv / v$ with $\bv\in\R[3]$\index{$\bv$, v}.
+	explicitly given e.g. in \cite[Chap. XXI, eqns. (1.1) and (1.2)]{DautrayLions}. For further use, we will just note
+	that we can write $\bomega = \bv / v$ with $\bv\in\R[3]$\index{v@$\bv$, v}.
 \end{remark} 
 \begin{remark}
-	In this macroscopic description, we should always consider beams of neutrons with the same given average properties in
+	In this macroscopic description, we should always consider beams of neutrons with the same average properties in
 	differential elements around $\br$, $\bomega$, $E$. For simplicity, we will refer to them as to single neutrons with
-	particular position, energy or direction (and occassionally call them $(\br,\bomega,E)$-neutrons) and we also omit the
-	``density'' specification of repeatedly used quantities -- e.g., we will henceforth call $\psi$ just \textit{angular neutron flux}.
+	particular position, energy or direction (and occasionally call them $(\br,\bomega,E)$-neutrons) and we also omit the
+	``density'' nomenclature of repeatedly used quantities -- e.g., we will henceforth call $\psi$ just \textit{angular
+	neutron flux}.
 \end{remark} 
 \begin{remark}\label{rem:balance}
-	We should also keep in mind that eq. \eqref{eq0} is a consequence of applying Gauss divergence
+	We keep in mind that eq. \eqref{eq0} is a consequence of applying Gauss divergence
 	theorem to the fundamental integral neutron balance over an arbitrary bounded subdomain of the phase space (which
-	assumes differentiable angular neutron flux density).
+	assumes differentiable angular neutron flux).
 \end{remark}
 
 \section{Neutron phase space} \label{sec:phase}
-Let us assume that $\VV$ is a domain bounded by a piecewise smooth boundary $\pV$, which may be oriented at almost every
-point $\br\in\pV$ (a.e. in $\pV$) by its unit outward normal field $\bn(\br)$.
-Then we may formally define the neutron phase space $$
+Let us assume that $\VV$ is a domain bounded by a piecewise smooth boundary $\pV$\index{Dp@$\pV$}, which is oriented
+at almost every point $\br\in\pV$ (a.e. in $\pV$) by its unit outward normal field $\bn(\br)$\index{n@$\bn$}.
+Then we may formally define the neutron phase space 
+$$
   X \coloneqq \{(\br,\bomega,E):\ \br\in \VV\subset\R[3], \bomega\in \Sphere, E \in [\Emin,\Emax]\}
-$$ together with its outflow and inflow boundary subsets, respectively:
+$$
+\index{X@$X$} 
+together with its outflow and inflow boundary subsets, respectively:
 $$
   \pX[\pm] \coloneqq \bigl\{ (\br,\bomega,E) \in \pV \times \Sphere \times [E_m, E_M], \mbox{ s.t. }
   \bomega\cdot\bn(\br) \gtrless 0 \bigr\}.
-$$ The whole boundary $\pX$ can be written as $$ \pX = \pX[+]\cup \pX[-] \cup \pX[0] $$ where $\pX[0]$ (boundary subset
+$$
+\index{Xp@$\pX[\pm]$, $\pX$} 
+The whole boundary $\pX$ can be written as $$ \pX = \pX[+]\cup \pX[-] \cup \pX[0] $$ where $\pX[0]$ (boundary subset
 tangential to the flow), so that $\overline X = X \cup \pX$.
 \begin{figure}[!hbt]
     \centering \includegraphics[scale=1]{phase_space.eps} \caption[Phase space of neutrons]{Phase space of neutrons}
     \label{fig:phase_space}
-\end{figure}% The product Lebesgue measure
+\end{figure}
+The product Lebesgue measure
 \begin{equation}\label{eq:measure}
   \d{x} = \d{\mu(X)} = \d{\mu(V\times\Sphere\times [\Emin,\Emax])} = \d{\br}\d{\bomega}\d{E}
 \end{equation}
+\index{dx@$\d{x}$}%
 is used when integrating over $X$, 
 while the boundary measure
 \begin{equation}\label{eq:measure2}
 \db = \abs{\bomega\cdot\bn}\d{S}\d{\bomega}\d{E},
 \end{equation}
+\index{dxi@$\db$}%
 is used when integrating over $\pX[\pm]$, where $S = \mu(\pV)$.
 Note that
 because of the assumed regularity of the boundary, $\pX[0]$ is a closed subset of $\pX$ of
 \linebreak\mbox{$\db$-measure} zero (\cite[Chap. XXI, Sec. 2.2]{DautrayLions}). This will allow us to decompose spaces 
 of measurable functions defined on $\pX$ into a direct sum of subspaces of measurable functions defined on $\pX[+]$ and 
-$\pX[-]$, respectively. When refering to physical units, we will consider the length scale of $\VV$ in centimeters.
+$\pX[-]$, respectively. When referring to physical units, we will consider the length scale of $\VV$ in centimeters.
 
 \comment{
 When discussing various semi-discretizations of the NTE, we will also refer to the following subspaces  (``sections''
@@ -117,7 +127,7 @@ angle}:
 		\cost
 	\end{array}\right]
 \end{equation*}
-(see \fref{fig:streaming}).
+(see \fref{fig:streaming}).\index{$omega$@$\bomega$}\index{$\vartheta$}\index{$\varphi$ (angle)}
 \begin{figure}[!hbt]
     \centering
     \includegraphics[scale=1.275]{cartesian_streaming}
@@ -130,7 +140,7 @@ $\abs{\d{\bomega}}$ can be written as:
 $$
 	\d{\bomega} = \frac{\abs{\d{\bomega}}}{r^2} = \frac{r^2 \sint \d{\polar}\d{\azimuthal}}{r^2} =  \sint
 	\d{\polar}\d{\azimuthal} $$
-(see \fref{fig:element}).
+(see \fref{fig:element}).\index{$\d{o}$@$\d{\bomega}$}
 \begin{figure}[!hbt]
     \centering
     \includegraphics[scale=1.275]{element}
@@ -144,6 +154,7 @@ Then
 $$
 	\mu_0 \equiv \cos \polar_0 = \bomega\cdot\bomega'
 $$
+\index{$\mu_0$}
 and
 \begin{equation}\label{eq:invint}
 \begin{aligned}
@@ -160,7 +171,7 @@ The first consequence of this assumption is that
 $$
 	\sigma_t(\br,\bomega,E)\psi(\br,\bomega,E) \equiv \sigma_t(\br,E)\psi(\br,\bomega,E)
 $$ 
-for any $\bomega\in\Sphere$. The
+for all $\br$, $\bomega$, $E$. The
 second is that reactions that change the direction of neutrons from $\bomega'$ to $\bomega$ are
 invariant under rotation of the coordinate system and are thus completely determined by the cosine of the two vectors:
 \begin{equation}\label{eq:iso}
@@ -176,24 +187,24 @@ The steady state NTE \eqref{eq0} in this regime reads
  \end{multlined}
 \end{equation}
 in $X$, complemented by specified angular flux distribution at $\pX[-]$. The two prototypical inflow boundary
-conditions are:
+conditions are:\index{boundary conditions}
 \begin{itemize}
 	\item incoming angular neutron flux
 	\begin{equation}\label{eq:nte2}
 	  \psi\vert_{\pX[-]} = \psi_{\text{in}}
-	\end{equation}
+	\end{equation}\index{$\psi\vert_{\pX[\pm]}$}%
 	($\psi_{\text{in}}\equiv 0$ corresponds to vacuum in $\R[3]\setminus \overline V$, which is a common
-	 assumption in nuclear reactor modeling),
+	 assumption in nuclear reactor modeling),%
+	 \index{boundary conditions!vacuum}%
 	
 	\item albedo boundary reflection
 	\begin{equation}\label{eq:nte3}
   	\psi(\br,\bomega,E) = \albedo(\br)\psi(\br, \bomega_R, E),\quad (\br,\bomega,E)\in \pX[-],\ \ \bomega_R = \bomega - 2
   	\bn (\bomega \cdot \bn)
-  \end{equation}
-  where $\bomega$ is the reflection of $\bomega_R$ about the boundary plane. For $\albedo \equiv 1$, this corresponds to
-  complete specular reflection and is used to model planes of symmetry, while for $\albedo =
-  0$, we recover the vacuum condition from above. Intermediate values mean that a fraction of neutrons leaving the
-  domain in direction $\bomega_R$ are returned back in direction $\bomega$, which is commonly used to model reactor
+  \end{equation}\index{$omegaR$@$\bomega_R$}\index{$\beta$|see {boundary conditions:
+  albedo}}\index{boundary conditions!albedo}\index{boundary conditions!reflective}%
+  where $\bomega$ is the reflection of
+  $\bomega_R$ about the boundary plane. For $\albedo \equiv 1$, this corresponds to complete specular reflection and is used to model planes of symmetry, while for $\albedo \equiv 0$, we recover the vacuum condition from above. Intermediate values mean that a fraction of neutrons leaving the domain in direction $\bomega_R$ are returned back in direction $\bomega$, which is commonly used to model reactor
   reflectors. We thus assume $0 \leq \albedo \leq 1$. 
 \end{itemize}
 \begin{remark}
@@ -204,13 +215,15 @@ conditions are:
 \begin{equation}\label{eq:albedo-general}
 	\angflux(x)\big\vert_{\pX[-]} = (\albedoop\angflux)(x) = \bndint[']{\pX[+]}\albedo(x\sla x')\angflux(x'),
 \end{equation}
-	where $x = (\br,\bomega,E)$ and $x' = (\br',\bomega',E')$. 
+	where $x = (\br,\bomega,E)$ and $x' = (\br',\bomega',E')$.
+	\index{operator!B@$\albedoop$}%
 \end{remark}
 For formal description of other types of boundary conditions, we refer to \cite{Sanchez4} or \cite[Sec. 1.3]{Agoshkov}.
 
-A physically plausible solution of NTE should be moreover non-negative throughout $\VV$ and continuous along any
+A physically plausible solution of the NTE should be moreover non-negative throughout $\VV$ and continuous along any
 direction $\bomega$, i.e. $\psi(\br + s\bomega,\bomega,E)$ is a continuous function of $s$ for any $\br$, $\bomega$, $E$. Note
-that $\psi(\br + s\bomega',\bomega,E)$ \textsl{may} be discontinuous when $\bomega' \neq \bomega$.
+that $\psi(\br + s\bomega',\bomega,E)$ \textsl{may} be discontinuous as a function of position when $\bomega' \neq
+\bomega$.
 
 \subsection{Advection term}\label{sec:advection}
 In Cartesian coordinate system (that we will exclusively consider in this thesis),
@@ -227,6 +240,7 @@ where $s\in I\subset \R$ parametrizes the path traveled by the neutron along the
   \label{fig:cartesian2}
 \end{center}
 \end{figure}
+\index{characteristic}
 Assuming now for simplicity that the integral term on the right of \eqref{eq1} is absorbed in the source term
 $q$, we may invert the differential operator on the left of \eqref{eq1} by integration along these characteristics and obtain an
 integral formulation of the neutron transport equation:
@@ -239,6 +253,7 @@ where
 	\br' &= \br - s' \bomega, \quad \br_0 = \br - s_0 \bomega\nonumber\\[.2em]
 	\tau(\br,\br') &= \tau(\br,\br-s'\bomega) = \int_0^{s'} \sigma_t(\br - s''\bomega)\,\d{s''} \label{eq:tau}
 \end{align}
+\index{$\tau(\br,\br')$}%
 In reference to \fref{fig:trepka}
 \begin{figure}[tbp]
 \begin{center}
@@ -247,36 +262,40 @@ In reference to \fref{fig:trepka}
   \label{fig:trepka}
 \end{center}
 \end{figure}
+\index{l@$\ell$}
 we can interpret the first term on the right of \eqref{eq:nte-integral} as the number of
-neutrons moving in the direction $\bomega$ that entered the given volume in $\br_0$ and reached point $\br$ without
+neutrons moving in the direction $\bomega$ that entered the given volume at $\br_0$ and reached point $\br$ without
 collision, whereas the second term as the number of neutrons introduced into the characteristic direction by sources 
 between $\br_0$ and $\br$ and reaching $\br$ without collision. The \textit{optical path length} $\tau$ represents the 
 probability of collision between $r'$ and $r$. This integral form is of both theoretical and practical value, as we will
 see later in sections \ref{sec:fixed-source} and \ref{sec:lattice}.
 
 \subsection{Collision terms}
-The kernel of the integral operator on the right-hand side of \eqref{eq1} characterizes the mean number of 
-($\bomega$,~$E$)-neutrons coming out of a (possible) collision of 
-($\bomega'$,~$E'$)-neutrons with nuclei at $\br$ (or more precisely in a
-differential element around $\br$). Such collisions can either just change the direction and energy of the
-inducing neutrons (elastic scattering) or cause absorption of the neutrons followed by release of
-new ones in the considered direction and energy range (fission), or both (inelastic scattering). This categorization
-motivates the splitting 
+\index{cross-section}
+The kernel of the integral operator on the right-hand side of \eqref{eq1} characterizes the mean number of
+($\bomega$,~$E$)-neutrons coming out of a collision of ($\bomega'$,~$E'$)-neutrons with nuclei at $\br$ (or more
+precisely in a differential element around $\br$). Such collisions can either just change the direction and energy of
+the inducing neutrons (elastic scattering)\index{scattering!elastic} or cause absorption of the neutrons followed by
+release of new ones in the considered direction and energy range (fission), or both (inelastic
+scattering)\index{scattering!inelastic}.
+This categorization motivates the splitting
 \begin{equation}\label{eq:splitting}
   \kappa(\br,\bomega\cdot\bomega',E\sla E') = \eta\sigma_s(\br,\bomega\cdot\bomega',E\sla E') +
   \nu\sigma_f(\br,\bomega\cdot\bomega',E\sla E').
 \end{equation}
 where the two components are the so-called \textit{double-differential macroscopic
-cross-section} for scattering and fission, respectively. 
-The \textit{scattering} and \textit{fission yield} $\eta$ and $\nu$, respectively, have the meaning of expected
-number of neutrons coming out of the scattering event ($=1$ in case of elastic scattering, might be $> 1$ when 
-inelastic scattering takes place) and the fission event, respectively, per one inducing neutron.% As they will always
-%appear in the product with the appropriate cross-section, their dependence on $\br, E', \bomega'$ is omitted.
+cross-section}\index{scattering!double-differential} for scattering and fission, respectively. 
+The \textit{scattering} and \textit{fission yield} $\eta$ and $\nu$\index{$\eta$}\index{$\nu$|see
+{fission yield}}\index{$\sigma_s$|see {cross-section: scattering}}\index{$\sigma_f$|see {cross-section:
+fission}}\index{cross-section!fission}\index{cross-section!scattering}, respectively, have the meaning of expected
+number of neutrons coming out of the scattering event ($=1$ in case of elastic scattering, might be $> 1$ when inelastic
+scattering takes place) and the fission event, respectively, per one inducing neutron.
+% As they will always appear in the product with the appropriate cross-section, their dependence on $\br, E', \bomega'$ is omitted. 
 
 Ordinary macroscopic cross-sections $\sigma_s(\br,E)$,
-$\sigma_f(\br,E)$ are then introduced to characterize the total probability that $(\bomega,E)$ neutrons undergo collisions of the above type irrespective of the outgoing direction and
-energy\footnote{Recall that the direction $\bomega$ of the incoming neutrons is irrelevant for the result as a
-consequence of the assumption of isotropic medium (and eq. \eqref{eq:invint}).}, i.e.
+$\sigma_f(\br,E)$ are then introduced to characterize the total probability that $(\bomega,E)$ neutrons undergo 
+collisions of the above type irrespective of the outgoing (primed) direction and energy\footnote{Recall that the
+direction $\bomega$ of the incoming neutrons is irrelevant for the result as a consequence of the assumption of isotropic medium (and eq. \eqref{eq:invint}).}, i.e.
 \begin{equation}\label{eq:ddifxs}
 \begin{aligned}
 \eta\sigma_s(\br, E) &=
@@ -286,8 +305,8 @@ consequence of the assumption of isotropic medium (and eq. \eqref{eq:invint}).},
 \end{aligned}
 \end{equation}
 
-The \textit{total macroscopic cross-section}, $\sigma_t$, characterizing the probability that neutron with energy $E$
-undergoes a collision of any type with nuclei at $\br$, can now be decomposed as 
+The \textit{total macroscopic cross-section}, $\sigma_t$\index{cross-section!total}, characterizing the probability
+that neutron with energy $E$ undergoes a collision of any type with nuclei at $\br$, can now be decomposed as 
 \begin{equation}\label{eq:st}
   \sigma_t(\br,E) = \sigma_c(\br,E) + \sigma_f(\br,E) + \sigma_s(\br,E) \equiv \sigma_a(\br,E) + \sigma_s(\br,E)
 \end{equation}
@@ -297,9 +316,11 @@ where
 	into the system) and
   	\item $\sigma_a(\br, E) = \sigma_c(\br,E) + \sigma_f(\br,E)$ is the absorption cross section.
 \end{itemize}
+\index{$\sigma_c$|see {cross-section: capture}}\index{cross-section!capture}
+\index{$\sigma_a$|see {cross-section: absorption}}\index{cross-section!absorption}
 
 For later use, note that fission is an isotropic process (which removes the angular dependence of the
-double-differential fission cross-section altogether) and the new energy distribution does not depend on the energy of 
+double-differential fission cross-section altogether) and the new energy distribution does not depend on energy of 
 the inducing neutron 
 \begin{figure}[hbt]
 \begin{center}
@@ -308,58 +329,64 @@ the inducing neutron
   \label{fig:spectrum}
 \end{center}
 \end{figure}
-(as it corresponds to the neutrons originally bound inside the nucleus; \fref{fig:spectrum}
+(as it corresponds to neutrons originally bound inside the nucleus; \fref{fig:spectrum}
 shows a typical shape of that function); using the second eq.
 \eqref{eq:ddifxs}, we can then write:
 \begin{equation}\label{eq:sf}
-\nu\sigma_f(\br,\bomega\cdot\bomega',E\sla E') = \frac{\chi(E)\nu\sigma_f(\br,E')}{4\pi},\quad 
+\nu\sigma_f(\br,\bomega\cdot\bomega',E\sla E') \equiv \frac{\chi(E)\nu\sigma_f(\br,E')}{4\pi},\quad 
 \intE{\Emin}{\Emax}{\chi(E)} = 1.
 \end{equation}
+\index{$\chi$|see {fission spectrum}}\index{fission spectrum}
  
-A physically realistic assumption is that all the macroscopic cross-sections are bounded measurable functions
-\footnote{with respect to product measure of type \eqref{eq:measure} appropriate for their particular set of arguments,
- or with respect to $\d{\mu(V\times\Sphere^2\times [\Emin,\Emax]^2)}$ in case of double-differential cross-section},
- piecewise continuous in $\VV$. The unit of macroscopic cross-sections is \SI{}{cm^{-1}}.
+A physically realistic assumption is that all the macroscopic cross-sections are bounded measurable functions\footnote{
+with respect to product measure of type \eqref{eq:measure} appropriate for their particular set of arguments, or with  
+respect to $\d{\mu(V\times\Sphere^2\times [\Emin,\Emax]^2)}$ in case of double-differential cross-section}, piecewise 
+continuous in $\VV$. The unit of macroscopic cross-sections is \SI{}{cm^{-1}}.
 
 \subsection{Quantities of interest}\label{sec:qoi}
 From the solution of eq. \eqref{eq1}, one can derive the following important integral quantities
 \begin{itemize}
-  \item \textit{scalar neutron flux density} \SI{}{[cm^{-2}.s^{-1}]}
+  \item \textit{scalar neutron flux (density)} \SI{}{[cm^{-2}.s^{-1}]}
   \begin{equation}\label{eq:scalar_flux}
     \phi(\br, E) = \intA{\psi(\br,\bomega,E)},
   \end{equation}
-  \item \textit{net neutron current density} \SI{}{[cm^{-2}.s^{-1}]}
+  \index{$\phi$|see {scalar flux}}\index{scalar flux}
+  \item \textit{net neutron current (density)} \SI{}{[cm^{-2}.s^{-1}]}
 	\begin{equation}\label{eq:bJ}
 		\bJ(\br, E)	= \intA{\bomega\psi(\br,\bomega,E)},
 	\end{equation}
+	\index{J@$\bJ$|see {net current}}\index{net current}
 \end{itemize}
 so that integrating $\bJ(\br,E)\cdot\bn(\br)$ over a given surface 
 gives the total number of neutrons with energy $E$ crossing (per unit time) that surface in the direction of 
-$\bn$ (and allows us to assess neutron conservation within given volume, recall Remark \ref{rem:balance}).
+$\bn$ (and allows assessing neutron conservation within given volume, recall Remark~\ref{rem:balance}).
 
 The integral
 \begin{equation}\label{eq:rr}
   \intE{E_1}{E_2}{\sigma_x(\br, E) \phi(\br, E)}
 \end{equation}
-represents the \textit{reaction rate density} (per unit time) ou viven type ($x = t,a,f,s,c$, see \eqref{eq:st}), 
-induced by neutrons of energies in range $[E_1, E_2]$. 
+represents the \textit{reaction rate density} (per unit time)\index{reaction rate} of given type ($x = t,a,f,s,c$, see
+\eqref{eq:st}), induced by neutrons of energies in range $[E_1, E_2]$. 
 As well as the scalar flux itself, reaction rates may be experimentally measured
 by various detector mechanisms, which is the reason why these quantities are more important in practical calculations
-than the actual solution of the NTE (the angular neutron flux). Of particular importance for reactor calculations is the
+than the actual solution of the NTE (angular neutron flux $\psi$). Of particular importance for reactor calculations is
+the
 \textit{power density} 
 \begin{equation}\label{eq:power}
 	P(\br) = \intE{\Emin}{\Emax}{e\sigma_f(\br, E) \phi(\br, E)} \quad \SI{}{[W.cm^{-3}]}
 \end{equation}
 where $e$ is the energy conversion factor converting fission rate to watts.
+\index{P@$P$|see {power density}}
 
 \subsection{Solvability of neutron transport problems}\label{sec:ntp}
-In this section, we will formulate the two basic problems of neutron transport in an operator form.
+In this section, we will formulate two basic problems of neutron transport in an operator form.
 We will be interested in \textit{generalized solutions} of these problems (which we call just solutions), which satisfy
 the equation and boundary conditions almost everywhere (a.e.) in $X$ (or $\pX$), and understand by $\bomega\cdot\nabla$
 the generalized directional derivative in the usual Sobolev sense. This is motivated by the low regularity that can be
-expected from the exact solution of the NTE -- for example, even for piecewise smooth material data (cross-sections $\sigma_x$) and sources $q$, the solution of the NTE is known to possibly exhibit singularities in 
-first partial derivatives (or be discontinuous as a function of $\bomega$) at surfaces of material discontinuities 
-coinciding with characteristic curves of the left-hand side of \eqref{eq1} (that is, straight lines; see \cite[Chap.
+expected from the exact solution of the NTE -- for example, even for piecewise smooth material data  (cross-sections
+$\sigma_x$) and sources $q$, the solution of the NTE is known to possibly exhibit singularities in first partial 
+derivatives (or be discontinuous as a function of $\bomega$) at surfaces of material discontinuities coinciding with 
+characteristic curves of the left-hand side of \eqref{eq1} (that is, straight lines; see \cite[Chap.
 1]{Agoshkov}, \cite[Sec. III]{Vladimirov}).
 % We will call the solution of such a generalized problem a \textit{weak solution}.
 
@@ -384,7 +411,7 @@ $X$\nomrefeq}
 \end{equation}
 Note that for the total volumetric scalar flux to be finite  (as is physically expected), the solution should belong to
 $\Lp[1](X)$.
-\index{$\Lp(X)$}\index{$\Lp[\infty](X)$}\index{\Lp(\pX[\pm])}\index{\Lp[\infty](\pX[\pm])}
+\index{space!$\Lp(X)$}\index{space!$\Lp[\infty](X)$}\index{space!$\Lp(\pX[\pm])$}\index{space!$\Lp[\infty](\pX[\pm])$}
 
 We formulate the fixed source problem using the following operators:
 \begin{equation*}
@@ -400,17 +427,17 @@ We shall call $A$, $\Sigma_t$, $K$ and $T = A + \Sigma_t - K$ the \textit{advect
 \textit{collision} and \textit{transport} operator, respectively. All these operators are continuous; the reaction
 operator $\Sigma_t : \Lp(X) \to \Lp(X)$ is a simple multiplication operator in $\Lp(X)$, self-adjoint and bounded,
 while the operator $K: \Lp(X) \to \Lp(X)$ is bounded under additional (physically justifiable) conditions
-(conditions (c) and/or (d) of the following theorem, depending on the chosen $p$), but is self-adjoint if and only 
+(conditions (c) and/or (d) of the following theorem, depending on $p$), but is self-adjoint if and only 
 if the kernel $\kappa$ of $K$ is symmetric in $E$ and $E'$. With the exception of the mono-energetic case, this is
 generally not true (a fact to which we return again in \sref{sec:MG}). To further simplify notation, let us also define 
 $$
 	\op{L} \coloneqq A + \Sigma_t.
 $$
-\index{$\op{L}$}\index{$A$}\index{$\Sigma_t$}\index{$K (operator)$}%
+\index{operator!L@$\op{L}$}\index{operator!A@$A$}\index{operator!S@$\Sigma_t$}\index{operator!K@$K$}\index{operator!T@$T$}%
 For piecewise smooth
-$\pV$ and $1\leq p < \infty$, the traces $\Gamma_{\pm}\psi \equiv \psi\vert_{\pX[\pm]}\in\Lp(\pX[\pm])$ are well defined
-for functions $\psi\in \widehat H^p(X)$, where
-$$
+$\pV$ and $1\leq p < \infty$, the traces $\Gamma_{\pm}\psi \equiv
+\psi\vert_{\pX[\pm]}\in\Lp(\pX[\pm])$\index{$\psi\vert_{\pX[\pm]}$} are well defined for functions  $\psi\in \widehat
+H^p(X)$, where $$
 \widehat H^p(X) = \{\psi\mid \psi\in\Lp(X), \bomega\cdot\nabla\psi\in\Lp(X)\}, \quad 1 \leq p \leq \infty
 $$
 and a continuous lifting operator 
@@ -425,7 +452,7 @@ The Sobolev space of functions with bounded boundary traces is then defined as
  in $\Lp{p}$.\nomrefeq} 
  \Hp(X) \coloneqq \left\{\psi\in\Lp(X), \bomega\cdot\nabla\psi\in\Lp(X), \Vert\Gamma\psi\Vert_{\Lp(\pX)} < \infty\right\}. 
 \end{equation}
-\index{\Hp(X)}%
+\index{space!$\Hp(X)$}%
 and $A : \Hp(X) \to \Lp(X)$, thus the complete transport operator \linebreak\mbox{$T: \Hp(X) \to \Lp(X)$}.
 We note that $\Hp[2](X)$ is a Hilbert space when equipped with the inner product
 \begin{equation*}\label{eq:ip}
@@ -433,14 +460,14 @@ We note that $\Hp[2](X)$ is a Hilbert space when equipped with the inner product
 	\ip{\Lp[2](X)}{\psi,\varphi} +
 	\ip{\Lp[2](\pX)}{\psi,\varphi} 	
 \end{equation*}
-where
+\index{$z$@$\ip{\Hp[2](X)}{\cdot,\cdot}$}where
 \begin{equation}\label{eq:ipL2}
 	\ip{\Lp[2](X)}{\psi,\varphi} = \int_X \psi \varphi \,\d{x},\quad
 	\ip{\Lp[2](\pX)}{\psi,\varphi} = \int_{\pX} \psi \varphi \,\d{\xi}.
 \end{equation}
-\index{$\ip{\Hp[2](X)}{\cdot,\cdot}$}\index{$\ip{\Lp[2](X)}{\cdot,\cdot}$}
+\index{$z$@$\ip{\Lp[2](X)}{\cdot,\cdot}$}\index{$z$@$\ip{\Lp[2](\pX)}{\cdot,\cdot}$}
 
-
+\index{boundary conditions}
 The lifting operator allows us to pick a function $\widehat \psi = \mathcal{G}\psi_{\text{in}} \in \Hp(X)$ and convert a
 problem $T\psi = q$ with non-homogeneous boundary conditions \eqref{eq:nte2} to a problem 
 $$
@@ -452,6 +479,7 @@ as $\psi = u + \widehat{q}$. Therefore, we can focus on the case with homogeneou
 $$
 	\Hpnot(X) \coloneqq \{\psi\in \Hp(X),\ \psi\vert_{\pX[-]} = 0\}.
 $$
+\index{space!$\Hpnot(X)$}%
 Similar treatment of reflective or more general boundary conditions requires special trace theorems, see
 \cite[Chap. XXI, Appendix of \S2]{DautrayLions} or \cite[Chap. 2]{Agoshkov}.
 
@@ -464,9 +492,9 @@ $
      T\psi = q.
 $
 \end{problem}
+\index{problem!fixed-source}
 
-
-We will first consider the physically most natural $\Lp[1](X)$ setting.
+We will first consider the physically most natural $\Lp[1](X)$ case.
 
 \subsubsection{$\Lp[1](X)$ setting}
 \begin{theorem}\label{thm1}
@@ -498,15 +526,18 @@ Notice that (using \eqref{eq:ddifxs})
 \end{equation}
 and is usually called \textit{collision ratio} \index{c|see{collision ratio}}\index{collision ratio} (or
 \textit{scattering ratio} in non-fissioning domains)\index{scattering ratio}.
+\index{subcritical}
+\index{characteristic}
 
  In \cite{Sanchez3}, Sanchez uses the inversion of the transport operator along characteristics (see \ref{sec:advection}
- above) to prove existence and uniqueness of a solution to the fixed source neutron transport problem in
+ above) to prove existence and uniqueness of solution to the fixed source neutron transport problem in
  the cross-section weighted space $\Hp[1]_{\sigma}(X)$ for right hand sides in $\Lp[1]_{\sigma}(X)$ (and albedo
- boundary conditions of general type \eqref{eq:albedo-general}).
- This appears to be an alternative physically natural functional setting due to the definition of the reaction rate, eq. 
+ boundary conditions of general type
+ \eqref{eq:albedo-general}).\index{space!$\Lp[1]_{\sigma}$}\index{space!$\Hp[1]_{\sigma}$}%
+ This appears to be an alternative physically natural functional setting due to the definition of reaction rate, eq. 
  \eqref{eq:rr}; moreover, assumption (a) may be relaxed by allowing $\sigma_t = 0$ in arbitrarily large regions 
-  (the \textit{void regions}). Note that if we assume (a) of Thm. \ref{thm1}, the norms of $\Lp[1]$ and
-  $\Lp[1]_{\sigma}$ are equivalent and the measure $\d{\tau} = \sigma_t(x) \d{x}$ associated with the space
+  (the \textit{void regions})\index{void regions}. Note that if we assume (a) of Thm. \ref{thm1}, the norms of $\Lp[1]$
+  and $\Lp[1]_{\sigma}$ are equivalent and the measure $\d{\tau} = \sigma_t(x) \d{x}$ associated with the space
   $\Lp[1]_{\sigma}$ represents a differential optical path length (see eq. \eqref{eq:tau}).
 
 \subsubsection{$\Lp[\infty](X)$ setting}
@@ -522,31 +553,34 @@ where
 d(\br,E) \coloneqq 
   \frac{1}{\sigma_t(\br,E)}\int_{\Emin}^{\Emax}\int_{\Sphere} \kappa(\br,\bomega\cdot\bomega',
 	    E\sla E')\,\d{E'}\d{\bomega'}
-\end{equation}
-can be interpreted as the average number of neutrons emitted with energy $E$ (into any direction) from
+\end{equation}\index{d}%
+can be interpreted as the average number of neutrons emitted with energy $E$ from
 collisions induced by all possible neutrons impinging on the nucleus at $\br$ (again, this is a reasonable condition
 in the subcritical state). Notice that because angular dependence of $\kappa$ is only through the cosine of the
-collision angle ($\bomega\cdot\bomega'$), assumptions (c) and (d) really represent different assumptions about just the energy
-transfer in collisions. 
+collision angle (i.e., $\bomega\cdot\bomega'$), the outgoing direction is immaterial and assumptions (c) and (d) really
+represent different assumptions about just the energy transfer in collisions. 
 
 \subsubsection{$\Lp[2](X)$ setting and second-order forms of NTE}\label{sec:L2}
 In general $\Lp(X)$ spaces with $1 < p < \infty$, Dautray and Lions outline the proof based on the same ideas as those
 used in the $\Lp[1](X)$ case (theory of monotone operators), utilizing assumptions (a-d) of Thm. \ref{thm1}.  The case
-$p = 2$ is particularly important\footnote{even though it does not lead to a direct physical interpretation as  the
-$\Lp[1](X)$ setting} as the Hilbert space structure of $\Lp[2](X)$ allows to use richer set of mathematical tools to
+$p = 2$ is particularly important
+%\footnote{even though it does not lead to a direct physical interpretation as  the
+%$\Lp[1](X)$ setting} 
+as the Hilbert space structure of $\Lp[2](X)$ allows to use richer set of mathematical tools to
 formulate practical solution methods. In particular, it allows to formulate variational principles for the NTE, which
 are of both theoretical and practical importance. 
 
 Let us set $V = \Hpnot[2](X)$ and let $V'$
 denote the dual space, i.e.
-the space of bounded linear functionals on $V$.  For $T : V \to V'$, we may view the problem of
+the space of bounded linear functionals on $V$\index{space!dual}.  For $T : V \to V'$, we may view the problem of
 finding $\psi \in V$ such that $T\psi = q$
 as a problem posed in $V'$ and write it in the variational (or \textit{weak}) form: Find $\psi \in V$ such that 
 \begin{equation}\label{eq:weakform0}
 	\langle T\psi, \varphi \rangle = \langle q, \varphi \rangle  \quad \forall \varphi\in V,
 \end{equation}
 where $\langle \cdot,\cdot\rangle$ denotes the duality pairing between $V'$ and $V$. As usual, we will refer to the
-arbitrarily varying functions $\varphi\in V$ in \eqref{eq:weakform0} as to \textit{test functions}. 
+arbitrarily varying functions $\varphi\in V$ in \eqref{eq:weakform0} as to \textit{test functions}.
+\index{$\varphi$ (test function)}
 
 This formulation
 allows considering more general right hand sides \linebreak\mbox{$q \in V' \supset \Lp[2](X)$}, but we will restrict our
@@ -562,9 +596,11 @@ $$
 	a(\psi, \varphi) = f(\varphi) \quad \forall \varphi\in\Lp[2](X).
 $$
 \end{problem}
+\index{problem!fixed-source (weak form)}\index{a@$a(u,v)$|see {bilinear form}}\index{f@$f(v)$|see {linear form}}%
+\index{bilinear form}\index{linear form}%
 Moreover, for a sufficiently smooth boundary, the incoming boundary conditions can be imposed weakly by incorporating
 them into the bilinear form $a(u,v)$ via Green's theorem \cite[Thm. 2.24]{Agoshkov}:
-for $\psi,\phi\in \Hp[2](X)$,
+for $\psi,\varphi\in \Hp[2](X)$,
 $$\ip{\Lp[2](X)}{\bomega\cdot\nabla\psi, \varphi} = \ip{\Lp[2](\pX)}{\psi, \varphi} -
 \ip{\Lp[2](X)}{\psi, \bomega\cdot\nabla\varphi},
 $$
@@ -581,12 +617,14 @@ with \textit{bounded and coercive} bilinear form $\tilde{a}$ corresponding to (b
 $\tilde{T}$ and source term $\tilde{q}$ of the even parity form of the NTE\footnote{This well-known and widely utilized
 form of the transport equation is obtained by writing eq. \eqref{eq1} for $\bomega$ and $-\bomega$, adding and
 subtracting the two resulting equations and eliminating the unknowns of odd parity; see e.g. \cite[Chap.
-II]{Azmy1}, \cite[Sec. 9.11]{Stacey1} or \cite[Chap. XX]{DautrayLions}).} That is, there exist $C_b > 0, \alpha > 0$
-such that $\forall u,v \in V$:
+II]{Azmy1}, \cite[Sec. 9.11]{Stacey1} or \cite[Chap. XX]{DautrayLions}).}.
+\index{NTE!even-parity form}%
+ That is, there exist $C_b > 0, \alpha > 0$ such that $\forall u,v \in V$:
 $$
 	\tilde{a}(u,v) \leq C_b \norm[{V}]{u}\norm[{V}]{v},
 	\quad \tilde{a}(u, u) \geq \alpha \norm[{V}]{u}^2
 $$
+\index{bilinear form!coercive}\index{bilinear form!bounded}\index{$\alpha$|see {bilinear form: coercive}}
 and the well-known Lax-Milgram lemma can be used to prove well-posedness of \eqref{eq:weakform_coercive} and
 consequently of Problem \ref{prb:1}. For the sake of completeness and future reference, we state the lemma below in
 its general form.
@@ -608,23 +646,24 @@ its general form.
 Banach space $V$ to a Banach space $W$} with norm $\norm[\mathcal{L}(V,W)]{\genop{A}} = \sup_{\norm[V]{v}=1} \norm[W]{\genop{A}v}$.}
 
 Bourhrara presents in \cite{Bourhrara2} three coercive weak formulations of the fixed source problem (and
-one for the criticality problem investigated in the following section) and shows that one of them could be obtained
-also as weak forms of another by now traditional second-order representation of the transport equation --  the
-self-adjoint angular flux equation (obtained by expressing $\psi$ from the $\sigma_t\psi$ term of \eqref{eq1} in terms 
-of the remaining terms and substituting back into the advection term). He also provides a comparison with other 
+one for the criticality problem investigated in the following section) and shows that one of them actually represents
+the weak form of another well-known second-order form of the transport equation -- the self-adjoint angular flux
+equation (obtained by expressing $\psi$ from the $\sigma_t\psi$ term of \eqref{eq1} in terms of the remaining terms and substituting back into the advection term). He also provides a comparison with other 
 formulations based on the least-squares approach (minimizing the appropriately scaled residual 
 \mbox{$\norm[{\Lp[2](X)}]{\mathcal{P}(T \psi - q)}^2 + \varpi\norm[{\Lp[2](\pX[-])}]{\psi_{\text{in}} - \psi}^2$}) 
-studied e.g. in \cite{Manteuffel} or \cite{Agoshkov}. 
+studied e.g. in \cite{Manteuffel} or \cite{Agoshkov}.\index{NTE!SAAF form}
 
 Approximations of Problem \ref{prb:2} leading to practical numerical solution methods are naturally obtained by
 restricting the formulation to finite-dimensional subspaces of $\Hp[2](X)$. With bounded and coercive bilinear form $a$,
-approximation error is then automatically provided by the C{\' e}a lemma. In the angular domain, this has
-been done using the subspace of spherical harmonics of finite degree in \cite{bourhrara3} of \cite{Manteuffel}, which
-is also known as the $\PN$ method (the finite-dimensional restriction can then be obtained for instance by using the
-finite-element discretization of the spatial dependence). As we will see in \sref{sec:1-SN}, this can be done also with
-the other most widely employed angular approximation methods, the $\SN$ method of discrete ordinates.
+approximation error is then automatically assessed by the C{\' e}a's lemma (e.g., \cite[2.1.2]{Hermes-book2}). In the
+angular domain, this has been done using the subspace of spherical harmonics of finite degree in \cite{bourhrara3} of \cite{Manteuffel}, which
+is also known as the $\PN$ method (the finite-dimensional restriction can then be obtained for instance by using
+finite-element discretization of the spatial dependence). The $\PN$ method will be the subject of \sref{sec:PN}; as we
+will see in \sref{sec:1-SN}, the same principle also applies to the other most widely employed angular approximation
+method, the $\SN$ method.
 
 \subsubsection{Subcriticality conditions}
+\index{subcritical}%
 For future reference, we collect the assumptions of Theorem \ref{thm1} into the following definition.
 \begin{definition}[Subcriticality conditions]\label{def:subcriticality}
 	Let 
@@ -636,12 +675,14 @@ For future reference, we collect the assumptions of Theorem \ref{thm1} into the 
 	    c(\br,E) = \frac{1}{\sigma_t(\br,E)}\int_{\Emin}^{\Emax}\int_{\Sphere} \kappa(\br,\bomega'\cdot\bomega,
 	    E'\sla E)\,\d{E'}\d{\bomega'},
 	  \end{equation*}
+	  \index{collision ratio}%
 	 \item $d \leq \overline d < 1$ a.e. in $\VV\times[\Emin,\Emax]$ where
 	 $$
 	 d(\br,E) = 
   		\frac{1}{\sigma_t(\br,E)}\int_{\Emin}^{\Emax}\int_{\Sphere} \kappa(\br,\bomega\cdot\bomega',
 	    E\sla E')\,\d{E'}\d{\bomega'},
 	 $$
+	 \index{d}%
 	\end{enumerate}
 	Then we call
 	\begin{itemize}
@@ -824,17 +865,18 @@ splitting $T = L + K$.
 
 The other important problem in neutron transport (particularly in nuclear reactor engineering) requires the
 determination of material composition (i.e. the values of $\sigma_x$) for a given domain geometry (or vice versa)
-which ensures a steady neutron distribution (that means -- steady power generation) with no additional neutron sources
-than the fission. This is called a ``criticality problem'' -- the system is said to be \textit{subcritical},
+that would ensure a steady neutron distribution (that means -- steady power generation) with no additional neutron
+sources besides fission. This is called a ``criticality problem'' -- the system is said to be \textit{subcritical},
 \textit{supercritical} and \textit{critical}, respectively, if without an additional neutron source the number of
 neutrons in the core will, respectively, continuously diminish, increase or be maintained through the
 balance between actual out of core leakage, absorption and fission. This characterization motivates the name of the
 conditions in Def. \ref{def:subcriticality}. In reactor core reloading optimization, we assume the core geometry fixed
 and try to find such a material composition that (besides other optimization criteria) would ensure the critical state. 
+\index{subcritical}\index{critical}\index{supercritical}
 
 Mathematically, we are looking for a non-trivial non-negative solution of the homogeneous
-version of eq. \eqref{eq1} (i.e. with $q\equiv 0$ and b.c. \eqref{eq:nte3}), which means solving an eigenvalue
-problem. The resulting eigenvalue then describes the departure from critical state with the current set of material
+version of eq. \eqref{eq1} (i.e. with $q\equiv 0$ and boundary conditions \eqref{eq:nte3}), which means solving an
+eigenvalue problem. The resulting eigenvalue then describes the departure from critical state with the current set of material
 data and the associated eigenfunction represents the shape of neutron flux in such a steady state. 
 
 In order to formulate
@@ -843,7 +885,7 @@ scattering and fission part, thus
 $$
 K\psi
   			= S\psi + F\psi
-$$
+$$\index{operator!K@$K$}\index{operator!F@$F$}\index{operator!S@$S$}%
 where, using further eq. \eqref{eq:sf},
 \begin{equation}\label{eq:FScrit}
 \begin{aligned}
@@ -854,7 +896,7 @@ E')\psi(\br,\bomega,E')}}
 \end{equation}
 The criticality eigenvalue problem then reads:
 \begin{problem}\label{prb:3}
-Find nontrivial, nonnegative $\psi\in \Dom{B} \subset \Lp(X)$ and $\lambda > 0$, such that
+Find nontrivial, non-negative $\psi\in \Dom{B} \subset \Lp(X)$ and $\lambda > 0$, such that
 \begin{equation}\label{eq:critical}
 \left\{
   \begin{aligned}
@@ -863,6 +905,7 @@ Find nontrivial, nonnegative $\psi\in \Dom{B} \subset \Lp(X)$ and $\lambda > 0$,
   \end{aligned}
 \right.
 \end{equation}
+\index{problem!criticality}\index{operator!B@$B$}\index{$\lambda$}%
 where $\albedoop\psi$ is given by the right-hand side of \eqref{eq:nte3} (or, more generally, $\albedoop$ is the
 boundary operator of \eqref{eq:albedo-general}).
 \end{problem}  
@@ -878,7 +921,7 @@ Proving existence and uniqueness of solution of \eqref{eq:critical} can proceed 
 		Results of the previous section can be used here if we consider the collision kernel $\kappa$ without the fission
 		part, e.g. if instead of the average number of all emitted neutrons in \eqref{eq:c} we consider only the number
 		emitted from scattering collisions (the \textit{scattering ratio}\index{scattering
-		ratio}\index{$\tilde{c}$|see{scattering ratio}}):
+		ratio}\index{c@$\tilde{c}$|see{scattering ratio}}):
 		\begin{equation}\label{eq:tildec}
 		\tilde c(\br,E) \coloneqq \frac{1}{\sigma_t(\br,E)}\int_{\Emin}^{\Emax}\int_{\Sphere}
 		\sigma_s(\br,\bomega\cdot\bomega', E'\sla E)\,\d{E'}\d{\bomega'}.
@@ -902,9 +945,10 @@ so that
 $\keff < 1$, $\keff > 1$ and $\keff = 1$, respectively, correspond to \textit{subcritical},
 \textit{supercritical} and \textit{critical} system. Notice that $c < 1 \Rightarrow \keff < 1$, but not the other way
 round because the possibility of neutron loss due to out of core leakage is not accounted for in \eqref{eq:c}. 
+\index{k@$\keff$}%
 \end{remark}
 
-Because of the first step, we can expect similiar assumptions as in Thm. \ref{thm1} (or in the discussion below the
+Because of the first step, we can expect similar assumptions as in Thm. \ref{thm1} (or in the discussion below the
 theorem) to be required. Depending on the chosen functional setting, various additional assumptions need to be made in
 order to carry out the other two steps.
 These mathematical assumptions restrict either the boundary conditions, geometry or material composition of the solution
@@ -959,8 +1003,7 @@ $\sigma_{fn}(\br,E')$ themselves (see \cite{Sanchez3}).
 An important property of the neutron transport equation is its orthogonal invariance, which says that under certain
 circumstances, to obtain a solution of the NTE with source term rotated (or reflected) around origin it is sufficient to
 apply the same rotation (reflection) on the solution corresponding to the original source. We will henceforth consider
-only rotations but any argument below and in the following chapter holds also for reflections. We will use the
-following definition to make this statement precise.
+only rotations but any argument below applies also for reflections.
  
 \begin{definition}\label{def:rotinv}
 We will say that an
@@ -969,13 +1012,16 @@ operator equation
 \genop{A}u = f
 \end{equation}
 is rotationally invariant, if $\genop{A}u = f$ implies $\genop{A}\genop{R}u = \genop{R}f$ for any operator
-$\op{\genop{R}}$ corresponding to a rotation $\mat{R}\in\R[3\times3]$ of coordinate system around origin:
+$\op{\genop{R}}$ corresponding to a rotation $\mat{R}\in\R[3\times3]$ of coordinate system around origin\footnote{by
+$\mat{I}$, we will henceforth denote the unit matrix of appropriate size obvious from the context}\index{I@$\mat{I}$}:
 \begin{equation}\label{eq:def_rot}
 \begin{gathered}
 \genop{R}: f(\br,\bomega) \mapsto f(\mat{R}^T\br,\mat{R}^T\bomega)\\
 \mat{R}^T\mat{R} = \mat{R}\mat{R}^T = \mat{I},\quad \det \mat{R} = 1.
 \end{gathered}
 \end{equation}
+\index{R@$\mat{R}$|seealso {orthogonal transformation}}\index{orthogonal
+transformation}\index{operator!R@$\genop{R}$|seealso {orthogonal transformation}}%
 \end{definition}
 Operator $\genop{R}$ is defined by its associated rotation matrix $\mat{R}$, which is conventionally
 characterized as an element of the special orthogonal group in $\R[3]$, the $\mathrm{SO}(3)$ \footnote{or just the
@@ -983,20 +1029,21 @@ ordinary orthogonal group $O(3)$ if reflections are taken into account}.
 We will also consider the operator itself to be an element of that group, i.e.
 $\genop{R} \in \mathrm{SO}(3)$. The following lemma shows that equation \eqref{eq:op1} is rotationally invariant if and
 only if its operator commutes with rotations.
+
+%\newpage
 \begin{lemma}\label{lemma1}
 	$\genop{A}u = f \ \Rightarrow \genop{A}\genop{R}u = \genop{R}f\,\ \forall \genop{R}\in \mathrm{SO}(3)$ if and only if $\genop{A}\genop{R} = \genop{R}\genop{A}$.
 \end{lemma}
 \begin{proof}
 	Sufficiency is obvious by operating with $\genop{R}$ on both sides of eq. \eqref{eq:op1}.
-	We will show neccessity indirectly, i.e. we suppose that there exists $\genop{R}\in\mathrm{SO}(3)$ such that $\genop{A}\genop{R} \neq \genop{R}\genop{A}$
+	We will show necessity indirectly, i.e. we suppose that there exists $\genop{R}\in\mathrm{SO}(3)$ such that $\genop{A}\genop{R} \neq \genop{R}\genop{A}$
 	and show that then we can have $\genop{A}u = f$ but $\genop{A}\genop{R}u \neq \genop{R}f$. Indeed, assuming $\genop{A}u = f$ and operating by $\genop{R}$, we get  
 	$$
-		\genop{R}f = \genop{R}\genop{A}u \neq \genop{A}\genop{R}u,
+		\genop{R}f = \genop{R}\genop{A}u \neq \genop{A}\genop{R}u.
 	$$
-	which concludes the proof.
 \end{proof}
 
-Using definitions from the previous subsections, let us write eq. \eqref{eq1} in the form of \eqref{eq:op1}:
+Using definitions from previous subsections, let us write eq. \eqref{eq1} in the form of \eqref{eq:op1}:
 \begin{equation}\label{eq1op}
 	T\psi \equiv (\op{L} - \op{K})\psi = \op{q},
 \end{equation} 
@@ -1011,20 +1058,20 @@ $\genop{R}$ as an operator from $V$ into itself. Then the following claim (by Zw
 	\end{equation}
 \end{theorem}
 \begin{proof}
-Because $A$ is represented by a dot product of two vectors and $\Sigma_t$ is rotation invariant by
-assumption, $L$ is rotation invariant as well. Commutativity of $K$ and $\genop{R}$ follows again from rotational
-invariance of dot product (i.e., \linebreak$\mat{R}^T\bomega\cdot\bomega' = \bomega\cdot\mat{R}\bomega'$),
-substitution $\mat{R}\bomega' = \bomega''$ in the angular integral and the fact that Jacobian determinant of this
+Because $A$ is represented by a dot product of two vectors and $\Sigma_t$ is rotation invariant as a consequence of the
+assumptions, $L$ is rotation invariant as well. Commutativity of $K$ and $\genop{R}$ follows again from rotational
+invariance of dot product (i.e., $\mat{R}^T\bomega\cdot\bomega' = \bomega\cdot\mat{R}\bomega'$), substitution $\mat{R}\bomega' = \bomega''$ in the angular integral and the fact that Jacobian determinant of this
 orthogonal transformation is unity.
 \end{proof}
 
-Assumptions of the theorem will be satisfied, e.g., in an isotropic homogeneous region where  $\sigma_t(\br,E) \equiv
-\sigma_t(E))$ and invariance of $\kappa$ follows from \eqref{eq:iso}. If we also assume that the sources (and
+Assumptions of the theorem will be satisfied for instance in an isotropic homogeneous region where  $\sigma_t(\br,E)
+\equiv \sigma_t(E)$ and invariance of $\kappa$ follows from \eqref{eq:iso}. If we also assume that sources (and
 boundary conditions) are  rotationally invariant ($q = \genop{R}q$), then the true solution of NTE is (by Lemma
 \ref{lemma1}) necessarily spherically symmetric or, in other words, the rotated solution satisfies the original
 equation:
 $$
 T\psi = q \quad \Rightarrow \quad T\genop{R}\psi = q.
 $$
-Numerical approximations should preserve this property in order to produce physically correct results, but as we will
-see in the following chapter, it is not always the case.
+Numerical approximations should preserve this property in order to produce physically correct results. As we will
+see in the following chapter, however, this is not the case for the widely used $\SN$ approximation and leads to
+undesirable numerical side-effects.

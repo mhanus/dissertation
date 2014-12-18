@@ -42,7 +42,7 @@ is chosen to minimize the error {\em after coarse-grid correction procedure}.
 This means, the standard two-level method
 minimizes the error in an intermediate stage of the iteration, while
 we are, naturally, interested in
-minimizng  {\em the final error after accomplishing the entire iteration}.
+minimizing  {\em the final error after accomplishing the entire iteration}.
 In other words, we strive to minimize the error after
 after coarse-grid correction and
 subsequent smoothing. The two-level smoothed aggregation method
@@ -114,14 +114,14 @@ operator given by
 $$
       Q = p(p^TAp)^{-1}p^TA.
 $$
-Thus, the error propagation opeartor of the coarse-grid correction is given by
+Thus, the error propagation operator of the coarse-grid correction is given by
 $I-Q=I-p(p^TAp)^{-1}p^TA$ and the error propagation operator of the two-level
 method by
 \eq{E}
       E_{TGM}=S_{post}[I-p(p^TAp)^{-1}p^TA]S_{pre},
 \qe
 where $S_{pre}$ and $S_{post}$ are error propagation operators of
-pre- and post- smothing iterations, respectively.
+pre- and post- smoothing iterations, respectively.
 
 Clearly, for the error $\vc{e}(\vc{x})\equiv \vc{x}-A^{-1}\vc{f}$ we have
 $A\vc{e}(\vc{x})=A\vc{x}-\vc{f}$. Hence, the coarse-grid correction can be
@@ -281,7 +281,7 @@ post-smoothing.
 Such extension is trivial, the pre-smoother has no influence on the
 coarse-grid correction operator $I - P(P^TAP)^{-1}P^TA$ and influences only
 its argument.
-Indeed, asuming the error propagation operator of the
+Indeed, assuming the error propagation operator of the
 pre-smoother is $S^*$ (the $A$-adjoint operator),
 the final error is given by $S(S^*\vc{e}-p\vc{v})$
 and we solve the minimization problem

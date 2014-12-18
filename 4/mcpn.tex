@@ -97,7 +97,7 @@ following relations between the velocity and direction vectors in Cartesian coor
 $$
   \bv = [v_x, v_y, v_z]^T = v\bomega,\quad \bomega = [\Omega_x, \Omega_y, \Omega_z]^T = \frac{\bv}{v}.
 $$
-\index{$\bv$, v}
+\index{v@$\bv$, v}
 \begin{definition}\label{defn:SSH}\cite[Def. 3.22]{Schreiner}
   A general linear combination of the $2n + 1$ (tesseral) spherical harmonics of degree $n$ is called a \textit{surface spherical 
   harmonic of degree $n$} and can be written as
@@ -107,6 +107,8 @@ $$
   \end{equation}
   where $A_m,B_m \in \R$ and  $\P{n}{m}$ are the \textit{associated Legendre polynomials} (eq.
   \eqref{eq:associated_Pn}).
+  	\index{Y@$\mathcal{Y}_n$|see {surface spherical harmonic}}
+	\index{surface spherical harmonic}
 \end{definition}
 Note that there is a one-to-one relationship between the coefficients in eq. \eqref{eq:exp} for fixed $n$ and the 
 coefficients in \eqref{eq:exp3}.
@@ -126,7 +128,7 @@ dimensionality or material properties, cf. the overview at the beginning of \sre
 together with heuristic boundary and interface conditions. As was shown in the paper, the SH\PN~ equations reduced by simple substitutions to the set of 
 $\SPN$ equations originally formulated by Gelbard and it is interesting to note that this actually showed that the 
 latter are within an isotropically scattering homogeneous medium equivalent to the full solid harmonics expansion -- 
-the same result for surface spherical harmonics has been independently proven in \cite{Coppa1} and revisited recently 
+the same result for surface spherical harmonics has been independently proved in \cite{Coppa1} and revisited recently 
 (\cite{Coppa2,McClarren1}). Unfortunately, the general treatment in \cite{Ackroyd1} is very technically involved and in 
 author's opinion quite difficult to follow -- this may be the reason why the idea has not been picked up and possible 
 research directions outlined in the paper's conclusion not pursued.
@@ -150,6 +152,7 @@ $$
   $$
     \be_\alpha' = g_{\alpha\beta}\be_\beta.
   $$
+  \index{G@$\mathbf{G}$|see {orthogonal transformation}}\index{orthogonal transformation}%
 \end{definition}
 A special case of the matrix $\mathbf{G}$ was the rotation matrix $\mat{R}$ introduced in \sref{sec:rotinv}; here we
 include also the reflections about origin to make the definition general. As we will only use the Cartesian tensors, we
@@ -204,8 +207,9 @@ Also, for simplicity,
 \end{definition}
 Specially for $n = m = 1$, we get the standard inner product of vectors (denoted by $\cdot$ so far), while for
 $n = m = 2$ we get the double inner product (denoted by $:$) of matrices \eqref{eq:doubleprod}. Generally when $n = m$,
-we obtain the scalar $\AAA{\gamma_1\ldots\gamma_n}\BBB{\gamma_n\ldots\gamma_1}$ and suppress the index under the $\cdot$ sign to simplify the writing (it should be clear from the two operands and their 
-rank that a total contraction over all their indices is intended).
+we obtain the scalar $\AAA{\gamma_1\ldots\gamma_n}\BBB{\gamma_n\ldots\gamma_1}$ and suppress the index under the $\cdot$
+sign to simplify the writing (it should be clear from the two operands and their rank that a total contraction over all 
+their indices is intended).
 
 \begin{definition}
   For $m \leq \lfloor n/2 \rfloor$ (the integer part of $n/2$), the $m$-fold contraction of tensor $\AA$ (contraction 
@@ -311,7 +315,7 @@ with those used by Johnston.
  
 We note that projection of $\PP$ along, say, $z$-axis (or any other because of the symmetry) yields (up to a
 normalization factor) the Legendre polynomials:
-\begin{equation}\label{eq:leg}
+\begin{equation}\label{eq:leg2}
   \PP(\bomega)\contr\be_z^n = P^{(n)}_{\alpha_1\ldots\alpha_n}\kron{3}{\alpha_1}\cdots\kron{3}{\alpha_n} = P^{(n)}_{33\ldots3} = \frac{n!}{(2n-1)!!}P_n(\mu) \equiv C_n P_n(\mu)
 \end{equation}
 and hence components of $\PP$ could be explicitly obtained by extending the well-known formulas for Legendre 
@@ -416,7 +420,7 @@ satisfy the following form of addition theorem:
 \begin{equation}\label{eq:MC-addition}
   \PP(\bomega)\contr\PP(\bomega') = C_n P_n(\bomega\cdot\bomega')
 \end{equation}
-($C_n$ defined in \eqref{eq:leg}). Combining the two results, we obtain
+($C_n$ defined in \eqref{eq:leg2}). Combining the two results, we obtain
 \begin{equation}\label{eq:MC-exp2}
   \psi(\br,\bomega) = \suma[n]{0}{\infty}\frac{2n+1}{4\pi
   C_n}\left[\intA[']{\psi(\br,\bomega')\PP(\bomega')}\right]\contr\PP(\bomega).
@@ -582,6 +586,7 @@ ranks is to require the moment tensors to be not only totally symmetric, but als
 \end{proof}
 
 \subsection{The $\MCPN$ approximation}
+\index{method!of Maxwell-Cartesian spherical harmonics|(}
 Using Thm. \ref{thm:MC-suffcond}, we see that we can obtain from \eqref{eq:MC-bte3} a set of moment equations if we
 ensure that the expression in square brackets is a TST tensor for each $n$. Since $\fmom$ and $\qmom$ are TST by
 definition, we only have to symmetrize and detrace the advection terms. We need to be careful, however, not to change
@@ -670,7 +675,7 @@ $\MCPN$ set. Let $$\Sa{n} = \sigma_t - \sigma_{sn} - \kron{n}{0}\nu\sigma_f.$$ T
     \end{aligned}
 \end{equation}
 (where we included the $\otimes$
-symbol whenever multiplication of tensors of rank $\geq 1$ occured).
+symbol whenever multiplication of tensors of rank $\geq 1$ occurred).
 We can see that the $\MCPN[1]$ set is equivalent to the $\PN[1]$ set. For $N \geq 3$, we have to take into account the
 definition of the moments as \textit{traceless} totally symmetric tensors. If we considered general symmetric
 moment tensors 
@@ -776,7 +781,7 @@ homogeneous region with constant $\Sigma$ and $\Sigma_0$ \footnote{Note that
 this does not preclude heterogeneous subregions with the physical cross-sections $\sigma_a$, $\sigma_{s0}$ and
 $\nu\sigma_f$ varying in such a way that $\sigma_a - \nu\sigma_f$ and $\sigma_a + \sigma_s$ are constant.}.
 The derivation below obviously extends to the case of sufficiently smooth cross-sections. In practice, however, the 
-cross-sections are typically only piecewise constant, which neccessitates the specification of interface conditions. 
+cross-sections are typically only piecewise constant, which necessitates the specification of interface conditions. 
 Formulation of an appropriate set of these conditions (and corresponding boundary conditions) will be the subject of 
 further investigation; possible approaches will be discussed in \sref{sec:mcp3_discussion}.
 
@@ -941,7 +946,7 @@ diffusion-like equations of the form \eqref{eq:mcp3_sp3_1}, \eqref{eq:mcp3_sp3_2
 puzzling paper \cite{Selengut} (see also commentary in \cite[Sec. 5.2]{McClarren2}). Starting from the even-parity NTE,
 the author ``derives'' equation \eqref{eq:scfl} and equations \eqref{eq:mcp3_sp3_1}, \eqref{eq:mcp3_sp3_2} as well as
 conditions for the even-parity tensorial moments and the unknowns of the diffusion-like equations -- all on a half-page
-space. Even though the excessive brevity of the paper prevented furthere study and practical use of these equations and
+space. Even though the excessive brevity of the paper prevented further study and practical use of these equations and
 conditions, the equivalence of the equations to those systematically derived in previous subsections may motivate the
 search for the additional conditions in the same form as in \cite{Selengut}.
 
@@ -950,4 +955,6 @@ The latter conditions make use of the expression for the second-order moment in 
 most other parts of the paper) is not given any proper explanation in the paper. In the following subsection, we will 
 show that it may actually require additional assumptions on the solution of the NTE, albeit physically 
 }
+
+\index{method!of Maxwell-Cartesian spherical harmonics|)}
 

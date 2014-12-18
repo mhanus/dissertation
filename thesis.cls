@@ -38,6 +38,7 @@
 
 
 %\usepackage{setspace}
+%\onehalfspacing
 \usepackage{nomencl}
 \usepackage{makeidx}
 \usepackage{isotope}
@@ -69,16 +70,23 @@
 
 \usepackage{a4wide}
 \usepackage{graphics} % for improved inclusion of graphics
+\usepackage{subfigure}
 
 %\usepackage{wrapfig} % to include figure with text wrapping around it
 \usepackage[margin=10pt,font=small,labelfont=bf]{caption} % for improved layout of figure captions with extra margin, smaller font than text
 \usepackage{fancyhdr} % for better header layout
 %\usepackage{eucal}
-\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[czech,english]{babel}
 \usepackage[usenames, dvipsnames]{color}
 \usepackage[multiple]{footmisc}
 \renewcommand\footnotelayout{\fontsize{11}{11}}
 \usepackage[sort, numbers]{natbib}
+
+\usepackage{imakeidx}
+\usepackage[font=small]{idxlayout}
+
+\makeindex[columns=2, columnsep=20pt, title=Index, intoc]
 
 \usepackage{stmaryrd}
 \usepackage{mathrsfs}
@@ -416,19 +424,18 @@
 {\Large 
 	\vspace*{1ex}
     {{\@collegeordept} \par}
-	\vspace*{.1ex}
     {{\@university} \par}
-	\vspace*{6ex}
-    { \Large {\submittedtext} \par}
-  	\vspace*{3ex}
-    {\Large Supervisor: {\@supervisor} \par}
 	\vspace*{4ex}
-    %{\it {\@degree} \par}
+    { \Large {\submittedtext} \par}
+  	\vspace*{6ex}
+    { Supervisor: {\@supervisor} \par}
+	
 	\null\vfill
-    {\@degreedate}
+    %{\it {\@degree} \par}
+	{\Large \@degreedate}
 }%end large
   \end{center}
-  \null\vfill
+  
 \end{alwayssingle}}
 
 % page number for cover back side should have page number blanked
@@ -491,7 +498,7 @@
 %the top of the page. The abstract itself appears in a quote environment,
 %i.e. tabbed in at both sides, and on its own page.
 
-\newenvironment{abstracts} {\begin{alwayssingle} \pagestyle{empty}
+\newenvironment{abstracten} {\begin{alwayssingle} \pagestyle{empty}
   \begin{center}
   \vspace*{1.5cm}
   {\Large \bfseries  Abstract}
@@ -500,6 +507,14 @@
    \begin{quote}}
 {\end{quote}\end{alwayssingle}}
 
+\newenvironment{abstractcz} {\selectlanguage{czech}\begin{alwayssingle} \pagestyle{empty}
+  \begin{center}
+  \vspace*{1.5cm}
+  {\Large \bfseries  Abstrakt}
+  \end{center}
+  \vspace{0.5cm}
+   \begin{quote}}
+{\end{quote}\end{alwayssingle}\selectlanguage{english}}
 %The abstractlong environment puts a large, bold, centered "Abstract" label at
 %the top of the page. The abstract itself does not appears in a quote
 %environment so you can get more in.
@@ -551,11 +566,10 @@
 % for the contents and figures lists. It also resets
 % page-numbering for the remainder of the dissertation (arabic, starting at 1).
 
-%\newenvironment{romanpages}
-%{
-%	\setcounter{page}{1}
-%	\renewcommand{\thepage}{\roman{page}}
-%} % close romanpage env't
- 
+\newenvironment{romanpages}
+{
+	\setcounter{page}{1}
+	\renewcommand{\thepage}{\roman{page}}
+} % close romanpage env't 
 {\newpage\renewcommand{\thepage}{\arabic{page}}\setcounter{page}{1}}
 

@@ -1,14 +1,111 @@
 
 % Thesis Abstract -----------------------------------------------------
 
+\begin{alwayssingle} \pagestyle{empty}
+  \begin{center}
+  \vspace*{1.5cm}
+  {\Large \bfseries  Abstract}
+  \end{center}
+  \vspace{0.5cm}
+\begin{quote}
 
-%\begin{abstractslong}    %uncommenting this line, gives a different abstract heading
-\begin{abstracts}        %this creates the heading for the abstract page
+The subject of this work is computational modeling of neutron transport relevant to economical and safe operation of
+nuclear facilities. The general mathematical model of neutron transport is provided by the linear Boltzmann's transport
+equation\comment{This first-order partial differential equation with integral terms describes the dependence of neutron
+field on six phase-space variables (position, direction, energy)} and the thesis begins with its precise mathematical
+formulation and presentation of known conditions for its well-posedness.
 
-Put your abstract or summary here, if your university requires it.
+\comment{High-dimensionality and complicated structure of the equation for real-world problems preclude analytical
+solution and present serious difficulties when a computational solution is attempted. Several dimension-reduction
+techniques thus need to be employed along with appropriate numerical solution schemes. This is the subject of the}
+In the following part, we study approximation methods for the transport equation, starting with the classical
+discretization of energetic dependence and followed by the review of two most widely used methods for approximating 
+directional dependence (the $\SN$ and $\PN$ methods). While these methods are usually presented independently of each 
+other, we show that they can be put into a single framework of Hilbert space projection techniques. This fact is then
+used in conjunction with the results of the first part to rigorously prove rotational invariance of the $\PN$
+equations and to analyze convergence of the basic iterative scheme for solving the $\SN$ equations. This part of the
+thesis is concluded by the description of a finite element method for the final discretization of spatial dependence and a discussion of the solution of the resulting system of
+algebraic equations.
 
-\end{abstracts}
-%\end{abstractlongs}
+The main new results are contained in the following two chapters focusing on the simplified $\PN$ approximation, which
+is a computationally more convenient albeit not as mathematically well-founded variant of the $\PN$ approximation. We
+prove well-posedness of the weak form of the $\SPN[3-7]$ equations and present a new way of deriving the equations from
+an alternative set to the $\PN$ equations, obtained from special linear combination of
+spherical harmonics.% (the so-called Maxwell-Cartesian spherical harmonics, hence the abbreviation $\MCPN$ for this
+% approximation), u%tilizing its tensor structure. Algebraic manipulations allowing to obtain the $\SPN[3]$-equivalent equations from the
+%$\MCPN[3]$ set in an interior of a homogeneous region are explicitly given in \sref{sec:mcp3_red}.
+
+The final part of the thesis contains numerical examples of the $\SN$ and $hp$-adaptive $\SPN$ calculations using a
+neutronics framework that has been implemented by the author to the $hp$-adaptive finite element library Hermes2D. The $\SPN[1]$
+(or diffusion) model also serves as a basis of a real-world reactor calculation suite co-developed by the author for the
+purposes of ``Project TA01020352 -- Increasing utilization of nuclear fuel through optimization of an inner fuel cycle and
+calculation of neutron-physics characteristics of nuclear reactor cores''. An example benchmark used to test the code
+concludes the thesis.
+ 
+
+\vspace*{1cm}
+%\begin{quote}
+{\large \bfseries  Keywords:}
+
+The neutron diffusion approximation, whereby the NTE is reduced to a second-order elliptic PDE (or, when energy
+dependence is taken into account implicitly, a weakly coupled non-symmetric system of second-order PDEs with
+positive-definite symmetric part -- the so-called \textit{multigroup neutron diffusion approximation}), also forms the
+
+\end{quote}
+
+\clearpage
+\selectlanguage{czech}
+  \begin{center}
+  \vspace*{1.5cm}
+  {\Large \bfseries  Abstrakt}
+  \end{center}
+  \vspace{0.5cm}
+\begin{quote}
+
+Práce se zabývá matematickým a numerickým modelováním transportu neutronů, se zaměřením na výpočty neutronových
+charakteristik jaderných reaktorů. Obecný matematický model transportu neutronů je reprezentován lineární Boltzmannovou
+transportní rovnicí. Práce začíná její přesnou matematickou formulaci a přehledem\linebreak výsledků týkajících se její
+řešitelnosti ve druhé kapitole. Následující kapitoly jsou zaměřeny na přibližné metody řešení této rovnice.
+
+Po stručném popisu klasické diskretizace energetické závislosti je hlavní část třetí kapitoly věnována aproximaci
+směrové závislosti pomocí dvou stěžejních metod -- metody diskrétních ordinát ($\SN$) a metody sférických harmonických
+funkcí ($\PN$). Zatímco obvykle jsou tyto metody formulovány nezávisle, v práci je ukázáno, jak je lze obě popsat pomocí
+jednotného rámce jako projekci na podprostor Hilbertova prostoru funkcí definovaných na sféře. Této skutečnosti je
+posléze využito při důkazu rotační invariantnosti $\PN$ rovnic a při konvergenční analýze základní iterační
+metody pro řešení $\SN$ soustavy.
+Třetí kapitola je zakončena popisem aplikace metody konečných prvků na finální diskretizaci prostorové závislosti.
+
+Hlavní nové výsledky této práce se týkají metody zjednodušených sférických harmonických funkcí ($\SPN$), jež představuje
+výpočetně efektivní aproximaci metody $\PN$. Ve čtvrté kapitole je standardním \linebreak způsobem odvozena slabá
+formulace $\SPN$ rovnic a dokázána její korektnost pro $N = 3,5,7$. V páté kapitole je pak odvozena
+nová soustava parciálních diferenciálních rovnic odpovídající $\PN$ aproximaci ($\MCPN$ aproximace). Na příkladu $\MCPN[3]$ aproximace je ukázáno, jak lze využít
+tenzorovou strukturu těchto rovnic k transformaci na soustavu ekvivalentní s $\SPN[3]$ aproximací.
+
+V šesté kapitole je popsána implementace $\SN$ a $\SPN$ aproximací do knihovny Hermes2D a na několika
+příkladech ukázány základní vlastnosti těchto aproximací.  Speciální pozornost je věnována implementaci nespojité
+Galerkinovy metody (pro $\SN$ aproximaci)%, umožňující využít speciální způsob asemblace soustav PDR v knihovně
+% Hermes2D, v níž je každá neznámá funkce aproximována na vlastním konečně-prvkovém prostoru. 
+a modifikaci standardního indikátoru chyby pro
+$hp$-adaptivitu v Hermes2D pro $\SPN$ aproximaci. Práce je ukončena ukázkou řešení standardního 3D benchmarku pomocí
+mnohagrupového difúzního kódu, který autor na základě zkušeností s vývojem neutronických modulů v knihovně Hermes2D
+vyvinul pro účely projektu ``TA01020352 -- Zvýšení využití jaderného paliva pomocí optimalizace vnitřního palivového
+cyklu a výpočtu neutronově-fyzikálních charakt. aktivních zón jaderných reaktorů''.
+
+
+
+  \vspace*{1cm}
+{\large \bfseries  Klíčová slova:}
+
+%\begin{quote}
+
+The neutron diffusion approximation, whereby the NTE is reduced to a second-order elliptic PDE (or, when energy
+dependence is taken into account implicitly, a weakly coupled non-symmetric system of second-order PDEs with
+positive-definite symmetric part -- the so-called \textit{multigroup neutron diffusion approximation}), also forms the
+
+
+\end{quote}
+
+\end{alwayssingle}\selectlanguage{english}
 
 
 % ---------------------------------------------------------------------- 
